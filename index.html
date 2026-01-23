@@ -15,10 +15,18 @@
         background-color: #1c1917;
         color: #d6d3d1;
         margin: 0;
+        overflow-x: hidden;
       }
       .custom-scroll::-webkit-scrollbar { width: 6px; }
       .custom-scroll::-webkit-scrollbar-track { background: #1c1917; }
       .custom-scroll::-webkit-scrollbar-thumb { background: #44403c; border-radius: 10px; }
+      
+      /* Pulse animation for loading */
+      @keyframes softPulse {
+        0%, 100% { opacity: 1; transform: scale(1); }
+        50% { opacity: 0.7; transform: scale(0.98); }
+      }
+      .animate-soft { animation: softPulse 2s infinite ease-in-out; }
     </style>
     <script type="importmap">
 {
@@ -37,9 +45,17 @@
 </head>
 <body>
     <div id="root">
-        <div class="h-screen w-full flex flex-col items-center justify-center gap-4 bg-[#1c1917]">
-            <div class="w-12 h-12 border-4 border-[#78350f] border-t-transparent rounded-full animate-spin"></div>
-            <p class="text-[#78350f] font-black uppercase tracking-[0.3em] animate-pulse">Inapakia Mtaani Wifi...</p>
+        <div class="h-screen w-full flex flex-col items-center justify-center gap-6 bg-[#1c1917]">
+            <div class="relative">
+                <div class="w-16 h-16 border-4 border-[#78350f]/20 border-t-[#78350f] rounded-full animate-spin"></div>
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <div class="w-2 h-2 bg-[#78350f] rounded-full"></div>
+                </div>
+            </div>
+            <div class="text-center">
+                <p class="text-[#78350f] font-black uppercase tracking-[0.4em] text-xs mb-2">Mtaani Wifi</p>
+                <p class="text-[#44403c] text-[10px] font-bold uppercase tracking-widest animate-pulse">Inapakia mfumo...</p>
+            </div>
         </div>
     </div>
     <script type="module" src="index.tsx"></script>
