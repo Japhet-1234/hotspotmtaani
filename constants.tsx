@@ -15,9 +15,9 @@ export const COLORS = {
 };
 
 export const PLANS = [
-  { id: 'p1', name: 'Mtaani Lite', price: 500, duration: '6 Hours', data: 'Unlimited', description: 'Inafaa kwa matumizi ya haraka' },
-  { id: 'p2', name: 'Mtaani Daily', price: 1000, duration: '24 Hours', data: 'Unlimited', description: 'Siku nzima bila kikomo' },
-  { id: 'p3', name: 'Mtaani Weekly', price: 5000, duration: '7 Days', data: 'Unlimited', description: 'Ofa bora kwa familia' },
+  { id: 'p1', name: 'Mtaani Lite', price: 500, duration: 'Masaa 6', data: 'Unlimited', description: 'Inafaa kwa matumizi ya haraka' },
+  { id: 'p2', name: 'Mtaani Daily', price: 1000, duration: 'Saa 24', data: 'Unlimited', description: 'Siku nzima bila kikomo' },
+  { id: 'p3', name: 'Mtaani Weekly', price: 5000, duration: 'Siku 7', data: 'Unlimited', description: 'Ofa bora kwa familia' },
 ];
 
 export const MOCK_CUSTOMERS = [];

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Zap, Key, CheckCircle, ArrowRight, Ticket, LogOut, MessageSquare, X, Lock, ShieldCheck, Activity } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { PLANS, ADMIN_PHONE, PAYMENT_NAME } from '../constants';
+import { PLANS, ADMIN_PHONE, PAYMENT_NAME } from '../constants.tsx';
 
 interface CustomerPortalProps {
   onAdminLogin: (pass: string) => boolean;
@@ -15,11 +15,10 @@ const CustomerPortal: React.FC<CustomerPortalProps> = ({ onAdminLogin }) => {
   const [connecting, setConnecting] = useState(false);
   const [connected, setConnected] = useState(false);
   
-  const [selectedPlan, setSelectedPlan] = useState<typeof PLANS[0] | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<any>(null);
   const [paymentForm, setPaymentForm] = useState({ phone: '', name: '' });
   const [showRegStep, setShowRegStep] = useState(false);
 
-  // Admin Login State
   const [showAdminModal, setShowAdminModal] = useState(false);
   const [adminPass, setAdminPass] = useState('');
   const [loginError, setLoginError] = useState(false);
@@ -33,7 +32,7 @@ const CustomerPortal: React.FC<CustomerPortalProps> = ({ onAdminLogin }) => {
     }
   }, []);
 
-  const handleBundleClick = (plan: typeof PLANS[0]) => {
+  const handleBundleClick = (plan: any) => {
     setSelectedPlan(plan);
     if (!user) {
       setShowRegStep(true);
@@ -142,7 +141,6 @@ const CustomerPortal: React.FC<CustomerPortalProps> = ({ onAdminLogin }) => {
 
   return (
     <div className="min-h-screen bg-[#1c1917] flex flex-col items-center p-4">
-      {/* Header with Admin Portal Button */}
       <div className="w-full max-w-6xl flex justify-between items-center py-6 px-4 mb-8">
         <div className="flex items-center gap-3">
            <div className="p-2 bg-[#78350f] rounded-xl shadow-lg">
@@ -150,7 +148,6 @@ const CustomerPortal: React.FC<CustomerPortalProps> = ({ onAdminLogin }) => {
            </div>
            <span className="text-xl font-black text-[#d6d3d1] italic tracking-tighter uppercase">Mtaani Wifi</span>
         </div>
-        
         <div className="flex items-center gap-4">
           {user ? (
             <div className="flex items-center gap-4 border-r border-[#44403c] pr-4">
@@ -167,8 +164,6 @@ const CustomerPortal: React.FC<CustomerPortalProps> = ({ onAdminLogin }) => {
               System Status: Online
             </div>
           )}
-          
-          {/* Main Admin Button for Owner to login and check activity */}
           <button 
             onClick={() => setShowAdminModal(true)}
             className="flex items-center gap-2 px-4 py-2 bg-[#451a03] text-[#d6d3d1] rounded-xl border border-[#78350f]/30 hover:bg-[#78350f] transition-all group"
@@ -180,7 +175,6 @@ const CustomerPortal: React.FC<CustomerPortalProps> = ({ onAdminLogin }) => {
       </div>
 
       <div className="w-full max-w-6xl flex flex-col gap-12 pb-32">
-        {/* Bundles Section */}
         <section className="space-y-10">
           <div className="text-center md:text-left space-y-4">
             <h2 className="text-4xl md:text-6xl font-black text-[#d6d3d1] uppercase tracking-tighter leading-none italic">
@@ -232,7 +226,6 @@ const CustomerPortal: React.FC<CustomerPortalProps> = ({ onAdminLogin }) => {
           </div>
         </section>
 
-        {/* Voucher Input */}
         <section className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center pt-10 border-t border-[#44403c]/30">
           <div className="bg-[#292524] rounded-[3rem] p-10 border border-[#44403c] shadow-2xl space-y-8 order-2 lg:order-1">
             <h2 className="text-2xl font-black text-[#d6d3d1] uppercase tracking-tight flex items-center gap-4">
@@ -263,7 +256,7 @@ const CustomerPortal: React.FC<CustomerPortalProps> = ({ onAdminLogin }) => {
                </div>
                <div className="flex items-start gap-4">
                  <div className="w-10 h-10 rounded-2xl bg-[#451a03] flex items-center justify-center text-[#d6d3d1] shrink-0 font-black">2</div>
-                 <p className="text-[#a8a29e] text-sm">Lipa kwa MPESA/Tigo Pesa namba <span className="text-[#78350f] font-bold">{ADMIN_PHONE}</span> ({PAYMENT_NAME}).</p>
+                 <p className="text-[#a8a29e] text-sm">Lipa kwa M-PESA/Tigo Pesa namba <span className="text-[#78350f] font-bold">{ADMIN_PHONE}</span> ({PAYMENT_NAME}).</p>
                </div>
                <div className="flex items-start gap-4">
                  <div className="w-10 h-10 rounded-2xl bg-[#451a03] flex items-center justify-center text-[#d6d3d1] shrink-0 font-black">3</div>
@@ -274,12 +267,6 @@ const CustomerPortal: React.FC<CustomerPortalProps> = ({ onAdminLogin }) => {
         </section>
       </div>
 
-      {/* Simplified Footer */}
-      <footer className="w-full max-w-6xl py-12 border-t border-[#44403c]/20 flex flex-col items-center gap-6">
-        <p className="text-[9px] text-[#44403c] font-mono uppercase tracking-[0.3em]">© 2024 MTAANI WIFI SOLUTIONS</p>
-      </footer>
-
-      {/* ADMIN LOGIN MODAL */}
       {showAdminModal && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/95 backdrop-blur-2xl">
           <div className="w-full max-w-md bg-[#292524] rounded-[3rem] border border-[#44403c] shadow-2xl overflow-hidden">
@@ -291,7 +278,7 @@ const CustomerPortal: React.FC<CustomerPortalProps> = ({ onAdminLogin }) => {
             </div>
             <form onSubmit={handleAdminSubmit} className="p-10 space-y-6">
               <div className="space-y-2">
-                <label className="text-[10px] font-black text-[#44403c] uppercase tracking-widest px-1">Ingiza Password ya Mfumo</label>
+                <label className="text-[10px] font-black text-[#44403c] uppercase tracking-widest px-1">Password ya Admin</label>
                 <input 
                   type="password" required autoFocus
                   className={`w-full bg-[#1c1917] border-2 ${loginError ? 'border-red-500' : 'border-[#44403c]'} rounded-2xl py-5 px-6 text-[#d6d3d1] outline-none focus:border-[#78350f] transition-all`}
@@ -309,7 +296,6 @@ const CustomerPortal: React.FC<CustomerPortalProps> = ({ onAdminLogin }) => {
         </div>
       )}
 
-      {/* REGISTRATION MODAL */}
       {showRegStep && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm">
           <div className="w-full max-w-md bg-[#292524] rounded-[3rem] border border-[#44403c] shadow-2xl overflow-hidden">
