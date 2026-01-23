@@ -1,1 +1,1 @@
-// Unified into index.html
+// Deprecated: Logic unified in index.html

@@ -1,1 +1,1 @@
-// Logic moved to index.html for Vanilla JS compatibility
+// Deprecated: All logic moved to index.html for Vanilla JS single-file solution.
