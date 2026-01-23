@@ -1,44 +1,44 @@
+
+// Service to interact with Google Gemini API for network analysis and marketing.
 import { GoogleGenAI } from "@google/genai";
 
-// Initialize the Google GenAI SDK with the API key from environment variables
+// Initialize the Google GenAI client
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
 /**
- * Fetches AI-generated network insights for the admin dashboard.
+ * Provides AI-driven insights about the current network status.
+ * Uses gemini-3-flash-preview for efficiency and speed.
  */
-export const getNetworkInsights = async (customerCount: number, traffic: string) => {
+export const getNetworkInsights = async (customerCount: number, traffic: string): Promise<string> => {
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: `Generate a short executive summary (max 3 sentences) for a network administrator. The current active customers are ${customerCount} and the daily traffic is ${traffic}. Use a professional tone.`,
-      config: {
-        temperature: 0.7,
-      }
+      contents: `You are an AI network administrator for "Mtaani WiFi". 
+      Generate a short, encouraging status update based on these metrics: 
+      Total Customers: ${customerCount}, Data Traffic Today: ${traffic}.
+      Keep it professional and concise (max 20 words).`,
     });
-    // Use .text property to access the generated content
-    return response.text || "Network status is stable. No anomalies detected.";
+    // Accessing .text property directly as per SDK guidelines
+    return response.text || "Network status stable. All systems operational.";
   } catch (error) {
     console.error("Gemini Insight Error:", error);
-    return "Network status is stable. Regular maintenance scheduled for Sunday.";
+    return "Surveillance systems active. Analyzing traffic patterns...";
   }
 };
 
 /**
- * Generates a catchy slogan for marketing wifi plans.
+ * Generates catchy marketing copy for WiFi vouchers in Swahili.
  */
-export const generateVoucherAdCopy = async (planName: string, duration: string) => {
+export const generateVoucherAdCopy = async (planName: string, price: number): Promise<string> => {
   try {
     const response = await ai.models.generateContent({
       model: 'gemini-3-flash-preview',
-      contents: `Create a catchy 5-word slogan for a hotspot voucher plan called "${planName}" that lasts for ${duration}.`,
-      config: {
-        temperature: 0.9,
-      }
+      contents: `Create a short, catchy Swahili marketing message for a "${planName}" WiFi voucher costing ${price} Tsh. Include emojis.`,
     });
-    // Accessing .text property directly and cleaning up quotes
-    return response.text?.replace(/"/g, '') || "Fast & Reliable Internet Now";
+    // Accessing .text property directly as per SDK guidelines
+    return response.text || `Chagua ${planName} kwa Tsh ${price} tu!`;
   } catch (error) {
-    console.error("Gemini Slogan Error:", error);
-    return "Fast & Reliable Internet Now";
+    console.error("Gemini Ad Copy Error:", error);
+    return `Kifurushi cha ${planName} kinapatikana kwa Tsh ${price}.`;
   }
 };

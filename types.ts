@@ -1,18 +1,5 @@
 
-export type Status = 'active' | 'expired' | 'available';
-
-export interface Voucher {
-  id: string;
-  code: string;
-  plan: string;
-  price: number;
-  dataLimit: string;
-  timeLimit: string;
-  status: Status;
-  createdAt: string;
-  expiryDate?: string;
-}
-
+// Shared data structures for the Mtaani Management system
 export interface BundleRequest {
   id: string;
   customerName: string;
@@ -25,22 +12,21 @@ export interface BundleRequest {
   status: 'pending' | 'approved' | 'rejected';
 }
 
+export interface Voucher {
+  id: string;
+  code: string;
+  plan: string;
+  price: number;
+  dataLimit?: string;
+  timeLimit?: string;
+  status: 'available' | 'active' | 'used';
+  createdAt: string;
+  expiryDate?: string;
+}
+
 export interface Customer {
   id: string;
   name: string;
-  macAddress: string;
-  ipAddress: string;
-  connectedAt: string;
-  totalDataUsed: string;
-  currentVoucher: string;
-  status: 'online' | 'offline';
-}
-
-export interface RouterStats {
-  cpuUsage: number;
-  memoryUsage: number;
-  activeUsers: number;
-  uptime: string;
-  throughput: string;
-  ipPool: string;
+  phone: string;
+  joinedAt: string;
 }
