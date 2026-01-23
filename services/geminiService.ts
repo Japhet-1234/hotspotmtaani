@@ -1,9 +1,11 @@
+import { GoogleGenAI } from "@google/genai";
 
-import { GoogleGenAI, Type } from "@google/genai";
-
-// Always use process.env.API_KEY directly without fallbacks or modifications
+// Initialize the Google GenAI SDK with the API key from environment variables
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
+/**
+ * Fetches AI-generated network insights for the admin dashboard.
+ */
 export const getNetworkInsights = async (customerCount: number, traffic: string) => {
   try {
     const response = await ai.models.generateContent({
@@ -13,14 +15,17 @@ export const getNetworkInsights = async (customerCount: number, traffic: string)
         temperature: 0.7,
       }
     });
-    // .text is a property, not a method
-    return response.text;
+    // Use .text property to access the generated content
+    return response.text || "Network status is stable. No anomalies detected.";
   } catch (error) {
     console.error("Gemini Insight Error:", error);
     return "Network status is stable. Regular maintenance scheduled for Sunday.";
   }
 };
 
+/**
+ * Generates a catchy slogan for marketing wifi plans.
+ */
 export const generateVoucherAdCopy = async (planName: string, duration: string) => {
   try {
     const response = await ai.models.generateContent({
@@ -30,9 +35,10 @@ export const generateVoucherAdCopy = async (planName: string, duration: string) 
         temperature: 0.9,
       }
     });
-    // Accessing .text property directly
-    return response.text?.replace(/"/g, '');
+    // Accessing .text property directly and cleaning up quotes
+    return response.text?.replace(/"/g, '') || "Fast & Reliable Internet Now";
   } catch (error) {
+    console.error("Gemini Slogan Error:", error);
     return "Fast & Reliable Internet Now";
   }
 };

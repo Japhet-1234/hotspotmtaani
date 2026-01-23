@@ -1,6 +1,6 @@
 {
-  "name": "Mtaani Wifi - Management System",
-  "description": "Mfumo wa Hotspot kwa wateja wa Tanzania unaotoa vocha na kudhibiti router.",
+  "name": "Mtaani Wifi Hub",
+  "description": "Hotspot management system with real-time admin sync",
   "requestFramePermissions": [
     "geolocation"
   ]
