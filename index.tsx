@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 
-// Target the correct 'root' element defined in index.html
+// Tunatafuta element kwa ID. Hii haina shida ya path.
 const rootElement = document.getElementById('root');
 
 if (!rootElement) {

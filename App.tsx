@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { HashRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import Sidebar from './components/Sidebar.tsx';
@@ -8,6 +7,10 @@ import CustomerDatabase from './components/CustomerDatabase.tsx';
 import RouterControl from './components/RouterControl.tsx';
 import CustomerPortal from './components/CustomerPortal.tsx';
 
+/**
+ * AppContent handles the layout and routing logic.
+ * HashRouter used here is best for GitHub Pages as it avoids 404 on refresh.
+ */
 const AppContent: React.FC = () => {
   const location = useLocation();
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
