@@ -1,5 +1,7 @@
 {
   "name": "Mtaani Wifi - Management System",
-  "description": "A community-focused hotspot management system with customer portal for bundle selection and admin controls for router synchronization.",
-  "requestFramePermissions": []
+  "description": "Mfumo wa Hotspot kwa wateja wa Tanzania unaotoa vocha na kudhibiti router.",
+  "requestFramePermissions": [
+    "geolocation"
+  ]
 }
