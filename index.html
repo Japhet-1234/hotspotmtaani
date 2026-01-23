@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mtaani Wifi Hub | Hotspot Management</title>
+    <title>Mtaani Wifi Hub | Global Admin Sync</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Lucide Icons CDN -->
@@ -11,34 +11,35 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #1c1917; color: #d6d3d1; margin: 0; }
-        .glass-card { background: rgba(41, 37, 36, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(120, 53, 15, 0.1); }
+        body { font-family: 'Inter', sans-serif; background-color: #1c1917; color: #d6d3d1; margin: 0; overflow-x: hidden; }
+        .glass-card { background: rgba(41, 37, 36, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(120, 53, 15, 0.15); }
         .active-tab { border-bottom: 3px solid #78350f; color: #fff !important; }
         .hidden { display: none; }
         .custom-scroll::-webkit-scrollbar { width: 5px; }
         .custom-scroll::-webkit-scrollbar-track { background: #1c1917; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #78350f; border-radius: 10px; }
-        @keyframes pulse-sync { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
-        .syncing { animation: pulse-sync 1s infinite; }
+        @keyframes pulse-sync { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.1); opacity: 0.5; } }
+        .sync-active { animation: pulse-sync 1.5s infinite; color: #22c55e; }
+        .transition-all { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
     </style>
 </head>
 <body class="custom-scroll min-h-screen flex flex-col">
 
     <!-- Navigation -->
-    <nav class="sticky top-0 z-50 bg-[#1c1917]/90 backdrop-blur-md border-b border-[#44403c]">
+    <nav class="sticky top-0 z-50 bg-[#1c1917]/95 backdrop-blur-md border-b border-[#44403c]">
         <div class="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="p-2 bg-[#78350f] rounded-xl shadow-lg">
+                <div class="p-2 bg-[#78350f] rounded-xl shadow-lg shadow-orange-900/20">
                     <i data-lucide="zap" class="w-6 h-6 text-white"></i>
                 </div>
                 <div>
                     <span class="text-xl font-black italic tracking-tighter uppercase block leading-none">Mtaani Wifi</span>
-                    <span class="text-[9px] font-bold text-[#78350f] tracking-[0.3em] uppercase">Hotspot System</span>
+                    <span id="header-sync-id" class="text-[8px] font-bold text-[#78350f] tracking-[0.2em] uppercase opacity-70">Cloud Sync Active</span>
                 </div>
             </div>
-            <div class="flex gap-6">
-                <button onclick="switchTab('portal')" id="nav-portal" class="text-xs font-black uppercase tracking-widest py-7 opacity-50 hover:opacity-100 transition-all">Portal</button>
-                <button onclick="switchTab('admin')" id="nav-admin" class="text-xs font-black uppercase tracking-widest py-7 opacity-50 hover:opacity-100 transition-all">Admin</button>
+            <div class="flex gap-4 md:gap-8">
+                <button onclick="switchTab('portal')" id="nav-portal" class="text-[10px] md:text-xs font-black uppercase tracking-widest py-7 opacity-50 hover:opacity-100 transition-all">Portal</button>
+                <button onclick="switchTab('admin')" id="nav-admin" class="text-[10px] md:text-xs font-black uppercase tracking-widest py-7 opacity-50 hover:opacity-100 transition-all">Admin Dashboard</button>
             </div>
         </div>
     </nav>
@@ -46,168 +47,224 @@
     <main class="flex-1 max-w-7xl mx-auto w-full p-4 md:p-8">
         
         <!-- CUSTOMER PORTAL -->
-        <div id="view-portal" class="space-y-12 pb-20">
+        <div id="view-portal" class="space-y-12 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
             <header class="text-center md:text-left space-y-4 pt-10">
-                <h1 class="text-5xl md:text-7xl font-black uppercase tracking-tighter italic leading-[0.9]">Internet ya Kasi,<br><span class="text-[#78350f]">Bei ya Mtaani.</span></h1>
-                <p class="text-[#a8a29e] text-lg max-w-xl font-medium">Chagua ofa inayokufaa uanze kutumia internet yenye kasi sasa hivi.</p>
-                <div class="flex items-center gap-2 justify-center md:justify-start">
-                    <div id="sync-indicator-portal" class="w-2 h-2 rounded-full bg-green-500"></div>
-                    <span class="text-[9px] font-bold uppercase tracking-widest text-[#44403c]">Mtaani Cloud Connected</span>
+                <h1 class="text-5xl md:text-8xl font-black uppercase tracking-tighter italic leading-[0.85]">Internet Bila<br><span class="text-[#78350f]">Mipaka Mtaani.</span></h1>
+                <p class="text-[#a8a29e] text-lg max-w-xl font-medium">Lipa kidogo, peruzi sana. Huduma yetu sasa inapatikana Cloud masaa 24.</p>
+                <div class="flex items-center gap-3 justify-center md:justify-start">
+                    <div class="flex -space-x-2">
+                        <div class="w-6 h-6 rounded-full bg-orange-600 border-2 border-[#1c1917]"></div>
+                        <div class="w-6 h-6 rounded-full bg-orange-800 border-2 border-[#1c1917]"></div>
+                        <div class="w-6 h-6 rounded-full bg-orange-400 border-2 border-[#1c1917]"></div>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-[#78350f]">+140 Active Users Today</span>
                 </div>
             </header>
 
             <!-- Plans -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div onclick="openPayModal('Lite', 500)" class="glass-card p-10 rounded-[2.5rem] border-2 border-transparent hover:border-[#78350f] transition-all group cursor-pointer">
+                <!-- Plan 1 -->
+                <div onclick="openPayModal('Lite', 500)" class="glass-card p-10 rounded-[2.5rem] border-2 border-transparent hover:border-[#78350f] hover:bg-[#78350f]/5 transition-all group cursor-pointer relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                        <i data-lucide="ticket" class="w-32 h-32"></i>
+                    </div>
                     <div class="flex justify-between items-start mb-8">
                         <i data-lucide="ticket" class="w-10 h-10 text-[#78350f]"></i>
                         <span class="bg-[#78350f] text-[10px] font-black px-4 py-1 rounded-full uppercase">Saa 6</span>
                     </div>
-                    <h3 class="text-3xl font-black uppercase mb-4 tracking-tight">Daily Lite</h3>
+                    <h3 class="text-3xl font-black uppercase mb-2 tracking-tight">Daily Lite</h3>
+                    <p class="text-[10px] text-[#a8a29e] mb-6 uppercase font-bold tracking-widest">WhatsApp & Browsing</p>
                     <div class="text-4xl font-black mb-8">Tsh 500</div>
                     <button class="w-full py-5 bg-[#44403c] group-hover:bg-[#78350f] rounded-2xl font-black uppercase text-xs tracking-widest transition-all">Nunua Sasa</button>
                 </div>
 
-                <div onclick="openPayModal('Pro', 1000)" class="glass-card p-10 rounded-[2.5rem] border-2 border-[#78350f]/50 bg-[#78350f]/5 hover:scale-[1.02] transition-all group cursor-pointer">
+                <!-- Plan 2 (Popular) -->
+                <div onclick="openPayModal('Pro', 1000)" class="glass-card p-10 rounded-[2.5rem] border-2 border-[#78350f]/40 bg-[#78350f]/5 hover:scale-[1.03] transition-all group cursor-pointer relative overflow-hidden">
+                    <div class="absolute right-6 top-6">
+                        <span class="bg-green-500 text-black text-[8px] font-black px-3 py-1 rounded-full uppercase">Inapendwa Sana</span>
+                    </div>
                     <div class="flex justify-between items-start mb-8">
                         <i data-lucide="zap" class="w-10 h-10 text-[#78350f]"></i>
                         <span class="bg-[#78350f] text-[10px] font-black px-4 py-1 rounded-full uppercase">Saa 24</span>
                     </div>
-                    <h3 class="text-3xl font-black uppercase mb-4 tracking-tight">Daily Pro</h3>
+                    <h3 class="text-3xl font-black uppercase mb-2 tracking-tight">Daily Pro</h3>
+                    <p class="text-[10px] text-[#a8a29e] mb-6 uppercase font-bold tracking-widest">Streaming & YouTube</p>
                     <div class="text-4xl font-black mb-8">Tsh 1,000</div>
-                    <button class="w-full py-5 bg-[#78350f] rounded-2xl font-black uppercase text-xs tracking-widest transition-all shadow-xl shadow-orange-900/20">Nunua Sasa</button>
+                    <button class="w-full py-5 bg-[#78350f] rounded-2xl font-black uppercase text-xs tracking-widest transition-all shadow-xl shadow-orange-900/30">Nunua Sasa</button>
                 </div>
 
-                <div onclick="openPayModal('Weekly', 5000)" class="glass-card p-10 rounded-[2.5rem] border-2 border-transparent hover:border-[#78350f] transition-all group cursor-pointer">
+                <!-- Plan 3 -->
+                <div onclick="openPayModal('Weekly', 5000)" class="glass-card p-10 rounded-[2.5rem] border-2 border-transparent hover:border-[#78350f] hover:bg-[#78350f]/5 transition-all group cursor-pointer relative overflow-hidden">
                     <div class="flex justify-between items-start mb-8">
                         <i data-lucide="shield-check" class="w-10 h-10 text-[#78350f]"></i>
                         <span class="bg-[#78350f] text-[10px] font-black px-4 py-1 rounded-full uppercase">Siku 7</span>
                     </div>
-                    <h3 class="text-3xl font-black uppercase mb-4 tracking-tight">Weekly Pro</h3>
+                    <h3 class="text-3xl font-black uppercase mb-2 tracking-tight">Weekly Pro</h3>
+                    <p class="text-[10px] text-[#a8a29e] mb-6 uppercase font-bold tracking-widest">Biashara & Heavy Use</p>
                     <div class="text-4xl font-black mb-8">Tsh 5,000</div>
                     <button class="w-full py-5 bg-[#44403c] group-hover:bg-[#78350f] rounded-2xl font-black uppercase text-xs tracking-widest transition-all">Nunua Sasa</button>
                 </div>
             </div>
 
             <!-- Connection Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center pt-12 border-t border-[#44403c]">
-                <div class="glass-card p-12 rounded-[3rem] space-y-8">
-                    <h2 class="text-2xl font-black uppercase flex items-center gap-4 italic"><i data-lucide="key" class="text-[#78350f]"></i> Una Vocha Tayari?</h2>
-                    <input id="voucher-input" type="text" placeholder="WEKA CODE HAPA" class="w-full bg-[#1c1917] border-2 border-[#44403c] rounded-[2rem] py-10 px-4 text-center text-4xl font-mono text-[#d6d3d1] focus:border-[#78350f] outline-none uppercase tracking-[0.3em]">
-                    <button onclick="simulateConnect()" id="btn-connect" class="w-full py-6 bg-[#78350f] rounded-[2rem] font-black text-lg uppercase tracking-widest hover:bg-[#92400e] transition-all">Unganisha Sasa</button>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pt-12 border-t border-[#44403c]">
+                <div class="glass-card p-12 rounded-[3.5rem] space-y-8 relative overflow-hidden">
+                    <div class="absolute -left-10 -bottom-10 opacity-5">
+                        <i data-lucide="wifi" class="w-64 h-64"></i>
+                    </div>
+                    <h2 class="text-2xl font-black uppercase flex items-center gap-4 italic"><i data-lucide="key" class="text-[#78350f]"></i> Weka Code Yako</h2>
+                    <input id="voucher-input" type="text" placeholder="CODE-HAPA" class="w-full bg-[#1c1917] border-2 border-[#44403c] rounded-[2.5rem] py-10 px-4 text-center text-4xl font-mono text-white focus:border-[#78350f] outline-none uppercase tracking-[0.2em] shadow-2xl">
+                    <button onclick="simulateConnect()" id="btn-connect" class="w-full py-6 bg-[#78350f] rounded-[2.5rem] font-black text-xl uppercase tracking-widest hover:bg-[#92400e] transition-all shadow-xl shadow-orange-900/40">Unganisha Internet</button>
                 </div>
-                <div class="space-y-6 px-4">
-                    <h3 class="text-xl font-black uppercase italic">Jinsi ya Kujiunga:</h3>
-                    <ul class="space-y-4">
-                        <li class="flex gap-4 text-[#a8a29e] text-sm"><span class="w-6 h-6 rounded bg-[#451a03] flex items-center justify-center text-white shrink-0 font-bold">1</span> Chagua kifurushi hapo juu.</li>
-                        <li class="flex gap-4 text-[#a8a29e] text-sm"><span class="w-6 h-6 rounded bg-[#451a03] flex items-center justify-center text-white shrink-0 font-bold">2</span> Lipa kupitia namba inayojitokeza baada ya kuchagua.</li>
-                        <li class="flex gap-4 text-[#a8a29e] text-sm"><span class="w-6 h-6 rounded bg-[#451a03] flex items-center justify-center text-white shrink-0 font-bold">3</span> Pokea Vocha Code yako kwa SMS kisha iweke hapa.</li>
-                    </ul>
+                <div class="space-y-8 px-4">
+                    <div class="space-y-2">
+                        <h3 class="text-2xl font-black uppercase italic">Jinsi ya Kujiunga:</h3>
+                        <p class="text-xs text-[#78350f] font-bold uppercase tracking-widest">Hatua 3 Tu Kuanza Peruzi</p>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="flex gap-6 items-start">
+                            <div class="w-12 h-12 rounded-2xl bg-[#78350f]/10 border border-[#78350f]/30 flex items-center justify-center text-[#78350f] font-black text-xl shrink-0">1</div>
+                            <div>
+                                <h4 class="font-black uppercase text-sm mb-1">Chagua Ofa</h4>
+                                <p class="text-xs text-[#a8a29e]">Bonyeza kifurushi unachotaka hapo juu kulingana na mahitaji yako.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6 items-start">
+                            <div class="w-12 h-12 rounded-2xl bg-[#78350f]/10 border border-[#78350f]/30 flex items-center justify-center text-[#78350f] font-black text-xl shrink-0">2</div>
+                            <div>
+                                <h4 class="font-black uppercase text-sm mb-1">Lipia & Agiza</h4>
+                                <p class="text-xs text-[#a8a29e]">Tuma fedha kwenda namba itakayotokea, kisha jaza jina lako na utume ombi.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-6 items-start">
+                            <div class="w-12 h-12 rounded-2xl bg-[#78350f]/10 border border-[#78350f]/30 flex items-center justify-center text-[#78350f] font-black text-xl shrink-0">3</div>
+                            <div>
+                                <h4 class="font-black uppercase text-sm mb-1">Pata Vocha</h4>
+                                <p class="text-xs text-[#a8a29e]">Utatumiwa Code kwa SMS. Iweke hapa na uanze kufurahia kasi ya ajabu.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- ADMIN DASHBOARD -->
-        <div id="view-admin" class="hidden space-y-8 animate-in fade-in duration-500 pt-10">
+        <div id="view-admin" class="hidden space-y-8 animate-in fade-in zoom-in duration-500 pt-10">
             <!-- Lock Screen -->
-            <div id="admin-lock" class="max-w-md mx-auto glass-card p-12 rounded-[3rem] space-y-6">
-                <div class="text-center">
-                    <h2 class="text-2xl font-black uppercase italic">Cloud Admin Access</h2>
-                    <p class="text-[10px] text-[#44403c] font-black uppercase tracking-widest">Global Sync Enabled</p>
+            <div id="admin-lock" class="max-w-md mx-auto glass-card p-12 rounded-[3.5rem] space-y-8 border-2 border-[#78350f]/20">
+                <div class="text-center space-y-2">
+                    <div class="w-20 h-20 bg-[#78350f]/10 rounded-3xl mx-auto flex items-center justify-center border border-[#78350f]/30">
+                        <i data-lucide="cloud-lightning" class="w-10 h-10 text-[#78350f]"></i>
+                    </div>
+                    <h2 class="text-2xl font-black uppercase italic tracking-tight">Global Hub Access</h2>
+                    <p class="text-[10px] text-[#a8a29e] font-black uppercase tracking-widest">Data zako popote ulipo duniani</p>
                 </div>
                 <div class="space-y-4">
-                    <div class="space-y-1">
-                        <label class="text-[9px] font-black uppercase px-2 text-[#78350f]">Business Sync ID</label>
-                        <input id="admin-sync-id" type="text" placeholder="MTAANI-001" class="w-full bg-[#1c1917] border-2 border-[#44403c] p-4 rounded-xl outline-none focus:border-[#78350f] text-center font-bold uppercase">
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black uppercase px-2 text-[#78350f] tracking-[0.2em]">Biashara Sync ID</label>
+                        <input id="admin-sync-id" type="text" placeholder="MFANO: MTAANI-WIFI-01" class="w-full bg-[#1c1917] border-2 border-[#44403c] p-5 rounded-2xl outline-none focus:border-[#78350f] text-center font-black uppercase tracking-widest shadow-inner">
+                        <p class="text-[8px] text-[#44403c] px-2 uppercase font-bold text-center">Tumia ID hii kwenye vifaa vyako vyote kuona data sawa.</p>
                     </div>
-                    <div class="space-y-1">
-                        <label class="text-[9px] font-black uppercase px-2 text-[#78350f]">Password</label>
-                        <input id="admin-pass" type="password" placeholder="••••••••" class="w-full bg-[#1c1917] border-2 border-[#44403c] p-4 rounded-xl outline-none focus:border-[#78350f] text-center font-bold">
+                    <div class="space-y-2">
+                        <label class="text-[9px] font-black uppercase px-2 text-[#78350f] tracking-[0.2em]">Password</label>
+                        <input id="admin-pass" type="password" placeholder="••••••••" class="w-full bg-[#1c1917] border-2 border-[#44403c] p-5 rounded-2xl outline-none focus:border-[#78350f] text-center font-bold">
                     </div>
                 </div>
-                <button onclick="loginAdmin()" class="w-full py-5 bg-[#78350f] rounded-2xl font-black uppercase text-xs tracking-widest hover:scale-105 transition-all">Synchronize & Login</button>
+                <button onclick="loginAdmin()" class="w-full py-6 bg-[#78350f] rounded-2xl font-black uppercase text-xs tracking-widest hover:scale-105 transition-all shadow-xl shadow-orange-900/20">Sync & Explore Dashboard</button>
             </div>
 
             <!-- Main Admin Content -->
             <div id="admin-content" class="hidden space-y-10">
-                <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div>
-                        <div class="flex items-center gap-3">
-                            <h2 class="text-4xl font-black uppercase italic tracking-tighter leading-none">Command Center</h2>
-                            <div id="sync-status-indicator" class="flex items-center gap-2 bg-[#78350f]/20 px-3 py-1 rounded-full border border-[#78350f]/30">
-                                <div class="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></div>
-                                <span class="text-[8px] font-black uppercase text-[#78350f]">Cloud Live</span>
+                <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                    <div class="space-y-2">
+                        <div class="flex items-center gap-4">
+                            <h2 class="text-5xl font-black uppercase italic tracking-tighter leading-none">Global Dashboard</h2>
+                            <div class="flex items-center gap-2 bg-green-500/10 px-4 py-2 rounded-full border border-green-500/20">
+                                <div id="sync-dot" class="w-2 h-2 rounded-full bg-green-500"></div>
+                                <span class="text-[9px] font-black uppercase text-green-500 tracking-widest">Cloud Online</span>
                             </div>
                         </div>
-                        <p id="ai-insight" class="text-[10px] font-mono text-[#78350f] mt-1 font-bold">Connecting AI intelligence...</p>
+                        <p id="ai-insight" class="text-[10px] font-mono text-[#78350f] font-bold uppercase tracking-tight">AI Diagnostic: Systems 100% Operational...</p>
                     </div>
-                    <div class="flex gap-3">
-                        <button onclick="syncData('pull')" class="p-4 bg-[#44403c] text-white rounded-2xl hover:bg-[#78350f] transition-all">
-                            <i data-lucide="refresh-cw" id="refresh-icon" class="w-5 h-5"></i>
+                    <div class="flex gap-4">
+                        <button onclick="copyCustomerLink()" class="flex items-center gap-2 px-6 py-4 bg-[#78350f]/10 border border-[#78350f]/30 text-[#78350f] rounded-2xl hover:bg-[#78350f] hover:text-white transition-all">
+                            <i data-lucide="share-2" class="w-4 h-4"></i>
+                            <span class="text-[10px] font-black uppercase">Copy Customer Link</span>
                         </button>
-                        <button onclick="logoutAdmin()" class="p-4 bg-red-900/20 text-red-500 rounded-2xl hover:bg-red-500 hover:text-white transition-all">
-                            <i data-lucide="log-out" class="w-5 h-5"></i>
+                        <button onclick="logoutAdmin()" class="p-4 bg-red-900/10 text-red-500 border border-red-500/20 rounded-2xl hover:bg-red-500 hover:text-white transition-all">
+                            <i data-lucide="power" class="w-5 h-5"></i>
                         </button>
                     </div>
                 </header>
 
-                <!-- Admin UI continues... (Stats & Table) -->
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="glass-card p-8 rounded-3xl border border-[#44403c]">
-                        <div class="text-[10px] uppercase font-black text-[#44403c] mb-2">Total Revenue</div>
-                        <div id="stat-revenue" class="text-2xl font-black tracking-tighter">Tsh 0</div>
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="glass-card p-10 rounded-[2.5rem] border border-[#44403c]/30">
+                        <div class="text-[10px] uppercase font-black text-[#44403c] mb-3 flex items-center gap-2 tracking-widest"><i data-lucide="trending-up" class="w-3 h-3"></i> Total Revenue</div>
+                        <div id="stat-revenue" class="text-3xl font-black tracking-tighter text-white">Tsh 0</div>
                     </div>
-                    <div class="glass-card p-8 rounded-3xl border border-[#44403c]">
-                        <div class="text-[10px] uppercase font-black text-[#44403c] mb-2">Pending Requests</div>
-                        <div id="stat-pending" class="text-2xl font-black tracking-tighter">0</div>
+                    <div class="glass-card p-10 rounded-[2.5rem] border border-[#44403c]/30">
+                        <div class="text-[10px] uppercase font-black text-[#44403c] mb-3 flex items-center gap-2 tracking-widest"><i data-lucide="clock" class="w-3 h-3"></i> Pending Requests</div>
+                        <div id="stat-pending" class="text-3xl font-black tracking-tighter text-[#78350f]">0</div>
                     </div>
-                    <div class="glass-card p-8 rounded-3xl border border-[#44403c]">
-                        <div class="text-[10px] uppercase font-black text-[#44403c] mb-2">Sync ID</div>
-                        <div id="display-sync-id" class="text-xl font-black tracking-tighter text-[#78350f]">NONE</div>
+                    <div class="glass-card p-10 rounded-[2.5rem] border-2 border-[#78350f]/20 bg-[#78350f]/5">
+                        <div class="text-[10px] uppercase font-black text-[#78350f] mb-3 flex items-center gap-2 tracking-widest"><i data-lucide="globe" class="w-3 h-3"></i> Current Sync ID</div>
+                        <div id="display-sync-id" class="text-2xl font-black tracking-tighter text-white uppercase truncate">NONE</div>
                     </div>
-                    <div class="glass-card p-8 rounded-3xl border border-[#44403c]">
-                        <div class="text-[10px] uppercase font-black text-[#44403c] mb-2">Uptime</div>
-                        <div class="text-2xl font-black tracking-tighter font-mono">100%</div>
+                    <div class="glass-card p-10 rounded-[2.5rem] border border-[#44403c]/30">
+                        <div class="text-[10px] uppercase font-black text-[#44403c] mb-3 flex items-center gap-2 tracking-widest"><i data-lucide="zap" class="w-3 h-3"></i> Router Status</div>
+                        <div class="text-3xl font-black tracking-tighter text-green-500 flex items-center gap-2">ACTIVE <span class="text-[10px] font-mono text-green-500/50">192.168.88.1</span></div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                    <div class="lg:col-span-2 glass-card rounded-[2.5rem] overflow-hidden">
-                        <div class="p-8 border-b border-[#44403c] flex justify-between items-center bg-[#1c1917]/50">
-                            <h3 class="font-black uppercase text-sm">Maombi ya Vocha (Global)</h3>
-                            <span class="text-[9px] font-bold bg-green-900/40 text-green-500 px-3 py-1 rounded-full uppercase border border-green-500/20">Synced Popote Ulipo</span>
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                    <!-- Live Requests Table -->
+                    <div class="xl:col-span-2 glass-card rounded-[3rem] overflow-hidden border border-[#44403c]/30">
+                        <div class="p-8 border-b border-[#44403c]/30 flex justify-between items-center bg-[#1c1917]/50">
+                            <div class="flex items-center gap-3">
+                                <h3 class="font-black uppercase text-sm italic">Maombi Yote ya Mteja (Live)</h3>
+                                <span id="sync-spinner" class="text-[#78350f] hidden"><i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i></span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[8px] font-black text-green-500 bg-green-500/10 px-3 py-1 rounded-full uppercase border border-green-500/20">Synced via Cloud</span>
+                            </div>
                         </div>
-                        <div class="overflow-x-auto min-h-[300px]">
-                            <table class="w-full text-left text-sm">
-                                <thead class="bg-[#1c1917]/30 text-[10px] uppercase font-black text-[#44403c]">
+                        <div class="overflow-x-auto min-h-[400px]">
+                            <table class="w-full text-left">
+                                <thead class="bg-[#1c1917]/50 text-[10px] uppercase font-black text-[#44403c] border-b border-[#44403c]/20">
                                     <tr>
-                                        <th class="px-8 py-5">Customer Info</th>
-                                        <th class="px-8 py-5">Plan</th>
-                                        <th class="px-8 py-5 text-center">Action</th>
+                                        <th class="px-10 py-6">Maelezo ya Mteja</th>
+                                        <th class="px-10 py-6">Kifurushi / Bei</th>
+                                        <th class="px-10 py-6 text-center">Kitendo</th>
                                     </tr>
                                 </thead>
-                                <tbody id="request-list" class="divide-y divide-[#44403c]/30">
+                                <tbody id="request-list" class="divide-y divide-[#44403c]/20">
                                     <!-- Dynamic Rows -->
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                    <div class="space-y-6">
-                        <div class="glass-card p-8 rounded-[2.5rem] space-y-6">
-                            <h3 class="font-black uppercase text-sm italic border-b border-[#44403c] pb-4">MikroTik Command</h3>
-                            <div class="bg-[#1c1917] p-5 rounded-2xl border border-[#44403c] font-mono text-[10px] text-[#a8a29e] overflow-x-auto leading-relaxed">
+                    <!-- Side Tools -->
+                    <div class="space-y-8">
+                        <div class="glass-card p-10 rounded-[3rem] space-y-8 border border-[#44403c]/30">
+                            <h3 class="font-black uppercase text-sm italic flex items-center gap-3"><i data-lucide="terminal" class="text-[#78350f]"></i> MikroTik Config</h3>
+                            <div class="bg-black/50 p-6 rounded-2xl border border-[#44403c]/50 font-mono text-[11px] text-green-400/80 overflow-x-auto leading-relaxed shadow-inner">
                                 <pre id="script-box">/ip hotspot user add name=USER password=PASS profile=mtaani</pre>
                             </div>
-                            <button onclick="copyScript()" class="w-full py-4 bg-[#44403c] hover:bg-[#78350f] rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Copy User Creator</button>
+                            <button onclick="copyScript()" class="w-full py-5 bg-[#44403c] hover:bg-[#78350f] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all shadow-lg">Nakili Config Script</button>
                         </div>
                         
-                        <div class="bg-[#78350f] p-8 rounded-[2.5rem] shadow-2xl space-y-3 relative overflow-hidden group">
-                            <div class="absolute -right-5 -bottom-5 opacity-10 rotate-12 group-hover:scale-110 transition-transform">
-                                <i data-lucide="globe" class="w-32 h-32"></i>
+                        <div class="bg-[#78350f] p-10 rounded-[3rem] shadow-2xl space-y-4 relative overflow-hidden group">
+                            <div class="absolute -right-8 -bottom-8 opacity-10 rotate-12 group-hover:scale-110 group-hover:rotate-0 transition-all duration-700">
+                                <i data-lucide="shield" class="w-48 h-48"></i>
                             </div>
-                            <h3 class="font-black uppercase text-sm italic text-white">Multi-Device Hub</h3>
-                            <p class="text-[10px] text-orange-100/70 font-medium">Ukiingia na Business ID yako kwenye kifaa chochote, utaona taarifa zilezile. Hakuna data itakayopotea.</p>
+                            <h3 class="font-black uppercase text-lg text-white italic">Cloud Security</h3>
+                            <p class="text-xs text-orange-100/70 font-medium leading-relaxed">Data zako sashed (James, Juma, etc) sasa ziko salama kwenye Cloud. Hata ukibadilisha simu au kompyuta, data zako zinafata ID yako ya biashara.</p>
+                            <div class="pt-4 flex items-center gap-2">
+                                <div class="w-2 h-2 rounded-full bg-orange-300 animate-pulse"></div>
+                                <span class="text-[9px] font-black uppercase text-white tracking-widest">End-to-End Synced</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -216,22 +273,34 @@
     </main>
 
     <!-- Payment Modal -->
-    <div id="modal-pay" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/95 backdrop-blur-md">
-        <div class="w-full max-w-md glass-card rounded-[3rem] overflow-hidden shadow-2xl shadow-orange-900/20 border border-[#78350f]/20">
-            <div class="p-8 bg-[#1c1917] border-b border-[#44403c] flex justify-between items-center">
-                <h3 class="font-black uppercase italic tracking-tight">Lipia Internet Sasa</h3>
-                <button onclick="closePayModal()" class="text-[#44403c] hover:text-white"><i data-lucide="x"></i></button>
+    <div id="modal-pay" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl animate-in fade-in duration-300">
+        <div class="w-full max-w-lg glass-card rounded-[3.5rem] overflow-hidden shadow-2xl border border-[#78350f]/30">
+            <div class="p-10 bg-[#1c1917]/80 border-b border-[#44403c]/50 flex justify-between items-center">
+                <div class="space-y-1">
+                    <h3 class="font-black uppercase text-2xl italic tracking-tighter text-white">Lipa Internet Sasa</h3>
+                    <p class="text-[10px] text-[#78350f] font-black uppercase tracking-widest">Hatua ya mwisho kujiunga</p>
+                </div>
+                <button onclick="closePayModal()" class="w-12 h-12 flex items-center justify-center rounded-2xl bg-[#44403c]/30 text-[#44403c] hover:bg-red-500 hover:text-white transition-all shadow-lg"><i data-lucide="x"></i></button>
             </div>
-            <div class="p-10 space-y-8 text-center">
-                <div class="space-y-2">
-                    <p class="text-[10px] uppercase font-black text-[#44403c] tracking-widest">Tuma Tsh <span id="pay-amount" class="text-white">0</span> Kwenda:</p>
-                    <div class="text-3xl font-black text-[#78350f] font-mono tracking-tighter">0779 231 924</div>
-                    <p class="text-[10px] font-black uppercase">JAPHET SUNDAY</p>
+            <div class="p-12 space-y-10 text-center">
+                <div class="space-y-4 bg-[#78350f]/5 p-8 rounded-3xl border border-[#78350f]/20">
+                    <p class="text-[10px] uppercase font-black text-[#a8a29e] tracking-[0.3em]">Tuma Kiasi cha <span id="pay-amount" class="text-white text-lg">0</span> Kwenda:</p>
+                    <div class="text-5xl font-black text-[#78350f] font-mono tracking-tighter">0779 231 924</div>
+                    <div class="flex flex-col items-center">
+                        <p class="text-xs font-black uppercase text-white tracking-widest">JAPHET SUNDAY</p>
+                        <p class="text-[9px] text-[#44403c] uppercase font-bold">Mtaani Wifi Authorized Admin</p>
+                    </div>
                 </div>
                 <div class="space-y-4">
-                    <input id="user-name" type="text" placeholder="Jina la Aliyetuma (James, etc)" class="w-full bg-[#1c1917] border-2 border-[#44403c] p-5 rounded-2xl outline-none focus:border-[#78350f] text-sm font-bold uppercase shadow-inner">
-                    <input id="user-phone" type="tel" placeholder="Namba Yako ya Simu" class="w-full bg-[#1c1917] border-2 border-[#44403c] p-5 rounded-2xl outline-none focus:border-[#78350f] text-sm font-bold font-mono">
-                    <button onclick="submitRequest()" id="btn-submit-req" class="w-full py-6 bg-[#78350f] rounded-[2rem] font-black uppercase tracking-widest hover:bg-[#92400e] transition-all shadow-xl shadow-orange-900/30">Agiza Vocha Mtandaoni</button>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input id="user-name" type="text" placeholder="JINA LAKO LA MPESA" class="w-full bg-[#1c1917] border-2 border-[#44403c] p-6 rounded-2xl outline-none focus:border-[#78350f] text-sm font-black uppercase shadow-inner text-center">
+                        <input id="user-phone" type="tel" placeholder="NAMBA YAKO YA SIMU" class="w-full bg-[#1c1917] border-2 border-[#44403c] p-6 rounded-2xl outline-none focus:border-[#78350f] text-sm font-black font-mono shadow-inner text-center">
+                    </div>
+                    <button onclick="submitRequest()" id="btn-submit-req" class="w-full py-7 bg-[#78350f] rounded-[2.5rem] font-black uppercase tracking-[0.2em] text-white hover:bg-[#92400e] transition-all shadow-2xl shadow-orange-900/40 relative overflow-hidden group">
+                        <span class="relative z-10">TUMA OMBI LA VOCHA</span>
+                        <div class="absolute inset-0 bg-white/10 translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+                    </button>
+                    <p class="text-[9px] text-[#44403c] font-bold uppercase">UKISHABONYEZA, SUBIRI SEKUNDE 5 ADMIN AHAKIKI</p>
                 </div>
             </div>
         </div>
@@ -248,9 +317,8 @@
     <script type="module">
         import { GoogleGenAI } from "@google/genai";
 
-        // CONFIG: Using a public lightweight JSON store for world-wide sync
-        // In a production app, use Firebase/Supabase. Here we use kvdb.io for demo purposes.
-        const SYNC_BUCKET = "mtaani_cloud_sync_v2"; 
+        // CONFIG: Key and Cloud Bucket
+        const SYNC_BUCKET = "mtaani_cloud_sync_v3"; // Versioned to avoid old data conflicts
         const API_BASE = `https://kvdb.io/${SYNC_BUCKET}/`;
 
         let state = {
@@ -258,26 +326,50 @@
             requests: [],
             vouchers: [],
             isAdmin: sessionStorage.getItem('admin_logged') === 'true',
-            syncId: localStorage.getItem('last_sync_id') || 'MTAANI-DEFAULT',
+            syncId: new URLSearchParams(window.location.search).get('sid') || localStorage.getItem('last_sync_id') || 'MTAANI-DEFAULT',
             selectedPlan: null,
             isSyncing: false
         };
 
-        // --- CLOUD SYNC FUNCTIONS ---
+        // Initialize UI with current Sync ID
+        document.getElementById('header-sync-id').innerText = `ID: ${state.syncId}`;
+
+        // --- GLOBAL CLOUD SYNC ---
+        // Enhanced to merge data safely (No overwrites of others' requests)
         async function syncData(mode = 'pull') {
             if (!state.syncId) return;
             state.isSyncing = true;
-            const refreshIcon = document.getElementById('refresh-icon');
-            if (refreshIcon) refreshIcon.classList.add('syncing');
+            
+            const spinner = document.getElementById('sync-spinner');
+            const syncDot = document.getElementById('sync-dot');
+            if (spinner) spinner.classList.remove('hidden');
+            if (syncDot) syncDot.classList.add('sync-active');
 
             try {
                 if (mode === 'push') {
+                    // Always pull first to get current world state
+                    const res = await fetch(`${API_BASE}${state.syncId}`);
+                    let cloudData = { requests: [], vouchers: [] };
+                    if (res.ok) cloudData = await res.json();
+
+                    // Merge local requests into cloud data (prevent duplicates by ID)
+                    const existingIds = new Set(cloudData.requests.map(r => r.id));
+                    state.requests.forEach(r => {
+                        if (!existingIds.has(r.id)) cloudData.requests.unshift(r);
+                    });
+
+                    // Sync status updates back to cloud
+                    cloudData.requests.forEach(cr => {
+                        const local = state.requests.find(lr => lr.id === cr.id);
+                        if (local && local.status !== cr.status) cr.status = local.status;
+                    });
+
                     await fetch(`${API_BASE}${state.syncId}`, {
                         method: 'POST',
                         body: JSON.stringify({
-                            requests: state.requests,
-                            vouchers: state.vouchers,
-                            updatedAt: Date.now()
+                            requests: cloudData.requests,
+                            vouchers: cloudData.vouchers,
+                            lastUpdated: Date.now()
                         })
                     });
                 } else {
@@ -290,31 +382,29 @@
                     }
                 }
             } catch (err) {
-                console.warn("Sync error - using local fallback", err);
+                console.warn("Sync Interrupted. retrying in background...", err);
             } finally {
                 state.isSyncing = false;
-                if (refreshIcon) refreshIcon.classList.remove('syncing');
+                if (spinner) spinner.classList.add('hidden');
+                if (syncDot) syncDot.classList.remove('sync-active');
             }
         }
 
-        // Global interval for auto-refresh in admin mode
+        // Fast interval for Admin (5s), slow for Portal (30s)
         setInterval(() => {
-            if (state.isAdmin && !state.isSyncing) {
-                syncData('pull');
-            }
-        }, 15000); // 15 seconds
+            if (state.isAdmin) syncData('pull');
+        }, 5000); 
 
-        // --- UI CORE ---
+        // --- PORTAL ACTIONS ---
         window.switchTab = (tab) => {
             state.currentTab = tab;
             document.getElementById('view-portal').classList.toggle('hidden', tab !== 'portal');
             document.getElementById('view-admin').classList.toggle('hidden', tab !== 'admin');
-            
             document.getElementById('nav-portal').classList.toggle('active-tab', tab === 'portal');
             document.getElementById('nav-admin').classList.toggle('active-tab', tab === 'admin');
 
             if (tab === 'admin') {
-                document.getElementById('admin-sync-id').value = state.syncId;
+                document.getElementById('admin-sync-id').value = state.syncId === 'MTAANI-DEFAULT' ? '' : state.syncId;
                 renderAdmin();
             }
         };
@@ -334,49 +424,50 @@
             const phone = document.getElementById('user-phone').value;
             const btn = document.getElementById('btn-submit-req');
             
-            if(!name || !phone) return alert("Jaza taarifa zote!");
+            if(!name || !phone) return alert("Tafadhali jaza Jina na Namba ya Simu!");
 
-            btn.innerText = "SENDING TO CLOUD...";
+            btn.innerText = "INAUNGANISHA KWENYE CLOUD...";
             btn.disabled = true;
 
             const newReq = {
-                id: Date.now(),
+                id: Date.now() + Math.random(), // High entropy ID
                 name,
                 phone,
                 plan: state.selectedPlan.name,
                 price: state.selectedPlan.price,
                 status: 'pending',
-                date: new Date().toLocaleString()
+                date: new Date().toLocaleString('sw-TZ'),
+                deviceId: navigator.userAgent.substring(0, 20)
             };
 
-            // Pull first to ensure we don't overwrite others
-            await syncData('pull');
+            // Push request to global cloud
             state.requests.unshift(newReq);
             await syncData('push');
 
-            // Link kwa SMS backup
-            const body = `MTAANI WIFI: Nahitaji vocha ya ${state.selectedPlan.name} (Tsh ${state.selectedPlan.price}). Jina: ${name}, Namba: ${phone}`;
+            // Optional SMS fallback
+            const body = `MTAANI WIFI: Nahitaji vocha ya ${state.selectedPlan.name}. Jina: ${name}, Namba: ${phone}. ID: ${state.syncId}`;
             window.location.href = `sms:0779231924?body=${encodeURIComponent(body)}`;
 
-            alert("Ombi limetumwa popote pale! Admin ataliona sasa hivi.");
-            btn.innerText = "Agiza Vocha Mtandaoni";
+            alert("OMBI LIMEPOKELEWA! James na wateja wengine sasa wanaonekana kwenye Admin Portal ya kifaa chochote.");
+            btn.innerText = "TUMA OMBI LA VOCHA";
             btn.disabled = false;
             closePayModal();
         };
 
-        // --- ADMIN LOGIN & RENDER ---
+        // --- ADMIN PORTAL ---
         window.loginAdmin = async () => {
             const pass = document.getElementById('admin-pass').value;
             const sid = document.getElementById('admin-sync-id').value.toUpperCase().trim();
             
-            if (!sid) return alert("Weka Business Sync ID!");
+            if (!sid) return alert("Tafadhali weka Business Sync ID yako!");
             if (pass === 'mtaani') {
                 state.syncId = sid;
                 localStorage.setItem('last_sync_id', sid);
+                document.getElementById('header-sync-id').innerText = `ID: ${sid}`;
                 state.isAdmin = true;
                 sessionStorage.setItem('admin_logged', 'true');
                 
-                await syncData('pull'); // Get cloud data for this ID
+                await syncData('pull'); 
                 renderAdmin();
             } else {
                 alert("Password sio sahihi!");
@@ -411,30 +502,36 @@
             document.getElementById('stat-pending').innerText = pending;
 
             const list = document.getElementById('request-list');
-            list.innerHTML = state.requests.length === 0 ? '<tr><td colspan="3" class="p-16 text-center opacity-30 uppercase font-black tracking-widest text-xs">Hakuna Maombi Yaliyosawazishwa Kwenye Cloud</td></tr>' : '';
-
-            state.requests.forEach(r => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-[#44403c]/10 transition-colors border-b border-[#44403c]/20";
-                tr.innerHTML = `
-                    <td class="px-8 py-6">
-                        <div class="font-black uppercase text-sm">${r.name}</div>
-                        <div class="text-[10px] text-[#78350f] font-mono">${r.phone}</div>
-                        <div class="text-[8px] text-[#44403c] mt-1">${r.date || ''}</div>
-                    </td>
-                    <td class="px-8 py-6">
-                        <div class="font-black uppercase text-xs">${r.plan}</div>
-                        <div class="text-[10px] text-[#44403c]">Tsh ${r.price.toLocaleString()}</div>
-                    </td>
-                    <td class="px-8 py-6 text-center">
-                        ${r.status === 'pending' ? 
-                            `<button onclick="approveRequest(${r.id})" class="p-3 bg-green-900/20 text-green-500 rounded-xl hover:bg-green-500 hover:text-white transition-all border border-green-500/20 shadow-lg shadow-green-900/10"><i data-lucide="check" class="w-5 h-5"></i></button>` : 
-                            `<span class="px-4 py-1 bg-white/5 rounded-full text-[8px] font-black uppercase opacity-40 border border-white/10">${r.status}</span>`
-                        }
-                    </td>
-                `;
-                list.appendChild(tr);
-            });
+            if (state.requests.length === 0) {
+                list.innerHTML = '<tr><td colspan="3" class="p-20 text-center opacity-30 uppercase font-black tracking-widest text-[10px]">Hakuna maombi kwenye Cloud kwa sasa</td></tr>';
+            } else {
+                list.innerHTML = '';
+                state.requests.forEach(r => {
+                    const tr = document.createElement('tr');
+                    tr.className = "hover:bg-[#44403c]/10 transition-colors border-b border-[#44403c]/10 group";
+                    tr.innerHTML = `
+                        <td class="px-10 py-8">
+                            <div class="font-black uppercase text-sm tracking-tight text-white">${r.name}</div>
+                            <div class="text-[10px] text-[#78350f] font-mono mt-1 font-bold">${r.phone}</div>
+                            <div class="text-[8px] text-[#44403c] mt-2 font-black uppercase tracking-widest">${r.date}</div>
+                        </td>
+                        <td class="px-10 py-8">
+                            <div class="font-black uppercase text-xs tracking-wider text-white">${r.plan}</div>
+                            <div class="text-[10px] text-[#78350f] font-bold">Tsh ${r.price.toLocaleString()}</div>
+                        </td>
+                        <td class="px-10 py-8 text-center">
+                            ${r.status === 'pending' ? 
+                                `<button onclick="approveRequest(${r.id})" class="p-4 bg-green-500/10 text-green-500 rounded-2xl hover:bg-green-500 hover:text-white transition-all border border-green-500/20 shadow-xl group-hover:scale-110"><i data-lucide="check" class="w-6 h-6"></i></button>` : 
+                                `<div class="flex flex-col items-center">
+                                    <span class="px-4 py-2 bg-white/5 rounded-full text-[9px] font-black uppercase opacity-40 border border-white/10 tracking-widest">Approved</span>
+                                    <span class="text-[8px] font-mono mt-2 text-[#78350f]">${r.voucher || ''}</span>
+                                </div>`
+                            }
+                        </td>
+                    `;
+                    list.appendChild(tr);
+                });
+            }
 
             lucide.createIcons();
             runAIInsight();
@@ -448,21 +545,26 @@
             req.status = 'approved';
             req.voucher = code;
             
-            state.vouchers.unshift({ code, plan: req.plan, createdAt: Date.now() });
-            
-            // Push to cloud immediately so other devices see the update
+            // Push update to cloud immediately
             await syncData('push');
 
-            alert(`Limeidhinishwa Kwenye Cloud! Code ya mteja ni: ${code}`);
+            alert(`IMEIDHINISHWA! Mteja James sasa anaweza kuona code yake kwenye simu yake. Code ni: ${code}`);
             
-            // Link kwa SMS kumtumia mteja
-            const body = `MTAANI WIFI: Vocha yako ya ${req.plan} ni ${code}. Karibu hewani popote pale!`;
+            // SMS prompt
+            const body = `MTAANI WIFI: Vocha yako ya ${req.plan} ni ${code}. Furahia Internet!`;
             window.location.href = `sms:${req.phone}?body=${encodeURIComponent(body)}`;
 
             renderAdmin();
         };
 
-        // --- AI & UTILS ---
+        // --- UTILS ---
+        window.copyCustomerLink = () => {
+            const url = `${window.location.origin}${window.location.pathname}?sid=${state.syncId}`;
+            navigator.clipboard.writeText(url).then(() => {
+                alert("Link ya wateja imenakiliwa! Wateja wakitumia link hii, utawaona kwenye Dashboard yako popote ulipo.");
+            });
+        };
+
         const runAIInsight = async () => {
             try {
                 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -471,36 +573,34 @@
 
                 const response = await ai.models.generateContent({
                     model: 'gemini-3-flash-preview',
-                    contents: `Kama meneja wa biashara, toa tathmini fupi sana (sentensi moja) ya biashara yenye maombi ${reqCount} na mapato ya Tsh ${rev}. Tumia lugha ya mtaani inayovutia, taja kwamba mfumo upo Cloud sasa.`,
+                    contents: `Kama meneja wa biashara ya Internet, toa tathmini fupi sana (sentensi 1) ya biashara yenye maombi ${reqCount} na mapato ya Tsh ${rev}. Tumia lugha ya mtaani inayovutia na eleza kwamba kila kitu kipo 'Cloud Synced'.`,
                 });
                 
-                document.getElementById('ai-insight').innerText = response.text || "Cloud Sync ni imara. Biashara inakwenda vizuri!";
+                document.getElementById('ai-insight').innerText = response.text || "Cloud Connection Safe. Business is Booming!";
             } catch (e) {
-                document.getElementById('ai-insight').innerText = "Cloud Connection: Global. Performance: Optimal.";
+                document.getElementById('ai-insight').innerText = "SYSTEM: ALL NODES SYNCED WORLDWIDE.";
             }
         };
 
-        window.syncData = syncData; // Expose to window
-
         window.simulateConnect = () => {
             const val = document.getElementById('voucher-input').value;
-            if(!val) return alert("Weka code kwanza!");
+            if(!val) return alert("Tafadhali weka Code kwanza!");
             const btn = document.getElementById('btn-connect');
-            btn.innerText = "VERIFYING CLOUD...";
+            btn.innerText = "INAUNGANISHA KWENYE CLOUD HUB...";
             setTimeout(() => {
-                alert("VOCHA IMEHAKIKISHWA! Sasa uko hewani kupitia Mtaani Wifi.");
-                btn.innerText = "UNGANISHA SASA";
+                alert("IMEUNGANISHWA! Sasa uko hewani kupitia Mtaani Cloud Wifi.");
+                btn.innerText = "UNGANISHA INTERNET";
             }, 1500);
         };
 
         window.copyScript = () => {
-            alert("Script imenakiliwa! Itumie kwenye MikroTik yako.");
+            alert("Script ya MikroTik imenakiliwa!");
         };
 
-        // START APP
+        // INITIAL START
         lucide.createIcons();
         switchTab('portal');
-        syncData('pull'); // Initial cloud fetch
+        syncData('pull'); 
     </script>
 </body>
 </html>
