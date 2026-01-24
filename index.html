@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jeff | System Admin Master Console</title>
+    <title>Jeff | Master System Admin Console</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -19,105 +19,126 @@
         .live-dot { animation: pulse-live 2s infinite; }
         .custom-scroll::-webkit-scrollbar { width: 4px; }
         .custom-scroll::-webkit-scrollbar-thumb { background: var(--brand); border-radius: 10px; }
-        .activity-item:hover { background: rgba(120, 53, 15, 0.05); }
+        .matrix-bg { background: radial-gradient(circle at 50% 50%, rgba(120, 53, 15, 0.05) 0%, transparent 100%); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-orange-900/30 overflow-x-hidden">
+<body class="min-h-screen flex flex-col selection:bg-orange-900/30 overflow-x-hidden matrix-bg">
 
     <!-- Navbar -->
     <nav class="sticky top-0 z-50 glass border-b border-white/5">
         <div class="max-w-[1600px] mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <div class="w-12 h-12 bg-orange-900/20 rounded-2xl flex items-center justify-center border border-orange-900/30">
-                    <i data-lucide="shield-check" class="w-6 h-6 text-[#78350f] live-dot"></i>
+                    <i data-lucide="cpu" class="w-6 h-6 text-[#78350f] live-dot"></i>
                 </div>
                 <div>
-                    <h1 class="text-xl font-black uppercase tracking-tighter italic leading-none">JEFF <span class="text-[#78350f]">COMMAND</span></h1>
+                    <h1 class="text-xl font-black uppercase tracking-tighter italic leading-none">JEFF <span class="text-[#78350f]">OS</span></h1>
                     <div class="flex items-center gap-2 mt-1">
                         <span id="sync-indicator" class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                        <span class="text-[8px] font-bold uppercase tracking-widest text-zinc-500">Global Server Active</span>
+                        <span class="text-[8px] font-bold uppercase tracking-widest text-zinc-500">System Kernel v2.0</span>
                     </div>
                 </div>
             </div>
-            <div class="flex bg-white/5 p-1 rounded-2xl border border-white/5">
-                <button onclick="switchTab('portal')" id="btn-portal" class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Mteja</button>
-                <button onclick="switchTab('admin')" id="btn-admin" class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Admin Master</button>
+            <div class="flex bg-white/5 p-1 rounded-2xl border border-white/5 shadow-inner">
+                <button onclick="switchTab('portal')" id="btn-portal" class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Interface</button>
+                <button onclick="switchTab('admin')" id="btn-admin" class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Master Admin</button>
             </div>
         </div>
     </nav>
 
     <main class="flex-1 max-w-[1600px] mx-auto w-full p-6 md:p-10">
         
-        <!-- MTEJA VIEW -->
+        <!-- CUSTOMER INTERFACE -->
         <div id="view-portal" class="space-y-12 animate-in fade-in duration-700">
+            <!-- Returning User Greeting -->
+            <div id="returning-greeting" class="hidden glass p-6 rounded-3xl border-orange-900/40 bg-orange-900/5 flex items-center justify-between shadow-2xl">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-orange-900/20 rounded-full flex items-center justify-center">
+                        <i data-lucide="smile" class="text-orange-900 w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] font-black uppercase tracking-widest text-zinc-500">Mfumo umekutambua!</p>
+                        <h3 class="text-sm font-bold italic">Karibu tena, Mteja wa Jeff.</h3>
+                    </div>
+                </div>
+                <span class="text-[9px] font-mono text-orange-900 bg-orange-900/10 px-3 py-1 rounded-full border border-orange-900/20" id="display-sid">NODE-ID</span>
+            </div>
+
             <header class="max-w-4xl space-y-6">
                 <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-900/10 border border-orange-900/20 shadow-xl">
-                    <i data-lucide="globe" class="w-3 h-3 text-orange-600"></i>
-                    <span class="text-[9px] font-black uppercase tracking-widest text-[#78350f]">Connected to Jeff's Mainframe</span>
+                    <i data-lucide="radio" class="w-3 h-3 text-orange-600"></i>
+                    <span class="text-[9px] font-black uppercase tracking-widest text-[#78350f]">Broadcasting High-Speed Signal</span>
                 </div>
-                <h2 class="text-7xl md:text-9xl font-black uppercase tracking-tighter italic leading-[0.8] tracking-[-0.05em]">Kasi. <br>Iliyojificha. <br><span class="text-[#78350f]">Mtaani.</span></h2>
-                <p class="text-zinc-500 text-xl font-medium leading-relaxed max-w-2xl">Karibu kwenye mtandao wenye kasi zaidi. Kila kitu unachofanya hapa kinalindwa na kuratibiwa na seva ya Jeff moja kwa moja.</p>
+                <h2 class="text-7xl md:text-9xl font-black uppercase tracking-tighter italic leading-[0.85] tracking-[-0.05em]">Internet <br>Kwa <br><span class="text-[#78350f]">Bajeti.</span></h2>
+                <p class="text-zinc-500 text-xl font-medium leading-relaxed max-w-2xl">Pata vocha ya haraka hapa Mtaani kwetu. Mfumo wa Jeff unakutambua na kukupatia huduma bora kila unaporudi.</p>
             </header>
 
-            <!-- Pricing -->
+            <!-- Pricing Grid -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div onclick="openPayModal('LITE-6H', 500)" class="glass p-12 rounded-[3.5rem] hover:border-orange-900 transition-all cursor-pointer group shadow-2xl relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity"><i data-lucide="zap" class="w-32 h-32"></i></div>
+                <!-- Plan Card 1 -->
+                <div onclick="openPayModal('BRONZE-6H', 500)" class="glass p-12 rounded-[3.5rem] hover:border-orange-900 transition-all cursor-pointer group shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity"><i data-lucide="battery-charging" class="w-32 h-32"></i></div>
                     <span class="text-[10px] font-black bg-zinc-800 px-4 py-1 rounded-full uppercase mb-6 block w-fit">6 HOURS</span>
-                    <h3 class="text-4xl font-black mb-1">Lite Plan</h3>
+                    <h3 class="text-4xl font-black mb-1">Bronze</h3>
                     <div class="text-2xl font-bold text-orange-900 mb-8 italic">Tsh 500</div>
-                    <button class="w-full py-5 bg-zinc-800 group-hover:bg-orange-900 rounded-3xl font-black uppercase text-xs tracking-widest transition-all">Agiza Sasa</button>
+                    <button class="w-full py-5 bg-zinc-800 group-hover:bg-orange-900 rounded-3xl font-black uppercase text-xs tracking-widest transition-all">Buy Now</button>
                 </div>
-                <div onclick="openPayModal('PRO-24H', 1000)" class="glass p-12 rounded-[3.5rem] border-orange-900/40 bg-orange-900/5 hover:scale-[1.02] transition-all cursor-pointer group shadow-2xl relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity text-orange-900"><i data-lucide="flame" class="w-32 h-32"></i></div>
+                <!-- Plan Card 2 -->
+                <div onclick="openPayModal('SILVER-24H', 1000)" class="glass p-12 rounded-[3.5rem] border-orange-900/40 bg-orange-900/5 hover:scale-[1.02] transition-all cursor-pointer group shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity text-orange-900"><i data-lucide="rocket" class="w-32 h-32"></i></div>
                     <span class="text-[10px] font-black bg-orange-900 px-4 py-1 rounded-full uppercase mb-6 block w-fit">24 HOURS</span>
-                    <h3 class="text-4xl font-black mb-1">Pro Plan</h3>
+                    <h3 class="text-4xl font-black mb-1">Silver</h3>
                     <div class="text-2xl font-bold text-orange-900 mb-8 italic">Tsh 1,000</div>
-                    <button class="w-full py-5 bg-orange-900 rounded-3xl font-black uppercase text-xs tracking-widest transition-all shadow-xl">Agiza Sasa</button>
+                    <button class="w-full py-5 bg-orange-900 rounded-3xl font-black uppercase text-xs tracking-widest transition-all shadow-xl">Buy Now</button>
                 </div>
-                <div onclick="openPayModal('PREMIUM-7D', 5000)" class="glass p-12 rounded-[3.5rem] hover:border-orange-900 transition-all cursor-pointer group shadow-2xl relative overflow-hidden">
-                    <div class="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity"><i data-lucide="star" class="w-32 h-32"></i></div>
+                <!-- Plan Card 3 -->
+                <div onclick="openPayModal('GOLD-7D', 5000)" class="glass p-12 rounded-[3.5rem] hover:border-orange-900 transition-all cursor-pointer group shadow-2xl relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity"><i data-lucide="crown" class="w-32 h-32"></i></div>
                     <span class="text-[10px] font-black bg-zinc-800 px-4 py-1 rounded-full uppercase mb-6 block w-fit">7 DAYS</span>
-                    <h3 class="text-4xl font-black mb-1">Weekly Plan</h3>
+                    <h3 class="text-4xl font-black mb-1">Gold</h3>
                     <div class="text-2xl font-bold text-orange-900 mb-8 italic">Tsh 5,000</div>
-                    <button class="w-full py-5 bg-zinc-800 group-hover:bg-orange-900 rounded-3xl font-black uppercase text-xs tracking-widest transition-all">Agiza Sasa</button>
+                    <button class="w-full py-5 bg-zinc-800 group-hover:bg-orange-900 rounded-3xl font-black uppercase text-xs tracking-widest transition-all">Buy Now</button>
                 </div>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
                 <div class="glass p-12 rounded-[4rem] space-y-8 shadow-2xl">
-                    <h3 class="text-2xl font-black uppercase italic flex items-center gap-4"><i data-lucide="wifi" class="text-orange-900"></i> Code Connect</h3>
-                    <input id="voucher-input" type="text" placeholder="XXXX-XXXX" class="w-full bg-black/40 border-2 border-white/5 rounded-[2.5rem] py-12 px-6 text-center text-5xl font-mono text-white focus:border-orange-900 outline-none uppercase tracking-widest shadow-inner">
-                    <button onclick="globalConnect()" class="w-full py-8 bg-orange-900 rounded-[2.5rem] font-black text-2xl uppercase tracking-widest shadow-2xl active:scale-[0.98] transition-transform">ACTIVATE NOW</button>
+                    <h3 class="text-2xl font-black uppercase italic flex items-center gap-4"><i data-lucide="key" class="text-orange-900"></i> Voucher Activation</h3>
+                    <input id="voucher-input" type="text" placeholder="CODE-HAPA" class="w-full bg-black/40 border-2 border-white/5 rounded-[2.5rem] py-12 px-6 text-center text-5xl font-mono text-white focus:border-orange-900 outline-none uppercase tracking-widest shadow-inner">
+                    <button onclick="globalConnect()" class="w-full py-8 bg-orange-900 rounded-[2.5rem] font-black text-2xl uppercase tracking-widest shadow-2xl active:scale-[0.98] transition-transform">ACTIVATE</button>
                 </div>
                 <div class="glass p-12 rounded-[4rem] space-y-6 flex flex-col shadow-2xl">
-                    <h3 class="text-xs font-black uppercase italic tracking-widest text-zinc-400 border-b border-white/5 pb-6 flex items-center gap-3"><i data-lucide="history" class="w-4 h-4"></i> My Vouchers</h3>
+                    <h3 class="text-xs font-black uppercase italic tracking-widest text-zinc-400 border-b border-white/5 pb-6 flex items-center justify-between">
+                        <span class="flex items-center gap-3"><i data-lucide="shopping-bag" class="w-4 h-4"></i> My Vouchers</span>
+                        <span class="text-[8px] opacity-50 font-mono" id="my-sid"></span>
+                    </h3>
                     <div id="customer-history" class="space-y-4 overflow-y-auto flex-1 custom-scroll max-h-[350px] pr-2">
-                        <div class="text-center py-24 opacity-20">
-                            <i data-lucide="inbox" class="w-12 h-12 mx-auto mb-4"></i>
-                            <p class="text-[10px] font-black uppercase">No active vouchers</p>
+                        <!-- History items -->
+                        <div class="text-center py-24 opacity-10">
+                            <i data-lucide="layers" class="w-12 h-12 mx-auto mb-4"></i>
+                            <p class="text-[10px] font-black uppercase">No History Found</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- ADMIN MASTER COMMAND -->
+        <!-- MASTER ADMIN COMMAND CENTER -->
         <div id="view-admin" class="hidden space-y-10 animate-in slide-in-from-bottom duration-500">
             <!-- Strict Login -->
-            <div id="admin-lock" class="max-w-md mx-auto glass p-12 rounded-[4rem] space-y-10 border-2 border-orange-900/30 mt-20 shadow-[0_0_100px_rgba(120,53,15,0.2)]">
+            <div id="admin-lock" class="max-w-md mx-auto glass p-12 rounded-[4rem] space-y-10 border-2 border-orange-900/30 mt-20 shadow-[0_0_150px_rgba(120,53,15,0.15)]">
                 <div class="text-center space-y-4">
                     <div class="w-24 h-24 bg-orange-900/10 rounded-[2.5rem] mx-auto flex items-center justify-center border border-orange-900/20 shadow-xl">
-                        <i data-lucide="fingerprint" class="w-12 h-12 text-orange-900"></i>
+                        <i data-lucide="eye" class="w-12 h-12 text-orange-900"></i>
                     </div>
-                    <h2 class="text-3xl font-black uppercase italic tracking-tighter">System Administrator</h2>
-                    <p class="text-[9px] text-zinc-500 uppercase tracking-[0.3em] font-bold">Authorized Personnel Only</p>
+                    <h2 class="text-3xl font-black uppercase italic tracking-tighter">Command Login</h2>
+                    <p class="text-[9px] text-zinc-500 uppercase tracking-[0.3em] font-bold">God-Eye Mode Activation</p>
                 </div>
                 <div class="space-y-4">
                     <input id="admin-id-input" type="text" placeholder="USER ID" class="w-full bg-black/40 border border-white/10 p-6 rounded-3xl outline-none focus:border-orange-900 text-center font-black uppercase tracking-widest transition-all">
                     <input id="admin-pass-input" type="password" placeholder="PASSWORD" class="w-full bg-black/40 border border-white/10 p-6 rounded-3xl outline-none focus:border-orange-900 text-center font-bold tracking-widest transition-all">
                 </div>
-                <button onclick="loginAdmin()" class="w-full py-8 bg-orange-900 rounded-3xl font-black uppercase text-sm tracking-widest shadow-2xl hover:brightness-110 active:scale-95 transition-all">INITIATE COMMAND</button>
+                <button onclick="loginAdmin()" class="w-full py-8 bg-orange-900 rounded-3xl font-black uppercase text-sm tracking-widest shadow-2xl hover:brightness-110 active:scale-95 transition-all">ENTER SYSTEM</button>
             </div>
 
             <!-- Admin Interface -->
@@ -125,95 +146,87 @@
                 <header class="flex flex-col xl:flex-row justify-between items-start xl:items-end gap-10">
                     <div>
                         <div class="flex items-center gap-3 mb-4">
-                            <span class="px-4 py-1.5 bg-orange-900/10 border border-orange-900/20 rounded-full text-[10px] font-black text-orange-900 uppercase tracking-widest">Root Access Granted</span>
+                            <span class="px-4 py-1.5 bg-orange-900/20 border border-orange-900/40 rounded-full text-[10px] font-black text-orange-900 uppercase tracking-widest flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-green-500 live-dot"></span>
+                                Master Access Active
+                            </span>
                             <span class="text-[10px] font-mono text-zinc-500" id="server-time">00:00:00</span>
                         </div>
-                        <h2 class="text-7xl md:text-9xl font-black uppercase italic tracking-[-0.05em] leading-none mb-6">Jeff. <span class="text-[#78350f]">Global.</span></h2>
-                        <div id="ai-insight" class="text-xs font-mono text-orange-900 font-bold uppercase bg-orange-900/5 p-4 rounded-2xl border-l-4 border-orange-900 italic max-w-2xl shadow-xl">Initializing neural system monitor...</div>
+                        <h2 class="text-7xl md:text-9xl font-black uppercase italic tracking-[-0.05em] leading-none mb-6">Jeff. <span class="text-[#78350f]">Monitor.</span></h2>
+                        <div id="ai-insight" class="text-xs font-mono text-orange-900 font-bold uppercase bg-orange-900/5 p-4 rounded-2xl border-l-4 border-orange-900 italic max-w-2xl shadow-xl">Scanning active nodes and traffic patterns...</div>
                     </div>
                     <div class="flex items-center gap-6">
                         <div class="text-right">
-                            <p class="text-[10px] font-black uppercase text-zinc-500 mb-1">Server Latency</p>
+                            <p class="text-[10px] font-black uppercase text-zinc-500 mb-1">Live Connections</p>
                             <div class="flex items-center gap-2 justify-end">
                                 <div class="w-2 h-2 rounded-full bg-green-500"></div>
-                                <span class="text-xl font-black font-mono">12ms</span>
+                                <span class="text-xl font-black font-mono" id="live-online-count">0</span>
                             </div>
                         </div>
                         <div class="flex gap-4">
-                            <button onclick="syncData('pull')" class="p-6 glass rounded-[2rem] hover:bg-orange-900 transition-all shadow-xl"><i data-lucide="refresh-cw" id="sync-icon"></i></button>
-                            <button onclick="logoutAdmin()" class="p-6 glass text-red-500 border-red-500/20 rounded-[2rem] hover:bg-red-500 hover:text-white transition-all shadow-xl"><i data-lucide="power"></i></button>
+                            <button onclick="syncData('pull')" class="p-6 glass rounded-[2rem] hover:bg-orange-900 transition-all shadow-xl"><i data-lucide="refresh-ccw" id="sync-icon"></i></button>
+                            <button onclick="logoutAdmin()" class="p-6 glass text-red-500 border-red-500/20 rounded-[2rem] hover:bg-red-500 hover:text-white transition-all shadow-xl"><i data-lucide="log-out"></i></button>
                         </div>
                     </div>
                 </header>
 
-                <!-- Stats Command Bar -->
+                <!-- Analytics Bar -->
                 <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-8">
-                    <div class="glass p-12 rounded-[3.5rem] border-2 border-orange-900/30 bg-orange-900/10 shadow-2xl group hover:scale-[1.02] transition-all">
-                        <div class="flex justify-between items-start mb-6">
-                            <div class="text-[10px] font-black uppercase text-orange-900 tracking-widest">Total Users</div>
-                            <i data-lucide="users" class="w-5 h-5 text-orange-900"></i>
-                        </div>
+                    <div class="glass p-10 rounded-[3rem] border-2 border-orange-900/30 bg-orange-900/5 shadow-2xl relative overflow-hidden">
+                        <div class="text-[10px] font-black uppercase text-orange-900 tracking-widest mb-4">Total System Users</div>
                         <div id="stat-total-users" class="text-6xl font-black italic tracking-tighter">0</div>
-                        <div class="mt-4 text-[9px] font-bold text-zinc-500 uppercase">Ever registered on site</div>
+                        <div class="mt-4 text-[9px] font-bold text-zinc-500 uppercase">Ever tapped into Jeff's OS</div>
                     </div>
-                    <div class="glass p-12 rounded-[3.5rem] shadow-2xl group hover:scale-[1.02] transition-all">
-                        <div class="flex justify-between items-start mb-6">
-                            <div class="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Active Requests</div>
-                            <i data-lucide="mail-warning" class="w-5 h-5 text-zinc-500"></i>
-                        </div>
+                    <div class="glass p-10 rounded-[3rem] shadow-2xl relative">
+                        <div class="text-[10px] font-black uppercase text-zinc-500 tracking-widest mb-4">Pending Vouchers</div>
                         <div id="stat-pending" class="text-6xl font-black italic tracking-tighter">0</div>
-                        <div class="mt-4 text-[9px] font-bold text-orange-900 uppercase">Awaiting your approval</div>
+                        <div class="mt-4 text-[9px] font-bold text-orange-900 uppercase">Awaiting SMS response</div>
                     </div>
-                    <div class="glass p-12 rounded-[3.5rem] shadow-2xl group hover:scale-[1.02] transition-all">
-                        <div class="flex justify-between items-start mb-6">
-                            <div class="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Total Revenue</div>
-                            <i data-lucide="banknote" class="w-5 h-5 text-green-500"></i>
-                        </div>
+                    <div class="glass p-10 rounded-[3rem] shadow-2xl">
+                        <div class="text-[10px] font-black uppercase text-zinc-500 tracking-widest mb-4">Global Revenue</div>
                         <div id="stat-revenue" class="text-5xl font-black italic tracking-tighter text-green-500">Tsh 0</div>
-                        <div class="mt-4 text-[9px] font-bold text-zinc-500 uppercase">Successful transactions</div>
+                        <div class="mt-4 text-[9px] font-bold text-zinc-500 uppercase">Processed via SMS/Cash</div>
                     </div>
-                    <div class="glass p-12 rounded-[3.5rem] shadow-2xl group hover:scale-[1.02] transition-all overflow-hidden relative">
-                        <div class="flex justify-between items-start mb-6">
-                            <div class="text-[10px] font-black uppercase text-zinc-500 tracking-widest">System Health</div>
-                            <i data-lucide="activity" class="w-5 h-5 text-blue-500"></i>
-                        </div>
+                    <div class="glass p-10 rounded-[3rem] shadow-2xl">
+                        <div class="text-[10px] font-black uppercase text-zinc-500 tracking-widest mb-4">System Uptime</div>
                         <div class="flex items-center gap-3">
                             <div class="w-4 h-4 rounded-full bg-green-500 live-dot"></div>
-                            <span class="text-3xl font-black italic uppercase">OPTIMAL</span>
+                            <span class="text-3xl font-black italic uppercase">100% SECURE</span>
                         </div>
-                        <div class="mt-4 text-[9px] font-bold text-zinc-500 uppercase">Node Sync Status: 100%</div>
+                        <div class="mt-4 text-[9px] font-bold text-zinc-500 uppercase">Latency: 4ms</div>
                     </div>
                 </div>
 
                 <div class="grid grid-cols-1 xl:grid-cols-3 gap-10">
-                    <!-- Master Activity Logs -->
-                    <div class="glass rounded-[4rem] p-10 space-y-8 border border-white/5 flex flex-col shadow-2xl min-h-[600px]">
+                    <!-- Live Activity Log -->
+                    <div class="glass rounded-[3.5rem] p-10 space-y-8 border border-white/5 flex flex-col shadow-2xl min-h-[600px]">
                         <div class="flex items-center justify-between border-b border-white/5 pb-8">
                             <h3 class="font-black uppercase text-xl italic tracking-tighter flex items-center gap-4">
-                                <i data-lucide="terminal" class="text-orange-900 w-6 h-6"></i> System Live Feed
+                                <i data-lucide="activity" class="text-orange-900 w-6 h-6"></i> System Activity
                             </h3>
-                            <div class="px-3 py-1 bg-green-500/10 text-green-500 text-[8px] font-black rounded-full uppercase">Realtime</div>
+                            <div class="px-3 py-1 bg-green-500/10 text-green-500 text-[8px] font-black rounded-full uppercase">Real-Time Feed</div>
                         </div>
                         <div id="activity-log" class="space-y-4 overflow-y-auto flex-1 custom-scroll pr-2">
-                            <!-- Activities -->
+                            <!-- Events go here -->
                         </div>
                     </div>
 
-                    <!-- User Database -->
-                    <div class="xl:col-span-2 glass rounded-[4rem] overflow-hidden border border-white/5 shadow-2xl flex flex-col">
+                    <!-- Master Database Table -->
+                    <div class="xl:col-span-2 glass rounded-[3.5rem] overflow-hidden border border-white/5 shadow-2xl flex flex-col">
                         <div class="p-10 border-b border-white/5 bg-white/2 flex justify-between items-center">
                             <h3 class="font-black uppercase text-xl italic tracking-tighter flex items-center gap-4">
-                                <i data-lucide="database" class="text-orange-900 w-6 h-6"></i> System User Database
+                                <i data-lucide="database" class="text-orange-900 w-6 h-6"></i> Node Database
                             </h3>
-                            <button onclick="clearSystemData()" class="text-[9px] font-black bg-red-950/20 text-red-500 px-6 py-2 rounded-full uppercase hover:bg-red-500 hover:text-white transition-all shadow-lg">Wipe Database</button>
+                            <button onclick="clearSystemData()" class="text-[9px] font-black bg-red-950/20 text-red-500 px-6 py-2 rounded-full uppercase hover:bg-red-500 hover:text-white transition-all">Clear Nodes</button>
                         </div>
                         <div class="overflow-x-auto flex-1">
                             <table class="w-full text-left">
                                 <thead class="bg-black/40 text-[10px] font-black uppercase text-zinc-600">
                                     <tr>
-                                        <th class="px-10 py-6">Device Profile</th>
-                                        <th class="px-10 py-6">System ID</th>
-                                        <th class="px-10 py-6">First Seen</th>
+                                        <th class="px-10 py-6">User Device</th>
+                                        <th class="px-10 py-6">Unique Node ID</th>
+                                        <th class="px-10 py-6">Visits</th>
+                                        <th class="px-10 py-6">Last Seen</th>
                                         <th class="px-10 py-6 text-center">Status</th>
                                     </tr>
                                 </thead>
@@ -225,21 +238,21 @@
                     </div>
                 </div>
 
-                <!-- Voucher Management Area -->
-                <div class="glass rounded-[4rem] overflow-hidden border border-white/10 shadow-[0_50px_100px_rgba(0,0,0,0.5)]">
-                    <div class="p-12 border-b border-white/5 bg-white/2 flex justify-between items-center">
+                <!-- Live Orders Section -->
+                <div class="glass rounded-[3.5rem] overflow-hidden border border-white/10 shadow-2xl">
+                    <div class="p-12 border-b border-white/5 bg-white/2">
                         <h3 class="font-black uppercase text-2xl italic tracking-tighter flex items-center gap-4">
-                            <i data-lucide="shopping-cart" class="text-green-500 w-8 h-8"></i> Live Voucher Orders
+                            <i data-lucide="shopping-cart" class="text-green-500 w-8 h-8"></i> Live Voucher Command
                         </h3>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
                             <thead class="bg-black/40 text-[11px] font-black uppercase text-zinc-500">
                                 <tr>
-                                    <th class="px-12 py-8">Customer Detail</th>
-                                    <th class="px-12 py-8">Plan Info</th>
-                                    <th class="px-12 py-8">Request State</th>
-                                    <th class="px-12 py-8 text-center">Control Panel</th>
+                                    <th class="px-12 py-8">Customer Name / Phone</th>
+                                    <th class="px-12 py-8">Selected Plan</th>
+                                    <th class="px-12 py-8">Order Status</th>
+                                    <th class="px-12 py-8 text-center">Manage</th>
                                 </tr>
                             </thead>
                             <tbody id="admin-request-list" class="divide-y divide-white/5">
@@ -252,22 +265,22 @@
         </div>
     </main>
 
-    <!-- Payment Modal -->
+    <!-- Global Modal (Payments) -->
     <div id="modal-pay" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6 bg-black/98 backdrop-blur-3xl">
-        <div class="w-full max-w-xl glass rounded-[4.5rem] overflow-hidden border-orange-900/20 shadow-[0_0_150px_rgba(120,53,15,0.3)]">
+        <div class="w-full max-w-xl glass rounded-[4.5rem] overflow-hidden border-orange-900/20 shadow-[0_0_200px_rgba(120,53,15,0.2)]">
             <div class="p-12 border-b border-white/5 flex justify-between items-center bg-zinc-900/50">
                 <h3 class="text-4xl font-black uppercase italic tracking-tighter">Omba Vocha</h3>
-                <button onclick="closePayModal()" class="w-16 h-16 flex items-center justify-center bg-zinc-800 rounded-[2rem] hover:bg-orange-900 transition-colors"><i data-lucide="x"></i></button>
+                <button onclick="closePayModal()" class="w-16 h-16 flex items-center justify-center bg-zinc-800 rounded-[2rem] hover:bg-orange-900 transition-all"><i data-lucide="x"></i></button>
             </div>
             <div class="p-14 space-y-12 text-center">
                 <div class="bg-orange-900/10 p-12 rounded-[3.5rem] border border-orange-900/20 shadow-inner">
-                    <p class="text-[11px] font-black text-zinc-500 uppercase tracking-[0.4em] mb-4">Pay to Jeff Master:</p>
+                    <p class="text-[11px] font-black text-zinc-500 uppercase tracking-[0.4em] mb-4">Lipia Kwa Jeff:</p>
                     <div class="text-6xl font-black text-orange-900 font-mono tracking-tighter">0779 231 924</div>
                 </div>
                 <div class="space-y-5">
-                    <input id="user-name" type="text" placeholder="YOUR FULL NAME" class="w-full bg-black/40 border-2 border-white/5 p-7 rounded-[2rem] outline-none focus:border-orange-900 text-sm font-black uppercase text-center tracking-widest shadow-xl">
-                    <input id="user-phone" type="tel" placeholder="YOUR MOBILE NUMBER" class="w-full bg-black/40 border-2 border-white/5 p-7 rounded-[2rem] outline-none focus:border-orange-900 text-sm font-black font-mono text-center tracking-widest shadow-xl">
-                    <button onclick="submitRequest()" id="btn-submit" class="w-full py-10 bg-orange-900 rounded-[2.5rem] font-black uppercase tracking-[0.3em] shadow-[0_20px_50px_rgba(120,53,15,0.4)] transition-all hover:brightness-110 active:scale-95 text-lg">SEND REQUEST</button>
+                    <input id="user-name" type="text" placeholder="JINA LAKO KAMILI" class="w-full bg-black/40 border-2 border-white/5 p-7 rounded-[2.2rem] outline-none focus:border-orange-900 text-sm font-black uppercase text-center tracking-widest shadow-xl">
+                    <input id="user-phone" type="tel" placeholder="NAMBA YA SIMU" class="w-full bg-black/40 border-2 border-white/5 p-7 rounded-[2.2rem] outline-none focus:border-orange-900 text-sm font-black font-mono text-center tracking-widest shadow-xl">
+                    <button onclick="submitOrder()" id="btn-submit" class="w-full py-10 bg-orange-900 rounded-[2.5rem] font-black uppercase tracking-[0.3em] shadow-[0_20px_60px_rgba(120,53,15,0.4)] transition-all hover:brightness-110 active:scale-95 text-lg">TUMA OMBI SASA</button>
                 </div>
             </div>
         </div>
@@ -284,160 +297,166 @@
     <script type="module">
         import { GoogleGenAI } from "@google/genai";
 
-        // GLOBAL CONFIG
-        const CLOUD_SERVER_ID = "jeff_master_cloud_v11"; 
-        const API_BASE = `https://kvdb.io/mtaani_master_jeff_11/`;
-        const MASTER_PHONE = "0779231924";
+        // MASTER CONFIG
+        const CLOUD_NAMESPACE = "jeff_master_v12_stable"; 
+        const API_BASE = `https://kvdb.io/jeff_master_v12_nodes/`;
+        const MASTER_ADMIN_PHONE = "0779231924";
 
         let state = {
             currentTab: 'portal',
             requests: [],
             visitors: [],
             activities: [],
-            isAdmin: sessionStorage.getItem('jeff_admin_auth') === 'true',
-            sessionId: getSystemId(),
-            device: detectDevice(),
+            isAdmin: sessionStorage.getItem('jeff_master_auth') === 'true',
+            sessionId: getPersistedId(),
+            deviceInfo: getDeviceInfo(),
             selectedPlan: null,
-            myHistory: JSON.parse(localStorage.getItem('jeff_vouchers') || '[]')
+            isNewUser: true
         };
 
-        function getSystemId() {
-            let id = localStorage.getItem('jeff_sys_id');
+        function getPersistedId() {
+            let id = localStorage.getItem('jeff_node_id');
             if(!id) {
-                id = 'NODE-' + Math.random().toString(36).substring(2, 10).toUpperCase();
-                localStorage.setItem('jeff_sys_id', id);
+                id = 'NODE-' + Math.random().toString(36).substring(2, 9).toUpperCase();
+                localStorage.setItem('jeff_node_id', id);
+                state.isNewUser = true;
+            } else {
+                state.isNewUser = false;
             }
             return id;
         }
 
-        function detectDevice() {
+        function getDeviceInfo() {
             const ua = navigator.userAgent;
             if (ua.includes("OPPO")) return "Oppo Device";
-            if (ua.includes("Samsung")) return "Samsung Phone";
+            if (ua.includes("Samsung")) return "Samsung Mobile";
             if (ua.includes("iPhone")) return "Apple iPhone";
-            if (ua.includes("Android")) return "Android Phone";
-            if (ua.includes("Windows")) return "Windows PC";
-            return "Mobile User";
+            if (ua.includes("Android")) return "Android System";
+            if (ua.includes("Windows")) return "Windows Desktop";
+            return "Universal Node";
         }
 
-        // --- CLOUD INFRASTRUCTURE ---
-        async function cloudSync(mode = 'pull') {
+        // --- CLOUD ARCHITECTURE ---
+        async function systemSync(mode = 'pull') {
             const syncIcon = document.getElementById('sync-icon');
             if (syncIcon) syncIcon.classList.add('animate-spin');
 
             try {
-                const res = await fetch(`${API_BASE}${CLOUD_SERVER_ID}`);
-                let remoteData = { requests: [], visitors: [], activities: [] };
-                if (res.ok) remoteData = await res.json();
+                const res = await fetch(`${API_BASE}${CLOUD_NAMESPACE}`);
+                let cloudData = { requests: [], visitors: [], activities: [] };
+                if (res.ok) cloudData = await res.json();
 
                 if (mode === 'push') {
-                    await fetch(`${API_BASE}${CLOUD_SERVER_ID}`, {
+                    await fetch(`${API_BASE}${CLOUD_NAMESPACE}`, {
                         method: 'POST',
                         body: JSON.stringify({ 
                             requests: state.requests, 
                             visitors: state.visitors, 
                             activities: state.activities,
-                            lastPulse: Date.now() 
+                            serverHeartbeat: Date.now() 
                         })
                     });
                 } else {
-                    state.requests = remoteData.requests || [];
-                    state.visitors = remoteData.visitors || [];
-                    state.activities = remoteData.activities || [];
-                    if (state.isAdmin) renderAdminDashboard();
+                    state.requests = cloudData.requests || [];
+                    state.visitors = cloudData.visitors || [];
+                    state.activities = cloudData.activities || [];
+                    
+                    if (state.isAdmin) renderAdmin();
                     renderCustomerHistory();
+                    
+                    // Check if this visitor is known to the server
+                    const found = state.visitors.find(v => v.id === state.sessionId);
+                    if (found && !state.isAdmin) {
+                        document.getElementById('returning-greeting').classList.remove('hidden');
+                        document.getElementById('display-sid').innerText = state.sessionId;
+                    }
                 }
-            } catch (e) { console.error("Cloud Node Sync Fail", e); }
+            } catch (e) { console.error("Cloud Node Offline", e); }
             finally { if (syncIcon) syncIcon.classList.remove('animate-spin'); }
         }
 
-        // --- SYSTEM EVENTS ---
-        async function logActivity(action, details) {
-            const activity = {
+        // --- LOGGING SYSTEM ---
+        async function systemLog(action, details) {
+            const entry = {
                 id: Date.now(),
                 timestamp: new Date().toLocaleTimeString('sw-TZ'),
                 action,
                 details,
-                nodeId: state.sessionId
+                node: state.sessionId
             };
-            
-            // Limit activities to last 50
-            state.activities.unshift(activity);
-            if (state.activities.length > 50) state.activities.pop();
-            await cloudSync('push');
+            state.activities.unshift(entry);
+            if (state.activities.length > 60) state.activities.pop();
+            await systemSync('push');
         }
 
-        async function registerMasterVisitor() {
+        async function updatePresence() {
             if(state.isAdmin) return;
             try {
-                const res = await fetch(`${API_BASE}${CLOUD_SERVER_ID}`);
+                const res = await fetch(`${API_BASE}${CLOUD_NAMESPACE}`);
                 let data = { requests: [], visitors: [], activities: [] };
                 if (res.ok) data = await res.json();
 
                 const index = data.visitors.findIndex(v => v.id === state.sessionId);
                 if (index === -1) {
+                    // Brand new user registration
                     const newV = {
                         id: state.sessionId,
-                        device: state.device,
+                        device: state.deviceInfo,
+                        visits: 1,
                         joined: new Date().toLocaleString('sw-TZ'),
                         lastSeen: Date.now()
                     };
                     data.visitors.unshift(newV);
                     
-                    // Log to activities
                     const act = {
                         id: Date.now(),
                         timestamp: new Date().toLocaleTimeString('sw-TZ'),
-                        action: 'NEW_VISIT',
-                        details: `System discovered ${state.device} (${state.sessionId})`,
-                        nodeId: state.sessionId
+                        action: 'NEW_CONNECTION',
+                        details: `Device ${state.deviceInfo} mapped to node ${state.sessionId}`,
+                        node: state.sessionId
                     };
                     data.activities.unshift(act);
-                    if (data.activities.length > 50) data.activities.pop();
-
-                    await fetch(`${API_BASE}${CLOUD_SERVER_ID}`, {
-                        method: 'POST',
-                        body: JSON.stringify(data)
-                    });
+                    await fetch(`${API_BASE}${CLOUD_NAMESPACE}`, { method: 'POST', body: JSON.stringify(data) });
                 } else {
-                    // Update last seen
+                    // Update returning user stats
                     data.visitors[index].lastSeen = Date.now();
-                    await fetch(`${API_BASE}${CLOUD_SERVER_ID}`, {
-                        method: 'POST',
-                        body: JSON.stringify(data)
-                    });
+                    // Increment visit only if more than 5 mins passed since last seen
+                    if (Date.now() - data.visitors[index].lastSeen > 300000) {
+                        data.visitors[index].visits = (data.visitors[index].visits || 1) + 1;
+                    }
+                    await fetch(`${API_BASE}${CLOUD_NAMESPACE}`, { method: 'POST', body: JSON.stringify(data) });
                 }
-            } catch (e) { console.warn("Visitor Logging Error", e); }
+            } catch (e) { console.warn("Presence Sync Failed", e); }
         }
 
-        // Auto Refresh
-        setInterval(() => { if (state.isAdmin) cloudSync('pull'); }, 5000);
+        // Intervals
+        setInterval(() => { if (state.isAdmin) systemSync('pull'); }, 5000);
         setInterval(() => { document.getElementById('server-time').innerText = new Date().toLocaleTimeString(); }, 1000);
-        setTimeout(registerMasterVisitor, 1500);
+        setTimeout(updatePresence, 1000);
 
-        // --- UI LOGIC ---
+        // --- INTERFACE LOGIC ---
         window.switchTab = (tab) => {
             state.currentTab = tab;
             document.getElementById('view-portal').classList.toggle('hidden', tab !== 'portal');
             document.getElementById('view-admin').classList.toggle('hidden', tab !== 'admin');
             document.getElementById('btn-portal').classList.toggle('active-nav', tab === 'portal');
             document.getElementById('btn-admin').classList.toggle('active-nav', tab === 'admin');
-            if (tab === 'admin') renderAdminDashboard();
+            if (tab === 'admin') renderAdmin();
         };
 
-        window.openPayModal = (planName, planPrice) => {
-            state.selectedPlan = { name: planName, price: planPrice };
+        window.openPayModal = (pName, pPrice) => {
+            state.selectedPlan = { name: pName, price: pPrice };
             document.getElementById('modal-pay').classList.remove('hidden');
         };
 
         window.closePayModal = () => document.getElementById('modal-pay').classList.add('hidden');
 
-        window.submitRequest = async () => {
+        window.submitOrder = async () => {
             const name = document.getElementById('user-name').value;
             const phone = document.getElementById('user-phone').value;
-            if(!name || !phone) return alert("Pleaese enter your details!");
+            if(!name || !phone) return alert("Jaza jina na namba!");
 
-            const newOrder = {
+            const order = {
                 id: Date.now(),
                 sessionId: state.sessionId,
                 name, phone,
@@ -445,18 +464,15 @@
                 price: state.selectedPlan.price,
                 status: 'pending',
                 date: new Date().toLocaleString('sw-TZ'),
-                device: state.device,
+                device: state.deviceInfo,
                 voucher: null
             };
 
-            state.requests.unshift(newOrder);
-            state.myHistory.unshift(newOrder);
-            localStorage.setItem('jeff_vouchers', JSON.stringify(state.myHistory));
+            state.requests.unshift(order);
+            await systemLog('ORDER_PLACED', `Mteja ${name} ameagiza kifurushi cha ${state.selectedPlan.name}`);
             
-            await logActivity('VOUCHER_ORDER', `User ${name} requested ${state.selectedPlan.name}`);
-            
-            const smsMsg = `Habari Jeff, nimeagiza ${state.selectedPlan.name}. Jina langu ni ${name}, Namba: ${phone}. ID: ${state.sessionId}`;
-            window.location.href = `sms:${MASTER_PHONE}?body=${encodeURIComponent(smsMsg)}`;
+            const smsText = `Karibu Jeff, nimeagiza ${state.selectedPlan.name}. Jina langu ni ${name}, Namba: ${phone}. ID Yangu: ${state.sessionId}`;
+            window.location.href = `sms:${MASTER_ADMIN_PHONE}?body=${encodeURIComponent(smsText)}`;
 
             closePayModal();
             renderCustomerHistory();
@@ -465,32 +481,33 @@
         const renderCustomerHistory = () => {
             const container = document.getElementById('customer-history');
             const myOrders = state.requests.filter(r => r.sessionId === state.sessionId);
+            document.getElementById('my-sid').innerText = state.sessionId;
             if (myOrders.length === 0) return;
             container.innerHTML = '';
             myOrders.forEach(o => {
                 const div = document.createElement('div');
-                div.className = "p-8 glass rounded-[2.5rem] border border-white/5 flex justify-between items-center shadow-2xl";
+                div.className = "p-8 glass rounded-[2.5rem] border border-white/5 flex justify-between items-center shadow-xl animate-in slide-in-from-right duration-300";
                 div.innerHTML = `
-                    <div class="space-y-2">
-                        <div class="text-[10px] font-black uppercase text-zinc-500">${o.plan} • ${o.date}</div>
-                        <div class="text-sm font-bold">${o.status === 'approved' ? `<span class="text-orange-900 font-black text-xl font-mono">${o.voucher}</span>` : 'Awaiting SMS Confirmation...'}</div>
+                    <div class="space-y-1">
+                        <div class="text-[9px] font-black uppercase text-zinc-500">${o.plan} • ${o.date}</div>
+                        <div class="text-sm font-bold">${o.status === 'approved' ? `<span class="text-orange-900 font-black text-xl font-mono">${o.voucher}</span>` : 'Inasubiri SMS yako...'}</div>
                     </div>
-                    <div class="px-5 py-2 rounded-full text-[9px] font-black uppercase ${o.status === 'approved' ? 'bg-orange-900 text-white' : 'bg-zinc-800 text-zinc-500'}">${o.status}</div>
+                    <div class="px-5 py-2 rounded-full text-[8px] font-black uppercase ${o.status === 'approved' ? 'bg-orange-900 text-white shadow-lg' : 'bg-zinc-800 text-zinc-500'}">${o.status}</div>
                 `;
                 container.appendChild(div);
             });
         };
 
-        // --- ADMIN MASTER PANEL ---
+        // --- MASTER ADMIN INTERFACE ---
         window.loginAdmin = async () => {
-            const user = document.getElementById('admin-id-input').value.toLowerCase().trim();
-            const pass = document.getElementById('admin-pass-input').value;
-            if(user === 'jeff' && pass === 'mtaani') {
+            const u = document.getElementById('admin-id-input').value.toLowerCase().trim();
+            const p = document.getElementById('admin-pass-input').value;
+            if(u === 'jeff' && p === 'mtaani') {
                 state.isAdmin = true;
-                sessionStorage.setItem('jeff_admin_auth', 'true');
-                await logActivity('ADMIN_LOGIN', `Admin jeff has initiated root access`);
-                await cloudSync('pull');
-                renderAdminDashboard();
+                sessionStorage.setItem('jeff_master_auth', 'true');
+                await systemLog('ADMIN_LOGIN', `Admin Jeff ameingia kwenye Master Console`);
+                await systemSync('pull');
+                renderAdmin();
             } else {
                 alert("ACCESS DENIED: Credentials Invalid.");
             }
@@ -498,35 +515,39 @@
 
         window.logoutAdmin = () => {
             state.isAdmin = false;
-            sessionStorage.removeItem('jeff_admin_auth');
-            renderAdminDashboard();
+            sessionStorage.removeItem('jeff_master_auth');
+            renderAdmin();
         };
 
-        const renderAdminDashboard = () => {
-            const lock = document.getElementById('admin-lock');
-            const content = document.getElementById('admin-content');
-            if (!state.isAdmin) { lock.classList.remove('hidden'); content.classList.add('hidden'); return; }
-            lock.classList.add('hidden'); content.classList.remove('hidden');
+        const renderAdmin = () => {
+            const l = document.getElementById('admin-lock');
+            const c = document.getElementById('admin-content');
+            if (!state.isAdmin) { l.classList.remove('hidden'); c.classList.add('hidden'); return; }
+            l.classList.add('hidden'); c.classList.remove('hidden');
 
             document.getElementById('stat-total-users').innerText = state.visitors.length;
             document.getElementById('stat-pending').innerText = state.requests.filter(r => r.status === 'pending').length;
-            const revTotal = state.requests.filter(r => r.status === 'approved').reduce((a, b) => a + b.price, 0);
-            document.getElementById('stat-revenue').innerText = `Tsh ${revTotal.toLocaleString()}`;
+            const rev = state.requests.filter(r => r.status === 'approved').reduce((a, b) => a + b.price, 0);
+            document.getElementById('stat-revenue').innerText = `Tsh ${rev.toLocaleString()}`;
 
-            // Render Activity Log
+            // Count Online Users
+            const onlineCount = state.visitors.filter(v => (Date.now() - v.lastSeen) < 30000).length;
+            document.getElementById('live-online-count').innerText = onlineCount;
+
+            // Render Log
             const logBox = document.getElementById('activity-log');
             logBox.innerHTML = '';
             state.activities.forEach(act => {
                 const div = document.createElement('div');
-                div.className = "p-5 rounded-2xl border border-white/5 activity-item transition-all";
-                let iconClass = "text-zinc-500";
-                if(act.action === 'NEW_VISIT') iconClass = "text-blue-500";
-                if(act.action === 'VOUCHER_ORDER') iconClass = "text-orange-900";
-                if(act.action === 'VOUCHER_APPROVED') iconClass = "text-green-500";
+                div.className = "p-5 rounded-2xl border border-white/5 hover:bg-white/5 transition-all";
+                let color = "text-zinc-500";
+                if(act.action.includes('ORDER')) color = "text-orange-900";
+                if(act.action.includes('NEW')) color = "text-blue-500";
+                if(act.action.includes('ADMIN')) color = "text-green-500";
 
                 div.innerHTML = `
                     <div class="flex justify-between items-start mb-1">
-                        <span class="text-[8px] font-black uppercase ${iconClass}">${act.action}</span>
+                        <span class="text-[8px] font-black uppercase ${color}">${act.action}</span>
                         <span class="text-[7px] font-mono text-zinc-600">${act.timestamp}</span>
                     </div>
                     <div class="text-[10px] text-zinc-400 font-medium">${act.details}</div>
@@ -534,53 +555,50 @@
                 logBox.appendChild(div);
             });
 
-            // Render Master Users
+            // Render Database
             const userTable = document.getElementById('master-user-list');
-            userTable.innerHTML = state.visitors.length === 0 ? '<tr><td colspan="4" class="p-20 text-center opacity-20 uppercase font-black text-xs">Database Empty</td></tr>' : '';
+            userTable.innerHTML = '';
             state.visitors.forEach(v => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-white/5 transition-colors border-b border-white/5";
-                const isOnline = (Date.now() - v.lastSeen) < 30000;
+                tr.className = "hover:bg-white/5 border-b border-white/5";
+                const isLive = (Date.now() - v.lastSeen) < 30000;
                 tr.innerHTML = `
                     <td class="px-10 py-7">
                         <div class="font-black uppercase text-xs">${v.device}</div>
-                        <div class="text-[9px] text-zinc-500">Node Sync Active</div>
+                        <div class="text-[9px] text-zinc-600 uppercase">First seen: ${v.joined.split(',')[0]}</div>
                     </td>
-                    <td class="px-10 py-7 font-mono text-[10px] text-orange-900">${v.id}</td>
-                    <td class="px-10 py-7 text-zinc-600 text-[10px]">${v.joined}</td>
+                    <td class="px-10 py-7 font-mono text-[10px] text-orange-900 font-bold">${v.id}</td>
+                    <td class="px-10 py-7 font-black text-sm">${v.visits || 1}</td>
+                    <td class="px-10 py-7 text-zinc-600 text-[10px] font-mono">${new Date(v.lastSeen).toLocaleTimeString()}</td>
                     <td class="px-10 py-7 text-center">
-                        <span class="px-3 py-1 rounded-full text-[8px] font-black uppercase ${isOnline ? 'bg-green-500/10 text-green-500' : 'bg-zinc-800 text-zinc-500'}">${isOnline ? 'Active' : 'Offline'}</span>
+                        <span class="px-3 py-1 rounded-full text-[8px] font-black uppercase ${isLive ? 'bg-green-500/10 text-green-500' : 'bg-zinc-800 text-zinc-500'}">${isLive ? 'Online' : 'Offline'}</span>
                     </td>
                 `;
                 userTable.appendChild(tr);
             });
 
-            // Render Requests
+            // Render Orders
             const reqTable = document.getElementById('admin-request-list');
-            reqTable.innerHTML = state.requests.length === 0 ? '<tr><td colspan="4" class="p-32 text-center opacity-10 uppercase font-black text-2xl">No Active Orders</td></tr>' : '';
+            reqTable.innerHTML = '';
             state.requests.forEach(r => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-white/5 transition-all border-b border-white/5";
+                tr.className = "hover:bg-white/5 border-b border-white/5";
                 tr.innerHTML = `
                     <td class="px-12 py-8">
-                        <div class="font-black uppercase text-lg">${r.name}</div>
+                        <div class="font-black uppercase text-lg italic tracking-tighter">${r.name}</div>
                         <div class="text-[11px] text-orange-900 font-mono">${r.phone}</div>
-                        <div class="text-[8px] text-zinc-600 uppercase mt-1">DEVICE: ${r.device}</div>
                     </td>
                     <td class="px-12 py-8">
-                        <div class="font-bold text-sm">${r.plan}</div>
+                        <div class="font-bold text-sm uppercase">${r.plan}</div>
                         <div class="text-xs text-zinc-500">Tsh ${r.price.toLocaleString()}</div>
                     </td>
                     <td class="px-12 py-8">
-                        <span class="px-4 py-1.5 rounded-full text-[9px] font-black uppercase ${r.status === 'pending' ? 'bg-orange-900/20 text-orange-900 shadow-[0_0_15px_rgba(120,53,15,0.2)]' : 'bg-green-500/20 text-green-500'}">${r.status}</span>
+                        <span class="px-4 py-1.5 rounded-full text-[9px] font-black uppercase ${r.status === 'pending' ? 'bg-orange-900/20 text-orange-900' : 'bg-green-500/20 text-green-500'}">${r.status}</span>
                     </td>
                     <td class="px-12 py-8 text-center flex items-center justify-center gap-4">
                         ${r.status === 'pending' ? 
-                            `<button onclick="approveOrder(${r.id})" class="p-5 bg-orange-900 rounded-2xl shadow-xl hover:brightness-110 active:scale-90 transition-all"><i data-lucide="check" class="w-5 h-5 text-white"></i></button>` : 
-                            `<div class="flex items-center gap-4">
-                                <span class="font-mono text-orange-900 font-black text-lg">${r.voucher}</span>
-                                <button onclick="sendVoucherSMS('${r.phone}', '${r.name}', '${r.voucher}', '${r.plan}')" class="p-4 bg-zinc-800 rounded-xl hover:bg-orange-900 transition-colors"><i data-lucide="send" class="w-4 h-4 text-white"></i></button>
-                            </div>`
+                            `<button onclick="approveOrder(${r.id})" class="p-5 bg-orange-900 rounded-2xl shadow-xl hover:scale-110 transition-transform"><i data-lucide="check" class="w-5 h-5 text-white"></i></button>` : 
+                            `<button onclick="sendVoucherSMS('${r.phone}', '${r.name}', '${r.voucher}', '${r.plan}')" class="p-4 bg-zinc-800 rounded-xl"><i data-lucide="send" class="w-4 h-4 text-white"></i></button>`
                         }
                         <button onclick="removeOrder(${r.id})" class="p-4 bg-red-950/20 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                     </td>
@@ -589,64 +607,64 @@
             });
 
             lucide.createIcons();
-            runSystemAI();
+            runIntelligence();
         };
 
         window.approveOrder = async (id) => {
             const r = state.requests.find(o => o.id === id);
             if (!r) return;
             r.status = 'approved';
-            r.voucher = "M-" + Math.random().toString(36).substring(2, 7).toUpperCase();
-            await logActivity('VOUCHER_APPROVED', `Admin approved ${r.plan} for ${r.name}`);
-            await cloudSync('push');
-            renderAdminDashboard();
+            r.voucher = "J-" + Math.random().toString(36).substring(2, 7).toUpperCase();
+            await systemLog('ORDER_APPROVED', `Admin ameidhinisha vocha kwa ${r.name}`);
+            await systemSync('push');
+            renderAdmin();
         };
 
         window.removeOrder = async (id) => {
-            if(!confirm("Destroy this record from master cloud?")) return;
+            if(!confirm("Futa ombi hili kwenye cloud?")) return;
             state.requests = state.requests.filter(o => o.id !== id);
-            await logActivity('RECORD_DELETED', `System record #${id} has been wiped`);
-            await cloudSync('push');
-            renderAdminDashboard();
+            await systemLog('ORDER_DELETED', `Record #${id} imefutwa kwenye seva`);
+            await systemSync('push');
+            renderAdmin();
         };
 
         window.clearSystemData = async () => {
-            if(!confirm("CRITICAL ACTION: Wipe entire user and activity database?")) return;
+            if(!confirm("ONYO: Je unataka kufuta node zote kwenye database?")) return;
             state.visitors = [];
             state.activities = [];
-            await logActivity('DB_WIPE', `Full database wipe executed by Admin`);
-            await cloudSync('push');
-            renderAdminDashboard();
+            await systemLog('DB_PURGE', `Database ya wateja imesafishwa na Admin`);
+            await systemSync('push');
+            renderAdmin();
         };
 
         window.sendVoucherSMS = (phone, name, voucher, plan) => {
-            const body = `Habari ${name}, Jeff ameidhinisha vocha yako ya ${plan}. Code ni: ${voucher}. Karibu!`;
-            window.location.href = `sms:${phone}?body=${encodeURIComponent(body)}`;
+            const b = `Mambo ${name}, Jeff ameidhinisha vocha yako ya ${plan}. Tumia code hii: ${voucher}. Karibu tena!`;
+            window.location.href = `sms:${phone}?body=${encodeURIComponent(b)}`;
         };
 
-        const runSystemAI = async () => {
+        const runIntelligence = async () => {
             try {
                 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
                 const count = state.visitors.length;
-                const active = state.requests.filter(r => r.status === 'pending').length;
+                const online = state.visitors.filter(v => (Date.now() - v.lastSeen) < 30000).length;
                 const response = await ai.models.generateContent({
                     model: 'gemini-3-flash-preview',
-                    contents: `Kuna watu ${count} kwenye database na maombi ${active} mapya. Jeff ndiye admin. Toa tathmini fupi sana ya kishikaji kwa kiswahili cha kibiashara.`,
+                    contents: `Admin Jeff hapa. System ina wateja ${count} jumla, na ${online} wapo online sasa hivi. Toa ushauri mfupi wa kishikaji wa kuongeza mauzo kwa kiswahili cha mtaani.`,
                 });
-                document.getElementById('ai-insight').innerText = response.text || "JEFF MASTER SYSTEM SECURED.";
-            } catch (e) { document.getElementById('ai-insight').innerText = "CLOUDBASE: JEFF SYSTEM ONLINE."; }
+                document.getElementById('ai-insight').innerText = response.text || "JEFF MASTER SYSTEM ACTIVE.";
+            } catch (e) { document.getElementById('ai-insight').innerText = "CLOUDBASE CONNECTED."; }
         };
 
         // BOOT
         window.globalConnect = () => {
-            const val = document.getElementById('voucher-input').value;
-            if(!val) return alert("Enter Code!");
-            alert("Verification initiated... Jeff's server is checking your voucher.");
+            const v = document.getElementById('voucher-input').value;
+            if(!v) return alert("Weka Code!");
+            alert("Checking... Mfumo wa Jeff unahakiki code yako sasa hivi.");
         };
 
         lucide.createIcons();
         switchTab('portal');
-        cloudSync('pull');
+        systemSync('pull');
     </script>
 </body>
 </html>
