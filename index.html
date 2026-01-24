@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mtaani Cloud | Live Monitoring System</title>
+    <title>Mtaani Cloud | SMS & Server Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -28,18 +28,18 @@
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-4">
                 <div class="w-10 h-10 bg-orange-900/20 rounded-xl flex items-center justify-center border border-orange-900/30">
-                    <i data-lucide="activity" class="w-5 h-5 text-[#78350f]"></i>
+                    <i data-lucide="message-square" class="w-5 h-5 text-[#78350f]"></i>
                 </div>
                 <div>
-                    <h1 class="text-lg font-extrabold uppercase tracking-tighter leading-none italic">Mtaani <span class="text-[#78350f]">Live</span></h1>
+                    <h1 class="text-lg font-extrabold uppercase tracking-tighter leading-none italic">Mtaani <span class="text-[#78350f]">SMS Hub</span></h1>
                     <div class="flex items-center gap-2">
                         <span id="sync-indicator" class="w-2 h-2 rounded-full bg-green-500 live-dot"></span>
-                        <span id="server-id-display" class="text-[8px] font-bold uppercase tracking-widest text-zinc-500">Connecting to Cloud Server...</span>
+                        <span id="server-id-display" class="text-[8px] font-bold uppercase tracking-widest text-zinc-500">Cloud Sync Active</span>
                     </div>
                 </div>
             </div>
             <div class="flex bg-white/5 p-1 rounded-2xl border border-white/5 shadow-inner">
-                <button onclick="switchTab('portal')" id="btn-portal" class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Portal</button>
+                <button onclick="switchTab('portal')" id="btn-portal" class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Customer</button>
                 <button onclick="switchTab('admin')" id="btn-admin" class="px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all">Admin Dashboard</button>
             </div>
         </div>
@@ -51,66 +51,47 @@
         <div id="view-portal" class="space-y-12 animate-in fade-in duration-700">
             <header class="max-w-3xl space-y-6">
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-900/10 border border-orange-900/20">
-                    <i data-lucide="eye" class="w-3 h-3 text-orange-600"></i>
-                    <span class="text-[9px] font-black uppercase tracking-widest text-[#78350f]">You are being monitored by Cloud Admin</span>
+                    <i data-lucide="smartphone" class="w-3 h-3 text-orange-600"></i>
+                    <span class="text-[9px] font-black uppercase tracking-widest text-[#78350f]">SMS Auto-Connect Enabled</span>
                 </div>
-                <h2 class="text-6xl md:text-8xl font-black uppercase tracking-tighter italic leading-[0.8]">Internet <br><span class="text-[#78350f]">Mtaani Kwako.</span></h2>
-                <p class="text-zinc-500 text-lg font-medium leading-relaxed">James, kila hatua unayochukua hapa—kuchagua kifurushi au kulipia—inaonekana kwa admin wako moja kwa moja ili akuhudumie haraka iwezekanavyo.</p>
+                <h2 class="text-6xl md:text-8xl font-black uppercase tracking-tighter italic leading-[0.8]">Lipa. <br>Tuma SMS. <br><span class="text-[#78350f]">Internet.</span></h2>
+                <p class="text-zinc-500 text-lg font-medium leading-relaxed">James, mfumo huu unakupeleka moja kwa moja kwenye SMS baada ya kulipia ili admin akupatie vocha yako papo hapo bila kuchelewa.</p>
             </header>
 
-            <!-- Pricing Section -->
+            <!-- Plans -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div onclick="openPayModal('Lite', 500)" class="glass p-10 rounded-[3rem] hover:border-orange-900 transition-all cursor-pointer group relative overflow-hidden">
-                    <div class="absolute -right-4 -bottom-4 opacity-5 group-hover:opacity-10 transition-all">
-                        <i data-lucide="clock" class="w-32 h-32"></i>
-                    </div>
+                <div onclick="openPayModal('Lite', 500)" class="glass p-10 rounded-[3rem] hover:border-orange-900 transition-all cursor-pointer group relative">
                     <span class="text-[9px] font-black bg-zinc-800 px-4 py-1 rounded-full uppercase mb-6 block w-fit">Saa 6</span>
                     <h3 class="text-3xl font-black mb-1">Lite Plan</h3>
                     <div class="text-2xl font-bold text-orange-900 mb-8">Tsh 500</div>
-                    <button class="w-full py-4 bg-zinc-800 group-hover:bg-orange-900 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all shadow-lg">Pata Vocha</button>
+                    <button class="w-full py-4 bg-zinc-800 group-hover:bg-orange-900 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all shadow-lg">Agiza Kwa SMS</button>
                 </div>
                 <div onclick="openPayModal('Pro', 1000)" class="glass p-10 rounded-[3rem] border-orange-900/40 bg-orange-900/5 hover:scale-[1.02] transition-all cursor-pointer group relative overflow-hidden">
-                    <div class="absolute top-4 right-8 flex gap-1 items-center">
-                        <span class="text-[8px] font-black text-orange-500 uppercase">Popular</span>
-                        <i data-lucide="zap" class="w-4 h-4 text-orange-500 fill-orange-500"></i>
-                    </div>
                     <span class="text-[9px] font-black bg-orange-900 px-4 py-1 rounded-full uppercase mb-6 block w-fit">Masaa 24</span>
                     <h3 class="text-3xl font-black mb-1">Pro Plan</h3>
                     <div class="text-2xl font-bold text-orange-900 mb-8">Tsh 1,000</div>
-                    <button class="w-full py-4 bg-orange-900 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all shadow-2xl shadow-orange-900/40">Pata Vocha</button>
+                    <button class="w-full py-4 bg-orange-900 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all shadow-2xl">Agiza Kwa SMS</button>
                 </div>
                 <div onclick="openPayModal('Weekly', 5000)" class="glass p-10 rounded-[3rem] hover:border-orange-900 transition-all cursor-pointer group relative overflow-hidden">
                     <span class="text-[9px] font-black bg-zinc-800 px-4 py-1 rounded-full uppercase mb-6 block w-fit">Wiki 1</span>
                     <h3 class="text-3xl font-black mb-1">Weekly Pro</h3>
                     <div class="text-2xl font-bold text-orange-900 mb-8">Tsh 5,000</div>
-                    <button class="w-full py-4 bg-zinc-800 group-hover:bg-orange-900 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all shadow-lg">Pata Vocha</button>
+                    <button class="w-full py-4 bg-zinc-800 group-hover:bg-orange-900 rounded-2xl font-black uppercase text-[10px] tracking-widest transition-all shadow-lg">Agiza Kwa SMS</button>
                 </div>
             </div>
 
-            <!-- Dashboard Mock for User -->
+            <!-- Dashboard -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 pt-10">
                 <div class="glass p-12 rounded-[3.5rem] space-y-8">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-orange-900/10 rounded-2xl flex items-center justify-center"><i data-lucide="unlock" class="text-orange-900"></i></div>
-                        <h3 class="text-2xl font-black uppercase italic">Ingiza Code Yako</h3>
-                    </div>
-                    <input id="voucher-input" type="text" placeholder="XXXX-XXXX" class="w-full bg-black/40 border-2 border-white/5 rounded-[2rem] py-10 px-4 text-center text-5xl font-mono text-white focus:border-orange-900 outline-none uppercase tracking-widest shadow-inner">
-                    <button onclick="globalConnect()" class="w-full py-6 bg-orange-900 rounded-[2rem] font-black text-xl uppercase tracking-widest hover:bg-orange-800 transition-all shadow-2xl shadow-orange-900/30">Activate Internet</button>
+                    <h3 class="text-2xl font-black uppercase italic flex items-center gap-3"><i data-lucide="wifi" class="text-orange-900"></i> Unganisha Vocha</h3>
+                    <input id="voucher-input" type="text" placeholder="CODE-HAPA" class="w-full bg-black/40 border-2 border-white/5 rounded-[2rem] py-10 px-4 text-center text-5xl font-mono text-white focus:border-orange-900 outline-none uppercase tracking-widest">
+                    <button onclick="globalConnect()" class="w-full py-6 bg-orange-900 rounded-[2rem] font-black text-xl uppercase tracking-widest shadow-2xl shadow-orange-900/30">Connect Now</button>
                 </div>
                 
                 <div class="glass p-10 rounded-[3.5rem] space-y-6 flex flex-col">
-                    <div class="flex justify-between items-center border-b border-white/5 pb-6">
-                        <h3 class="text-xs font-black uppercase italic tracking-widest text-zinc-400">Historia Yako na Seva</h3>
-                        <div class="flex items-center gap-2">
-                            <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-                            <span class="text-[8px] font-black uppercase text-zinc-500">Live Connection</span>
-                        </div>
-                    </div>
+                    <h3 class="text-xs font-black uppercase italic tracking-widest text-zinc-400 border-b border-white/5 pb-6">Historia ya Vocha Zako</h3>
                     <div id="customer-history" class="space-y-4 overflow-y-auto flex-1 custom-scroll max-h-[300px]">
-                        <div class="text-center py-20 opacity-20">
-                            <i data-lucide="cloud-off" class="w-12 h-12 mx-auto mb-4"></i>
-                            <p class="text-[10px] font-black uppercase tracking-widest">Hakuna data kwenye seva yako bado</p>
-                        </div>
+                        <p class="text-[10px] font-black uppercase text-zinc-700 text-center py-20">Hujawahi kuomba vocha kwenye seva hii.</p>
                     </div>
                 </div>
             </div>
@@ -119,109 +100,73 @@
         <!-- ADMIN DASHBOARD -->
         <div id="view-admin" class="hidden space-y-10 animate-in fade-in zoom-in duration-500">
             <!-- Login -->
-            <div id="admin-lock" class="max-w-md mx-auto glass p-12 rounded-[3.5rem] space-y-8 border-2 border-orange-900/30 shadow-2xl mt-20">
+            <div id="admin-lock" class="max-w-md mx-auto glass p-12 rounded-[3.5rem] space-y-8 border-2 border-orange-900/30 mt-20">
                 <div class="text-center space-y-2">
                     <div class="w-20 h-20 bg-orange-900/10 rounded-3xl mx-auto flex items-center justify-center border border-orange-900/30">
-                        <i data-lucide="shield-check" class="w-10 h-10 text-orange-900"></i>
+                        <i data-lucide="server" class="w-10 h-10 text-orange-900"></i>
                     </div>
-                    <h2 class="text-2xl font-black uppercase tracking-tight italic">Hotspot Server Access</h2>
-                    <p class="text-[10px] text-zinc-500 uppercase tracking-widest">Kila kifaa kina-sync na seva moja</p>
+                    <h2 class="text-2xl font-black uppercase italic">Admin Server Hub</h2>
+                    <p class="text-[10px] text-zinc-500 uppercase tracking-widest">Reserved Data Management System</p>
                 </div>
                 <div class="space-y-4">
-                    <div class="space-y-1">
-                        <label class="text-[9px] font-black uppercase text-orange-900 px-2 tracking-widest">Business Sync ID</label>
-                        <input id="admin-sync-id" type="text" placeholder="MTAANI-WIFI-01" class="w-full bg-black/40 border border-white/10 p-5 rounded-2xl outline-none focus:border-orange-900 text-center font-black uppercase tracking-widest shadow-inner">
-                    </div>
-                    <div class="space-y-1">
-                        <label class="text-[9px] font-black uppercase text-orange-900 px-2 tracking-widest">Pass Key</label>
-                        <input id="admin-pass" type="password" placeholder="••••••••" class="w-full bg-black/40 border border-white/10 p-5 rounded-2xl outline-none focus:border-orange-900 text-center font-bold">
-                    </div>
+                    <input id="admin-sync-id" type="text" placeholder="SERVER ID (Mfano: MTAANI-01)" class="w-full bg-black/40 border border-white/10 p-5 rounded-2xl outline-none focus:border-orange-900 text-center font-black uppercase tracking-widest">
+                    <input id="admin-pass" type="password" placeholder="PASSWORD" class="w-full bg-black/40 border border-white/10 p-5 rounded-2xl outline-none focus:border-orange-900 text-center font-bold">
                 </div>
-                <button onclick="loginAdmin()" class="w-full py-6 bg-orange-900 rounded-2xl font-black uppercase text-xs tracking-widest hover:scale-[1.02] transition-all shadow-xl shadow-orange-900/20">Vuta Data za Server & Live Feed</button>
+                <button onclick="loginAdmin()" class="w-full py-6 bg-orange-900 rounded-2xl font-black uppercase text-xs tracking-widest shadow-xl">Ingia Kusimamia Seva</button>
             </div>
 
             <!-- Admin Interface -->
             <div id="admin-content" class="hidden space-y-10">
                 <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
                     <div>
-                        <div class="flex items-center gap-4">
-                            <h2 class="text-6xl font-black uppercase italic tracking-tighter leading-none">Command Center</h2>
-                            <div class="flex items-center gap-2 bg-green-500/10 px-4 py-2 rounded-full border border-green-500/20">
-                                <span class="w-2 h-2 rounded-full bg-green-500 live-dot"></span>
-                                <span class="text-[10px] font-black uppercase text-green-500 tracking-widest">Syncing Global Hub...</span>
-                            </div>
-                        </div>
-                        <div id="ai-insight" class="text-[11px] font-mono text-orange-900 font-bold uppercase mt-4 max-w-2xl bg-orange-900/5 p-2 rounded-lg border-l-4 border-orange-900">Analyzing live traffic spikes...</div>
+                        <h2 class="text-6xl font-black uppercase italic tracking-tighter leading-none">Database Logs</h2>
+                        <div id="ai-insight" class="text-[11px] font-mono text-orange-900 font-bold uppercase mt-4 bg-orange-900/5 p-2 rounded border-l-4 border-orange-900">Wateja wako wote wamehifadhiwa hapa (Reserved)...</div>
                     </div>
                     <div class="flex gap-4">
-                        <button onclick="syncData('pull')" class="p-5 glass rounded-2xl hover:bg-orange-900 transition-all shadow-lg group"><i data-lucide="refresh-cw" id="sync-icon" class="group-hover:rotate-180 transition-transform"></i></button>
-                        <button onclick="logoutAdmin()" class="p-5 glass text-red-500 border-red-500/20 rounded-2xl hover:bg-red-500 hover:text-white transition-all shadow-lg"><i data-lucide="log-out"></i></button>
+                        <button onclick="syncData('pull')" class="p-5 glass rounded-2xl hover:bg-orange-900 transition-all"><i data-lucide="refresh-cw" id="sync-icon"></i></button>
+                        <button onclick="logoutAdmin()" class="p-5 glass text-red-500 border-red-500/20 rounded-2xl hover:bg-red-500 hover:text-white transition-all"><i data-lucide="power"></i></button>
                     </div>
                 </header>
 
-                <!-- Real-time Metrics -->
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Stats -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="glass p-10 rounded-[3rem]">
+                        <div class="text-[10px] font-black uppercase text-zinc-500 mb-4">Wateja Waliohifadhiwa</div>
+                        <div id="stat-total" class="text-5xl font-black italic">0</div>
+                    </div>
                     <div class="glass p-10 rounded-[3rem] border-2 border-orange-900/20 bg-orange-900/5">
-                        <div class="text-[10px] font-black uppercase text-orange-900 mb-4 flex items-center gap-2"><i data-lucide="users" class="w-3 h-3"></i> Active Visitors Now</div>
-                        <div id="stat-active" class="text-5xl font-black italic">0</div>
-                        <p class="text-[9px] text-zinc-500 mt-2 font-bold uppercase tracking-widest">Watu waliofungua website sasa hivi</p>
+                        <div class="text-[10px] font-black uppercase text-orange-900 mb-4">Jumla ya Mapato (Approved)</div>
+                        <div id="stat-rev" class="text-5xl font-black italic">Tsh 0</div>
                     </div>
                     <div class="glass p-10 rounded-[3rem]">
-                        <div class="text-[10px] font-black uppercase text-zinc-500 mb-4 flex items-center gap-2"><i data-lucide="ticket" class="w-3 h-3"></i> Total Invoices</div>
-                        <div id="stat-total-req" class="text-5xl font-black italic">0</div>
-                    </div>
-                    <div class="glass p-10 rounded-[3rem]">
-                        <div class="text-[10px] font-black uppercase text-zinc-500 mb-4 flex items-center gap-2"><i data-lucide="banknote" class="w-3 h-3"></i> Today Revenue</div>
-                        <div id="stat-rev" class="text-4xl font-black italic text-green-500">Tsh 0</div>
-                    </div>
-                    <div class="glass p-10 rounded-[3rem] border-white/5">
-                        <div class="text-[10px] font-black uppercase text-zinc-500 mb-4 flex items-center gap-2"><i data-lucide="server" class="w-3 h-3"></i> Global Sync ID</div>
-                        <div id="stat-sid" class="text-xl font-black font-mono text-orange-900 uppercase truncate">...</div>
+                        <div class="text-[10px] font-black uppercase text-zinc-500 mb-4">Server Status</div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-green-500 live-dot"></span>
+                            <span class="text-xl font-black uppercase tracking-widest">ONLINE</span>
+                        </div>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
-                    <!-- Live Requests -->
-                    <div class="xl:col-span-2 glass rounded-[3.5rem] overflow-hidden shadow-2xl border border-white/5">
-                        <div class="p-10 border-b border-white/5 bg-white/2 flex justify-between items-center">
-                            <h3 class="font-black uppercase text-lg italic tracking-tighter flex items-center gap-3"><i data-lucide="list-checks" class="text-orange-900"></i> Server Activity Logs</h3>
-                            <div class="flex gap-2">
-                                <span class="px-3 py-1 bg-zinc-800 rounded-full text-[8px] font-black uppercase tracking-widest">James/Juma Database</span>
-                            </div>
-                        </div>
-                        <div class="overflow-x-auto min-h-[450px]">
-                            <table class="w-full text-left">
-                                <thead class="bg-black/40 text-[10px] font-black uppercase text-zinc-600 border-b border-white/5">
-                                    <tr>
-                                        <th class="px-10 py-6">Customer / Session</th>
-                                        <th class="px-10 py-6">Request Info</th>
-                                        <th class="px-10 py-6">Server Status</th>
-                                        <th class="px-10 py-6 text-center">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="admin-main-list" class="divide-y divide-white/5">
-                                    <!-- Dynamic Rows -->
-                                </tbody>
-                            </table>
-                        </div>
+                <!-- Table -->
+                <div class="glass rounded-[3.5rem] overflow-hidden shadow-2xl border border-white/5">
+                    <div class="p-10 border-b border-white/5 bg-white/2 flex justify-between items-center">
+                        <h3 class="font-black uppercase text-lg italic tracking-tighter flex items-center gap-3"><i data-lucide="database" class="text-orange-900"></i> Global User Records</h3>
+                        <span class="text-[8px] font-black bg-zinc-800 px-4 py-1 rounded-full uppercase">Hapapotei Data Mpaka Ufute</span>
                     </div>
-
-                    <!-- Online Visitors Sidebar -->
-                    <div class="glass rounded-[3.5rem] p-10 space-y-8 border border-white/5">
-                        <h3 class="font-black uppercase text-sm italic tracking-widest border-b border-white/5 pb-4 flex items-center gap-3">
-                            <span class="w-2 h-2 rounded-full bg-green-500 live-dot"></span> Online Visitors
-                        </h3>
-                        <div id="online-visitor-list" class="space-y-4 max-h-[500px] overflow-y-auto custom-scroll pr-2">
-                            <p class="text-[10px] text-zinc-600 font-black uppercase text-center py-20">Scanning Cloud for active nodes...</p>
-                        </div>
-                        <div class="pt-6 border-t border-white/5">
-                            <div class="bg-orange-900/10 p-6 rounded-3xl border border-orange-900/20">
-                                <p class="text-[9px] font-black text-orange-900 uppercase tracking-widest mb-2">Server Auto-Refresh</p>
-                                <div class="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
-                                    <div id="sync-progress" class="bg-orange-900 h-full w-0 transition-all duration-1000"></div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="overflow-x-auto min-h-[450px]">
+                        <table class="w-full text-left">
+                            <thead class="bg-black/40 text-[10px] font-black uppercase text-zinc-600">
+                                <tr>
+                                    <th class="px-10 py-6">Mteja / Namba</th>
+                                    <th class="px-10 py-6">Kifurushi</th>
+                                    <th class="px-10 py-6">Status</th>
+                                    <th class="px-10 py-6 text-center">Manage / SMS</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-main-list" class="divide-y divide-white/5">
+                                <!-- Data rows -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -230,25 +175,22 @@
 
     <!-- Payment Modal -->
     <div id="modal-pay" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6 bg-black/98 backdrop-blur-3xl">
-        <div class="w-full max-w-lg glass rounded-[4rem] overflow-hidden shadow-2xl border-orange-900/20">
+        <div class="w-full max-w-lg glass rounded-[4rem] overflow-hidden border-orange-900/20">
             <div class="p-10 border-b border-white/5 flex justify-between items-center bg-zinc-900/50">
-                <h3 class="text-3xl font-black uppercase italic tracking-tighter">Lipa Vocha</h3>
+                <h3 class="text-3xl font-black uppercase italic tracking-tighter">Agiza Vocha</h3>
                 <button onclick="closePayModal()" class="w-12 h-12 flex items-center justify-center bg-zinc-800 rounded-2xl hover:text-red-500 transition-all"><i data-lucide="x"></i></button>
             </div>
             <div class="p-12 space-y-10 text-center">
-                <div class="bg-orange-900/10 p-10 rounded-[3rem] border border-orange-900/20 relative overflow-hidden group">
-                    <p class="text-[10px] font-black text-zinc-500 uppercase tracking-[0.3em] mb-4">Tuma Malipo Kwenda:</p>
+                <div class="bg-orange-900/10 p-10 rounded-[3rem] border border-orange-900/20">
+                    <p class="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-4">Malipo Kwenda Admin:</p>
                     <div class="text-5xl font-black text-orange-900 font-mono tracking-tighter">0779 231 924</div>
-                    <div class="mt-4 flex flex-col items-center">
-                        <span class="text-sm font-black uppercase">JAPHET SUNDAY</span>
-                        <span class="text-[9px] font-bold text-zinc-600 uppercase">Mtaani Wifi Hub Official</span>
-                    </div>
+                    <p class="text-[10px] font-black uppercase mt-4">JAPHET SUNDAY</p>
                 </div>
                 <div class="space-y-4">
-                    <input id="user-name" type="text" placeholder="JINA LAKO LA MPESA" class="w-full bg-black/40 border-2 border-white/5 p-6 rounded-3xl outline-none focus:border-orange-900 text-sm font-black uppercase text-center tracking-widest">
-                    <input id="user-phone" type="tel" placeholder="NAMBA YA SIMU" class="w-full bg-black/40 border-2 border-white/5 p-6 rounded-3xl outline-none focus:border-orange-900 text-sm font-black font-mono text-center tracking-widest">
-                    <button onclick="submitToServer()" id="btn-submit" class="w-full py-8 bg-orange-900 rounded-[3rem] font-black uppercase text-sm tracking-[0.2em] shadow-2xl shadow-orange-900/40 hover:scale-[1.03] active:scale-95 transition-all">Tuma Ombi Seva Kuu</button>
-                    <p class="text-[9px] text-zinc-600 font-black uppercase">UKISHABONYEZA, SUBIRI SEKUNDE 5 ADMIN AFUNGUE CODE YAKO</p>
+                    <input id="user-name" type="text" placeholder="JINA LAKO" class="w-full bg-black/40 border-2 border-white/5 p-6 rounded-3xl outline-none focus:border-orange-900 text-sm font-black uppercase text-center tracking-widest">
+                    <input id="user-phone" type="tel" placeholder="NAMBA YAKO" class="w-full bg-black/40 border-2 border-white/5 p-6 rounded-3xl outline-none focus:border-orange-900 text-sm font-black font-mono text-center tracking-widest">
+                    <button onclick="submitToServer()" id="btn-submit" class="w-full py-8 bg-orange-900 rounded-[3rem] font-black uppercase tracking-[0.2em] shadow-2xl transition-all hover:scale-[1.03]">TUMA & FUNGUA SMS</button>
+                    <p class="text-[9px] text-zinc-600 font-black uppercase">UKIBOFYA, SIMU ITAFUNGUA SMS MOJA KWA MOJA KWENDA KWA ADMIN</p>
                 </div>
             </div>
         </div>
@@ -265,53 +207,21 @@
     <script type="module">
         import { GoogleGenAI } from "@google/genai";
 
-        const SYNC_BUCKET = "mtaani_live_v5_pro"; 
+        const SYNC_BUCKET = "mtaani_sms_v6_final"; 
         const API_BASE = `https://kvdb.io/${SYNC_BUCKET}/`;
+        const ADMIN_PHONE = "0779231924";
 
         let state = {
             currentTab: 'portal',
             requests: [],
-            presence: [], 
             syncId: localStorage.getItem('global_sid') || 'MTAANI-BIZ-01',
             isAdmin: sessionStorage.getItem('admin_logged') === 'true',
             selectedPlan: null,
             sessionId: 'SESS-' + Math.random().toString(36).substring(2, 10).toUpperCase(),
-            customerHistory: JSON.parse(localStorage.getItem('my_history') || '[]'),
-            syncProgress: 0
+            customerHistory: JSON.parse(localStorage.getItem('my_history') || '[]')
         };
 
-        // --- REAL-TIME PRESENCE (Heartbeat) ---
-        async function sendHeartbeat() {
-            if (state.isAdmin) return; // Admins don't count as visitor presence
-            try {
-                const res = await fetch(`${API_BASE}${state.syncId}`);
-                let cloudData = { requests: [], presence: [] };
-                if (res.ok) cloudData = await res.json();
-
-                // Update my heartbeat
-                const now = Date.now();
-                const myPresence = {
-                    id: state.sessionId,
-                    lastSeen: now,
-                    device: navigator.platform,
-                    browser: navigator.userAgent.substring(0, 30)
-                };
-
-                // Filter out old presence data (> 1 min)
-                const activePresence = (cloudData.presence || []).filter(p => now - p.lastSeen < 60000 && p.id !== state.sessionId);
-                activePresence.push(myPresence);
-
-                await fetch(`${API_BASE}${state.syncId}`, {
-                    method: 'POST',
-                    body: JSON.stringify({ ...cloudData, presence: activePresence })
-                });
-            } catch (e) { console.warn("Presence sync error", e); }
-        }
-
-        // Send heartbeat every 15s when on Portal
-        setInterval(() => { if (state.currentTab === 'portal') sendHeartbeat(); }, 15000);
-
-        // --- CLOUD SYNC LOGIC ---
+        // --- CLOUD SYNC ---
         async function syncData(mode = 'pull') {
             if (!state.syncId) return;
             const icon = document.getElementById('sync-icon');
@@ -319,48 +229,30 @@
 
             try {
                 if (mode === 'push') {
-                    const res = await fetch(`${API_BASE}${state.syncId}`);
-                    let cloudData = { requests: [], presence: [] };
-                    if (res.ok) cloudData = await res.json();
-
-                    // Merge requests
-                    const reqMap = new Map((cloudData.requests || []).map(r => [r.id, r]));
-                    state.requests.forEach(r => reqMap.set(r.id, r));
-                    const merged = Array.from(reqMap.values()).sort((a, b) => b.id - a.id);
-
                     await fetch(`${API_BASE}${state.syncId}`, {
                         method: 'POST',
-                        body: JSON.stringify({ ...cloudData, requests: merged, lastUpdated: Date.now() })
+                        body: JSON.stringify({ requests: state.requests, lastUpdated: Date.now() })
                     });
                 } else {
                     const res = await fetch(`${API_BASE}${state.syncId}`);
                     if (res.ok) {
                         const data = await res.json();
                         state.requests = data.requests || [];
-                        state.presence = data.presence || [];
                         if (state.isAdmin) renderAdmin();
                         renderCustomerHistory();
                     }
                 }
-            } catch (e) {
-                console.error("Cloud Sync Error", e);
-            } finally {
-                if (icon) icon.classList.remove('animate-spin');
-                document.getElementById('server-id-display').innerText = `SERVER ACTIVE: ${state.syncId}`;
-                state.syncProgress = 0;
+            } catch (e) { console.error("Cloud Sync Error", e); }
+            finally { 
+                if (icon) icon.classList.remove('animate-spin'); 
+                document.getElementById('server-id-display').innerText = `SERVER: ${state.syncId}`;
             }
         }
 
-        // Admin Loop (Every 5s)
-        setInterval(() => {
-            if (state.isAdmin) {
-                state.syncProgress += 20;
-                document.getElementById('sync-progress').style.width = `${state.syncProgress}%`;
-                if (state.syncProgress >= 100) syncData('pull');
-            }
-        }, 1000);
+        // Auto Refresh for Admin
+        setInterval(() => { if (state.isAdmin) syncData('pull'); }, 5000);
 
-        // --- UI ROUTING ---
+        // --- NAVIGATION ---
         window.switchTab = (tab) => {
             state.currentTab = tab;
             document.getElementById('view-portal').classList.toggle('hidden', tab !== 'portal');
@@ -368,24 +260,23 @@
             document.getElementById('btn-portal').classList.toggle('active-nav', tab === 'portal');
             document.getElementById('btn-admin').classList.toggle('active-nav', tab === 'admin');
             if (tab === 'admin') renderAdmin();
-            if (tab === 'portal') sendHeartbeat();
         };
 
         window.openPayModal = (name, price) => {
             state.selectedPlan = { name, price };
-            document.getElementById('pay-amount').innerText = price.toLocaleString();
             document.getElementById('modal-pay').classList.remove('hidden');
         };
 
         window.closePayModal = () => document.getElementById('modal-pay').classList.add('hidden');
 
+        // --- CUSTOMER ACTIONS ---
         window.submitToServer = async () => {
             const name = document.getElementById('user-name').value;
             const phone = document.getElementById('user-phone').value;
-            if(!name || !phone) return alert("Jaza Jina na Namba ya Simu kwanza!");
+            if(!name || !phone) return alert("Jaza Jina na Namba!");
 
             const btn = document.getElementById('btn-submit');
-            btn.innerText = "UPLOADING TO SERVER...";
+            btn.innerText = "SAVING & OPENING SMS...";
             btn.disabled = true;
 
             const newReq = {
@@ -395,18 +286,21 @@
                 plan: state.selectedPlan.name,
                 price: state.selectedPlan.price,
                 status: 'pending',
-                date: new Date().toLocaleTimeString('sw-TZ'),
-                device: navigator.platform
+                date: new Date().toLocaleString('sw-TZ'),
+                voucher: null
             };
 
+            state.requests.unshift(newReq);
             state.customerHistory.unshift(newReq);
             localStorage.setItem('my_history', JSON.stringify(state.customerHistory));
-            state.requests.unshift(newReq);
             
             await syncData('push');
-            
-            alert("OMBI LAKO LIMEFIKA! Admin ameshaona sasa hivi kupitia Command Center.");
-            btn.innerText = "Tuma Ombi Seva Kuu";
+
+            // --- TRIGGER SMS REDIRECT ---
+            const smsBody = `Habari Admin, nimeomba vocha ya ${state.selectedPlan.name} (Tsh ${state.selectedPlan.price.toLocaleString()}). Jina langu ni ${name}. Namba yangu ya malipo ni ${phone}. Nasubiri vocha yangu.`;
+            window.location.href = `sms:${ADMIN_PHONE}?body=${encodeURIComponent(smsBody)}`;
+
+            btn.innerText = "TUMA & FUNGUA SMS";
             btn.disabled = false;
             closePayModal();
             renderCustomerHistory();
@@ -422,11 +316,11 @@
             container.innerHTML = '';
             myRequests.forEach(r => {
                 const div = document.createElement('div');
-                div.className = "p-8 glass rounded-[2rem] border-white/5 flex justify-between items-center shadow-lg";
+                div.className = "p-8 glass rounded-[2rem] flex justify-between items-center shadow-lg border border-white/5";
                 div.innerHTML = `
                     <div class="space-y-1">
                         <div class="text-[10px] font-black uppercase text-zinc-500">${r.plan} • ${r.date}</div>
-                        <div class="text-sm font-bold text-white">${r.status === 'approved' ? `<span class="text-orange-900 font-black">VOUCHER: ${r.voucher}</span>` : '<span class="animate-pulse">Checking Status...</span>'}</div>
+                        <div class="text-sm font-bold text-white">${r.status === 'approved' ? `<span class="text-orange-900 font-black">VOUCHER: ${r.voucher}</span>` : '<span class="animate-pulse">Waiting for Admin SMS...</span>'}</div>
                     </div>
                     <div class="px-4 py-1.5 rounded-full text-[9px] font-black uppercase ${r.status === 'approved' ? 'bg-orange-900 text-white' : 'bg-zinc-800 text-zinc-500'}">
                         ${r.status}
@@ -436,7 +330,7 @@
             });
         };
 
-        // --- ADMIN RENDER ---
+        // --- ADMIN ACTIONS ---
         window.loginAdmin = async () => {
             const sid = document.getElementById('admin-sync-id').value.toUpperCase().trim();
             const pass = document.getElementById('admin-pass').value;
@@ -447,7 +341,7 @@
                 sessionStorage.setItem('admin_logged', 'true');
                 await syncData('pull');
                 renderAdmin();
-            } else alert("Invalid Access Key!");
+            } else alert("Access Denied!");
         };
 
         window.logoutAdmin = () => {
@@ -460,36 +354,15 @@
             const authDiv = document.getElementById('admin-lock');
             const contentDiv = document.getElementById('admin-content');
             if (!state.isAdmin) { authDiv.classList.remove('hidden'); contentDiv.classList.add('hidden'); return; }
-            
             authDiv.classList.add('hidden'); contentDiv.classList.remove('hidden');
 
-            // Update Metrics
-            document.getElementById('stat-sid').innerText = state.syncId;
-            document.getElementById('stat-total-req').innerText = state.requests.length;
-            document.getElementById('stat-active').innerText = state.presence.length;
+            document.getElementById('stat-total').innerText = state.requests.length;
             const dailyRev = state.requests.filter(r => r.status === 'approved').reduce((acc, curr) => acc + curr.price, 0);
             document.getElementById('stat-rev').innerText = `Tsh ${dailyRev.toLocaleString()}`;
 
-            // Render Online List
-            const onlineList = document.getElementById('online-visitor-list');
-            onlineList.innerHTML = state.presence.length === 0 ? '<p class="text-[10px] text-zinc-600 font-black uppercase text-center py-20">Hakuna mteja online sasa hivi</p>' : '';
-            state.presence.forEach(p => {
-                const div = document.createElement('div');
-                div.className = "flex items-center gap-4 p-4 glass rounded-2xl border-white/5";
-                div.innerHTML = `
-                    <div class="w-2 h-2 rounded-full bg-green-500 live-dot"></div>
-                    <div class="flex-1">
-                        <div class="text-[10px] font-black text-white uppercase truncate w-32">${p.id}</div>
-                        <div class="text-[8px] text-zinc-500 font-bold">${p.device}</div>
-                    </div>
-                    <div class="text-[8px] font-mono text-orange-900">ACTIVE</div>
-                `;
-                onlineList.appendChild(div);
-            });
-
-            // Render Table
             const mainList = document.getElementById('admin-main-list');
-            mainList.innerHTML = state.requests.length === 0 ? '<tr><td colspan="4" class="p-20 text-center text-[10px] font-black uppercase opacity-20">Seva Haina Data za Maombi</td></tr>' : '';
+            mainList.innerHTML = state.requests.length === 0 ? '<tr><td colspan="4" class="p-20 text-center opacity-20 uppercase font-black text-xs">Seva haina rekodi yoyote</td></tr>' : '';
+
             state.requests.forEach(r => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-white/2 transition-colors border-b border-white/5";
@@ -497,20 +370,23 @@
                     <td class="px-10 py-8">
                         <div class="font-black uppercase text-sm text-white">${r.name}</div>
                         <div class="text-[9px] font-mono text-orange-900">${r.phone}</div>
-                        <div class="text-[8px] text-zinc-600 uppercase mt-1">ID: ${r.sessionId || 'UNKNOWN'}</div>
                     </td>
                     <td class="px-10 py-8">
                         <div class="font-bold text-xs text-white">${r.plan}</div>
                         <div class="text-[10px] text-zinc-500">Tsh ${r.price.toLocaleString()}</div>
                     </td>
                     <td class="px-10 py-8">
-                        <span class="px-3 py-1 rounded-full text-[8px] font-black uppercase ${r.status === 'pending' ? 'bg-orange-900/20 text-orange-900 border border-orange-900/30' : 'bg-zinc-800 text-zinc-500'}">${r.status}</span>
+                        <span class="px-3 py-1 rounded-full text-[8px] font-black uppercase ${r.status === 'pending' ? 'bg-orange-900/20 text-orange-900 border border-orange-900/30' : 'bg-green-500/20 text-green-500 border border-green-500/30'}">${r.status}</span>
                     </td>
-                    <td class="px-10 py-8 text-center">
+                    <td class="px-10 py-8 text-center flex items-center justify-center gap-4">
                         ${r.status === 'pending' ? 
-                            `<button onclick="approve(${r.id})" class="p-4 bg-orange-900 rounded-2xl hover:scale-110 transition-all shadow-xl shadow-orange-900/40"><i data-lucide="check-circle" class="w-6 h-6"></i></button>` : 
-                            `<div class="text-sm font-black font-mono text-orange-900 tracking-tighter">${r.voucher}</div>`
+                            `<button onclick="approve(${r.id})" class="p-4 bg-orange-900 rounded-2xl hover:scale-110 transition-all"><i data-lucide="check-circle" class="w-6 h-6"></i></button>` : 
+                            `<div class="flex items-center gap-3">
+                                <div class="text-sm font-black font-mono text-orange-900">${r.voucher}</div>
+                                <button onclick="sendVoucherSMS('${r.phone}', '${r.name}', '${r.voucher}', '${r.plan}')" class="p-3 bg-zinc-800 rounded-xl hover:bg-orange-900 transition-all"><i data-lucide="send" class="w-4 h-4"></i></button>
+                            </div>`
                         }
+                        <button onclick="eraseRecord(${r.id})" class="p-3 bg-red-950/30 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                     </td>
                 `;
                 mainList.appendChild(tr);
@@ -524,33 +400,41 @@
             const req = state.requests.find(r => r.id === id);
             if (!req) return;
             req.status = 'approved';
-            req.voucher = "HOT-" + Math.random().toString(36).substring(2, 7).toUpperCase();
+            req.voucher = "MTN-" + Math.random().toString(36).substring(2, 7).toUpperCase();
             await syncData('push');
-            alert(`ID ya ${req.name} imehakikiwa. Vocha ni: ${req.voucher}. James anaiona sasa hivi.`);
             renderAdmin();
+        };
+
+        window.eraseRecord = async (id) => {
+            if(!confirm("Una uhakika unataka kufuta rekodi hii kwenye Seva milele?")) return;
+            state.requests = state.requests.filter(r => r.id !== id);
+            await syncData('push');
+            renderAdmin();
+        };
+
+        window.sendVoucherSMS = (phone, name, voucher, plan) => {
+            const body = `Habari ${name}, vocha yako ya ${plan} ni: ${voucher}. Karibu tena Mtaani Wifi!`;
+            window.location.href = `sms:${phone}?body=${encodeURIComponent(body)}`;
         };
 
         // AI INSIGHTS
         const runAI = async () => {
             try {
                 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-                const visitorCount = state.presence.length;
-                const reqCount = state.requests.filter(r => r.status === 'pending').length;
+                const count = state.requests.length;
                 const response = await ai.models.generateContent({
                     model: 'gemini-3-flash-preview',
-                    contents: `Fanya tathmini fupi sana ya biashara: Wateja online sasa hivi ni ${visitorCount}, na kuna maombi yanayosubiri ${reqCount}. Tumia lugha ya kisasa ya kibiashara.`,
+                    contents: `Kama Cloud Hub Manager, toa sifa fupi sana kwa biashara yenye wateja ${count} waliohifadhiwa kwenye database. Tumia lugha ya mtaani ya biashara.`,
                 });
-                document.getElementById('ai-insight').innerText = response.text || "SYSTEM: SERVER NODES OPERATING AT 100%.";
-            } catch (e) {
-                document.getElementById('ai-insight').innerText = "CLOUD FEED: GLOBAL NODES ACTIVE.";
-            }
+                document.getElementById('ai-insight').innerText = response.text || "SERVER SECURE: DATA RESERVED.";
+            } catch (e) { document.getElementById('ai-insight').innerText = "CLOUDBASE: ALL NODES SYNCED."; }
         };
 
         // BOOT
         window.globalConnect = () => {
             const val = document.getElementById('voucher-input').value;
-            if(!val) return alert("Ingiza Code kwanza!");
-            alert("Uthibitishaji wa Code: Unachunguzwa kwenye Seva Kuu...");
+            if(!val) return alert("Weka Vocha!");
+            alert("Checking Server: Vocha inahakikiwa kwenye Cloud...");
         };
 
         lucide.createIcons();
