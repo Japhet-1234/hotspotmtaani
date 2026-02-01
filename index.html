@@ -3,549 +3,512 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MTAANI WIFI | Command Center</title>
+    <title>wifi Mtaani | Hotspot System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #1e293b; overflow-x: hidden; }
-        .mtaani-card { background: white; border-radius: 24px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
-        .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-radius: 16px; font-weight: 700; color: #64748b; transition: all 0.2s; cursor: pointer; }
-        .sidebar-link:hover { background: #f1f5f9; color: #2563eb; }
-        .sidebar-link.active { background: #2563eb; color: white; box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.2); }
+        :root {
+            --primary-brown: #5d4037;
+            --light-grey: #f8f8f8;
+            --text-grey: #333333;
+        }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--light-grey); 
+            color: var(--text-grey); 
+            transition: all 0.5s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn-brown { background-color: var(--primary-brown); color: white; transition: all 0.2s; }
+        .btn-brown:active { transform: scale(0.98); }
+        .card-white { background: white; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
         .hidden { display: none; }
-        .code-block { background: #0f172a; color: #38bdf8; padding: 20px; border-radius: 12px; font-family: monospace; font-size: 13px; position: relative; overflow-x: auto; }
-        .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         
-        #toast-sms { transition: all 0.5s ease; transform: translateY(100px); opacity: 0; }
-        #toast-sms.show { transform: translateY(0); opacity: 1; }
+        input:focus, select:focus { 
+            border-color: var(--primary-brown) !important; 
+            outline: none; 
+            box-shadow: 0 0 0 4px rgba(93, 64, 55, 0.08); 
+        }
         
-        .notification-dot { position: absolute; top: 10px; right: 10px; width: 10px; height: 10px; background: #ef4444; border: 2px solid white; border-radius: full; }
-        .connected-badge { animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        .pulse-emerald { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: .4; } }
+
+        #toast {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translate(-50%, 100px);
+            opacity: 0;
+            left: 50%;
+        }
+        #toast.show { transform: translate(-50%, -20px); opacity: 1; }
+
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
     </style>
 </head>
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen pb-20">
 
-    <div id="sync-bar" class="fixed top-0 left-0 h-1 bg-blue-600 z-[200] transition-all duration-500" style="width: 0%"></div>
-
-    <!-- NOTIFICATION SYSTEM -->
-    <div id="toast-sms" class="fixed bottom-8 right-8 z-[1000] bg-slate-900 text-white p-6 rounded-3xl shadow-2xl flex items-center gap-4 border border-white/10">
-        <div class="bg-blue-500 p-3 rounded-2xl shadow-lg">
-            <i data-lucide="message-circle" class="w-6 h-6 text-white"></i>
-        </div>
-        <div>
-            <p class="text-[10px] font-black uppercase tracking-widest text-blue-400">Alert</p>
-            <p id="sms-msg" class="text-sm font-bold">Imekamilika!</p>
-        </div>
-    </div>
-
-    <div class="flex flex-1 h-screen overflow-hidden">
+    <!-- USER PORTAL VIEW -->
+    <div id="user-view" class="max-w-md mx-auto p-4 space-y-6">
         
-        <!-- SIDEBAR -->
-        <aside id="admin-sidebar" class="hidden w-72 bg-white border-r border-slate-200 flex flex-col p-6 animate-in slide-in-from-left duration-500">
-            <div class="flex items-center gap-3 mb-10 px-2">
-                <div class="bg-slate-900 p-2 rounded-2xl"><i data-lucide="wifi" class="text-white w-5 h-5"></i></div>
-                <h2 class="font-black text-xl tracking-tight uppercase">JEFF <span class="text-blue-600">HUB</span></h2>
+        <!-- Header -->
+        <header class="text-center py-8">
+            <div class="inline-block p-5 bg-white rounded-[2rem] mb-6 shadow-sm border border-stone-100">
+                <i data-lucide="wifi" class="w-12 h-12 text-[#5d4037]"></i>
             </div>
-            
-            <nav class="flex-1 space-y-1">
-                <div onclick="setAdminTab('dash')" id="tab-dash" class="sidebar-link active"><i data-lucide="layout-grid" class="w-5 h-5"></i> Dashboard</div>
-                <div onclick="setAdminTab('users')" id="tab-users" class="sidebar-link"><i data-lucide="users" class="w-5 h-5"></i> Wateja & Sessions</div>
-                <div onclick="setAdminTab('routers')" id="tab-routers" class="sidebar-link"><i data-lucide="router" class="w-5 h-5"></i> Router Info</div>
-                <div onclick="setAdminTab('messages')" id="tab-messages" class="sidebar-link relative"><i data-lucide="mail" class="w-5 h-5"></i> Ujumbe (Inbox) <span id="msg-badge" class="hidden notification-dot"></span></div>
-                <div onclick="setAdminTab('config')" id="tab-config" class="sidebar-link"><i data-lucide="terminal" class="w-5 h-5"></i> Config Codes</div>
-                <div onclick="setAdminTab('logs')" id="tab-logs" class="sidebar-link"><i data-lucide="history" class="w-5 h-5"></i> System Logs</div>
-            </nav>
+            <h1 class="text-4xl font-black uppercase tracking-tighter text-[#5d4037]">wifi Mtaani</h1>
+            <p class="text-[11px] font-extrabold text-stone-400 uppercase tracking-[0.4em] mt-3">Internet Isiyo na Kikomo</p>
+        </header>
 
-            <div class="mt-auto pt-6 border-t border-slate-100">
-                <button onclick="doLogout()" class="sidebar-link text-red-500 hover:bg-red-50 w-full"><i data-lucide="power" class="w-5 h-5"></i> Logout</button>
+        <!-- LIVE SESSION STATUS (Auto-detects active session) -->
+        <section id="session-status" class="hidden card-white p-8 border-t-8 border-emerald-500 bg-emerald-50/20 space-y-6 animate-in fade-in slide-in-from-top-4 duration-700">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-3 h-3 bg-emerald-500 rounded-full pulse-emerald"></div>
+                    <span class="text-[11px] font-black uppercase tracking-widest text-emerald-600">Internet Iko Hewani</span>
+                </div>
+                <button onclick="disconnectSession()" class="text-[10px] font-bold text-red-400 uppercase hover:text-red-600 transition-colors">Ondoka</button>
             </div>
-        </aside>
-
-        <!-- MAIN AREA -->
-        <div class="flex-1 flex flex-col overflow-y-auto custom-scroll">
-            <header class="bg-white/80 backdrop-blur-md border-b border-slate-200 sticky top-0 z-40 px-8 py-5 flex items-center justify-between">
-                <div>
-                    <h1 id="view-title" class="text-sm font-black uppercase tracking-widest text-slate-400">Portal ya Mteja</h1>
+            <div class="text-center py-4 bg-white/50 rounded-3xl border border-emerald-100/50">
+                <p class="text-[10px] font-black text-stone-400 uppercase tracking-[0.2em] mb-2">Muda Uliobaki</p>
+                <h2 id="live-timer" class="text-5xl font-black text-[#5d4037] tracking-tighter tabular-nums">00:00:00</h2>
+            </div>
+            <div class="flex justify-between items-center px-2">
+                <div class="space-y-1">
+                    <p class="text-[9px] font-bold text-stone-400 uppercase">Simu Yako</p>
+                    <p id="status-phone" class="text-xs font-black text-[#5d4037]">-</p>
                 </div>
-                <div class="flex items-center gap-4">
-                    <button id="admin-entry-btn" onclick="switchView('admin')" class="bg-slate-100 text-slate-600 px-5 py-2 rounded-xl text-xs font-black uppercase">Admin Portal</button>
-                    <button id="client-entry-btn" onclick="switchView('portal')" class="hidden bg-blue-600 text-white px-5 py-2 rounded-xl text-xs font-black uppercase">Rudi Portal</button>
+                <div class="text-right space-y-1">
+                    <p class="text-[9px] font-bold text-stone-400 uppercase">Kifurushi</p>
+                    <p id="status-plan" class="text-xs font-black text-emerald-600 uppercase">-</p>
                 </div>
-            </header>
+            </div>
+        </section>
 
-            <main class="p-8">
-                
-                <!-- CLIENT PORTAL -->
-                <div id="view-portal" class="max-w-4xl mx-auto space-y-10">
-                    
-                    <!-- STATUS BADGE (Kama ameshaunganishwa) -->
-                    <div id="status-active" class="hidden bg-emerald-50 border-2 border-emerald-100 p-6 rounded-3xl flex items-center justify-between animate-in slide-in-from-top">
-                        <div class="flex items-center gap-4">
-                            <div class="bg-emerald-500 p-3 rounded-2xl text-white connected-badge"><i data-lucide="wifi"></i></div>
-                            <div>
-                                <p class="text-xs font-black text-emerald-600 uppercase tracking-widest">Hali: UMEUNGANISHWA</p>
-                                <h3 id="timer-display" class="text-2xl font-black text-slate-900">Masaa 24:00:00</h3>
-                            </div>
-                        </div>
-                        <button onclick="disconnectManually()" class="bg-slate-200 text-slate-600 px-6 py-3 rounded-2xl text-xs font-black uppercase">Disconnect</button>
-                    </div>
-
-                    <div class="bg-blue-600 rounded-[3rem] p-12 text-white relative overflow-hidden shadow-2xl">
-                        <div class="relative z-10 space-y-6">
-                            <span class="bg-white/20 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest">Jeff Mtaani Hotspot</span>
-                            <h2 class="text-5xl font-black tracking-tighter">WiFi Unlimited. <br>Buku Tu Siku Nzima.</h2>
-                            <div class="flex gap-4">
-                                <button onclick="openPayment('MTAA-UNLIMITED-24H', 1000)" class="bg-white text-blue-600 px-8 py-4 rounded-2xl font-black uppercase text-xs shadow-lg">Lipa 1,000 (Siku 1)</button>
-                                <button onclick="openSupport()" class="bg-blue-500/50 text-white px-8 py-4 rounded-2xl font-black uppercase text-xs backdrop-blur-md">Msaada / Chat</button>
-                            </div>
-                        </div>
-                        <i data-lucide="zap" class="absolute -right-10 -bottom-10 w-64 h-64 text-white opacity-10"></i>
-                    </div>
-
-                    <div id="voucher-form" class="mtaani-card p-10 space-y-6">
-                        <h3 class="text-xl font-black uppercase tracking-tight">Ingiza Vocha Hapa</h3>
-                        <div class="flex flex-col md:flex-row gap-4">
-                            <input id="v-input" type="text" placeholder="VOCHA-XXXXX" class="flex-1 bg-slate-50 border-2 border-slate-100 p-6 rounded-2xl text-center text-3xl font-black uppercase tracking-widest outline-none focus:border-blue-600">
-                            <button onclick="connectNow()" class="bg-slate-900 text-white px-10 py-6 rounded-2xl font-black text-lg">UNGANISHA</button>
-                        </div>
-                    </div>
+        <!-- Main Interaction Box (Login) -->
+        <div id="login-container" class="space-y-6">
+            <!-- Voucher Input Section -->
+            <section id="main-input-box" class="card-white p-8 space-y-6 border-b-8 border-[#5d4037]">
+                <div class="text-center">
+                    <h2 class="text-xs font-black uppercase tracking-widest text-stone-400 mb-1">Weka Vocha</h2>
+                    <p class="text-[10px] text-stone-300">Tumia namba uliyopewa baada ya malipo</p>
                 </div>
-
-                <!-- ADMIN CENTER -->
-                <div id="view-admin" class="hidden">
-                    <div id="admin-lock" class="max-w-md mx-auto mtaani-card p-12 space-y-6 mt-10">
-                        <h2 class="text-center text-2xl font-black">Jeff Login</h2>
-                        <input id="adm-user" type="text" placeholder="Username" class="w-full p-4 border rounded-xl font-bold">
-                        <input id="adm-pass" type="password" placeholder="Password" class="w-full p-4 border rounded-xl font-bold">
-                        <button onclick="doLogin()" class="w-full py-4 bg-blue-600 text-white rounded-xl font-black uppercase">Fungua</button>
+                <div class="space-y-4">
+                    <div class="relative">
+                        <input id="v-code" type="text" placeholder="J-XXXX" class="w-full p-6 bg-stone-50 border-2 border-stone-100 rounded-[1.5rem] text-center text-3xl font-black uppercase placeholder:text-stone-200">
                     </div>
-
-                    <div id="admin-main" class="hidden space-y-8">
-                        
-                        <!-- TAB: DASHBOARD -->
-                        <div id="sec-dash" class="space-y-6">
-                            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                                <div class="mtaani-card p-8 bg-blue-600 text-white border-none shadow-xl"><p class="text-[10px] font-black uppercase text-blue-200">Revenue</p><h3 id="stat-rev" class="text-3xl font-black">Tsh 0</h3></div>
-                                <div class="mtaani-card p-8"><p class="text-[10px] font-black uppercase text-slate-400">Pending</p><h3 id="stat-pending" class="text-3xl font-black text-blue-600">0</h3></div>
-                                <div class="mtaani-card p-8"><p class="text-[10px] font-black uppercase text-slate-400">Inbox</p><h3 id="stat-msg" class="text-3xl font-black text-orange-500">0</h3></div>
-                                <div class="mtaani-card p-8"><p class="text-[10px] font-black uppercase text-slate-400">Online Sasa</p><h3 id="stat-active" class="text-3xl font-black text-emerald-500">0</h3></div>
-                            </div>
-                            
-                            <div class="mtaani-card overflow-hidden">
-                                <div class="p-6 border-b font-black uppercase text-xs tracking-widest text-slate-400">Maombi ya Vocha (Sasa Hivi)</div>
-                                <div class="overflow-x-auto"><table class="w-full text-left"><tbody id="adm-orders"></tbody></table></div>
-                            </div>
-                        </div>
-
-                        <!-- TAB: WATEJA & SESSIONS -->
-                        <div id="sec-users" class="hidden space-y-6">
-                            <h3 class="text-2xl font-black">Wateja na Session Zinazoendelea</h3>
-                            <div id="user-cards" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
-                        </div>
-
-                        <!-- TAB: MESSAGES -->
-                        <div id="sec-messages" class="hidden space-y-6">
-                            <h3 class="text-2xl font-black">Inbox - Ujumbe kutoka kwa Wateja</h3>
-                            <div class="mtaani-card overflow-hidden">
-                                <div class="divide-y divide-slate-100" id="inbox-list"></div>
-                            </div>
-                        </div>
-
-                        <!-- TAB: ROUTERS -->
-                        <div id="sec-routers" class="hidden space-y-6">
-                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                                <div class="mtaani-card p-8 h-fit">
-                                    <h4 class="font-black mb-4">Sajili Router Mpya</h4>
-                                    <input id="r-name" type="text" placeholder="Jina la Router" class="w-full p-4 border rounded-xl mb-4 font-bold">
-                                    <input id="r-ip" type="text" placeholder="IP Address" class="w-full p-4 border rounded-xl mb-4 font-mono">
-                                    <button onclick="addRouter()" class="w-full py-4 bg-slate-900 text-white rounded-xl font-black uppercase text-xs">Sajili Sasa</button>
-                                </div>
-                                <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4" id="router-list"></div>
-                            </div>
-                        </div>
-
-                        <!-- TAB: CONFIG -->
-                        <div id="sec-config" class="hidden space-y-6">
-                            <div class="mtaani-card p-10 space-y-8">
-                                <h3 class="text-2xl font-black">Router Configuration Codes</h3>
-                                <div class="space-y-4">
-                                    <p class="text-xs font-black text-slate-400 uppercase">Step 1: Setup Basic Hotspot</p>
-                                    <div class="code-block">/ip hotspot profile add name=MtaaniProfile login-by=http-chap<br>/ip hotspot add interface=bridge1 profile=MtaaniProfile</div>
-                                    <p class="text-xs font-black text-slate-400 uppercase">Step 2: Walled Garden Rules</p>
-                                    <div class="code-block">/ip hotspot walled-garden add dst-host=kvdb.io<br>/ip hotspot walled-garden add dst-host=google.com</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- TAB: LOGS -->
-                        <div id="sec-logs" class="hidden space-y-6">
-                            <div class="mtaani-card p-8 font-mono text-xs h-[600px] overflow-y-auto custom-scroll space-y-2 bg-slate-50" id="log-container"></div>
-                        </div>
-
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black uppercase tracking-widest text-stone-400 block text-center">Namba uliyosajili</label>
+                        <input id="v-phone-activate" type="tel" placeholder="07XXXXXXXX" class="w-full p-4 bg-white border-2 border-stone-100 rounded-2xl text-center text-sm font-bold">
                     </div>
+                    <button onclick="connectToWifi()" class="btn-brown w-full py-6 rounded-[1.5rem] font-black uppercase text-xs tracking-[0.25em] flex items-center justify-center gap-3 shadow-xl shadow-stone-200">
+                        UNGANISHA SASA <i data-lucide="zap" class="w-4 h-4 fill-current"></i>
+                    </button>
                 </div>
-            </main>
+            </section>
+
+            <!-- RECOVERY SECTION -->
+            <section id="recovery-box" class="bg-stone-200/40 p-6 rounded-[2.5rem] border-2 border-dashed border-stone-300 space-y-4">
+                <div class="text-center">
+                    <h3 class="text-[11px] font-black uppercase tracking-widest text-stone-500">Ulikatika Internet?</h3>
+                    <p class="text-[10px] text-stone-400">Ingiza namba yako kurudisha muda uliobaki</p>
+                </div>
+                <div class="flex gap-3">
+                    <input id="v-phone-recover" type="tel" placeholder="Namba ya simu..." class="flex-1 p-5 border-2 border-white rounded-2xl text-sm font-bold bg-white/90 shadow-sm">
+                    <button onclick="recoverSession()" class="bg-[#5d4037] text-white p-5 rounded-2xl hover:opacity-90 active:scale-95 transition-all shadow-lg shadow-stone-200">
+                        <i data-lucide="refresh-cw" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </section>
         </div>
-    </div>
 
-    <!-- PAYMENT MODAL -->
-    <div id="modal-pay" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6 bg-slate-900/90 backdrop-blur-sm">
-        <div class="w-full max-w-lg mtaani-card p-10 space-y-6 animate-in zoom-in duration-300">
-            <div class="flex justify-between items-center">
-                <h3 class="text-2xl font-black">Kifurushi Unlimited</h3>
-                <button onclick="closePayment()" class="text-slate-400"><i data-lucide="x"></i></button>
+        <!-- Package Selection -->
+        <section id="packages-section" class="space-y-5">
+            <h2 class="text-xs font-black uppercase tracking-widest text-stone-500 text-center">Ofa za Internet (Unlimited)</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <div onclick="selectPackage(500, 'Masaa 6')" class="card-white p-6 text-center cursor-pointer border-2 border-transparent hover:border-[#5d4037] active:bg-stone-50 transition-all">
+                    <p class="text-[10px] font-black text-stone-400 uppercase mb-1">Masaa 6</p>
+                    <p class="text-2xl font-black text-[#5d4037]">500/=</p>
+                </div>
+                <div onclick="selectPackage(1000, 'Saa 24')" class="card-white p-6 text-center cursor-pointer border-2 border-transparent hover:border-[#5d4037] active:bg-stone-50 transition-all">
+                    <p class="text-[10px] font-black text-stone-400 uppercase mb-1">Saa 24</p>
+                    <p class="text-2xl font-black text-[#5d4037]">1,000/=</p>
+                </div>
+                <div onclick="selectPackage(2000, 'Siku 3')" class="card-white p-6 text-center cursor-pointer border-2 border-transparent hover:border-[#5d4037] active:bg-stone-50 transition-all">
+                    <p class="text-[10px] font-black text-stone-400 uppercase mb-1">Siku 3</p>
+                    <p class="text-2xl font-black text-[#5d4037]">2,000/=</p>
+                </div>
+                <div onclick="selectPackage(5000, 'Wiki 1')" class="card-white p-6 text-center cursor-pointer border-2 border-transparent hover:border-[#5d4037] active:bg-stone-50 transition-all">
+                    <p class="text-[10px] font-black text-stone-400 uppercase mb-1">Wiki 1</p>
+                    <p class="text-2xl font-black text-[#5d4037]">5,000/=</p>
+                </div>
             </div>
-            <div class="bg-blue-600 p-8 rounded-3xl text-white text-center">
-                <p class="text-[10px] font-black uppercase mb-2">Lipa Kiasi cha:</p>
-                <div id="pay-amount" class="text-4xl font-black">Tsh 1,000</div>
-                <div class="mt-4 text-xs font-mono bg-white/10 p-2 rounded-lg">Masaa 24 Unlimited WiFi</div>
+        </section>
+
+        <!-- Payment Info Box -->
+        <section id="payment-box" class="hidden card-white p-8 space-y-6 border-2 border-stone-100 animate-in slide-in-from-bottom-8 duration-500">
+            <div class="bg-stone-50 p-6 rounded-[2rem] border border-stone-100 text-center space-y-4">
+                <p class="text-xs font-bold text-stone-400 uppercase">Tuma kiasi cha <b id="pay-amount" class="text-[#5d4037] text-lg">0/=</b></p>
+                <div class="p-4 bg-white rounded-2xl shadow-sm border border-stone-100 space-y-1">
+                    <p class="text-sm font-black text-[#5d4037] tracking-tight">TIGO PESA: 0779231924</p>
+                    <p class="text-[10px] font-bold text-stone-400">JINA: JAPHET SUNDAY</p>
+                </div>
             </div>
             <div class="space-y-4">
-                <p class="text-sm font-bold text-slate-500">Jaza maelezo yako kwanza kisha utatuma ujumbe direct kwa Jeff.</p>
-                <input id="p-name" type="text" placeholder="Jina lako" class="w-full p-4 border rounded-xl font-bold focus:border-blue-600 outline-none">
-                <input id="p-phone" type="tel" placeholder="Namba yako ya Malipo" class="w-full p-4 border rounded-xl font-black focus:border-blue-600 outline-none">
-                <button onclick="sendOrder()" class="w-full py-5 bg-blue-600 text-white rounded-2xl font-black uppercase tracking-widest shadow-xl flex items-center justify-center gap-3">TUMA OMBI & SMS <i data-lucide="send" class="w-5 h-5"></i></button>
+                <input id="u-name" type="text" placeholder="Jina lako kamili" class="w-full p-5 bg-stone-50/50 border-2 border-stone-100 rounded-2xl text-sm font-bold">
+                <input id="u-phone" type="tel" placeholder="Namba uliyolipia" class="w-full p-5 bg-stone-50/50 border-2 border-stone-100 rounded-2xl text-sm font-bold">
+                <button onclick="requestVoucherViaSms()" class="btn-brown w-full py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-lg shadow-stone-200">
+                    TUMA OMBI KWA SMS <i data-lucide="send" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- Admin Access -->
+        <footer class="pt-12 text-center">
+            <button onclick="showAdminLogin()" class="text-[10px] font-black text-stone-300 uppercase tracking-widest hover:text-[#5d4037] transition-all">Admin Panel Access</button>
+        </footer>
+    </div>
+
+    <!-- ADMIN PANEL VIEW -->
+    <div id="admin-view" class="hidden max-w-5xl mx-auto p-4 md:p-8 space-y-8">
+        <header class="flex flex-col md:flex-row justify-between items-center gap-4 bg-white p-8 rounded-[2.5rem] shadow-sm">
+            <div>
+                <h2 class="text-2xl font-black text-[#5d4037] tracking-tighter">ADMIN DASHBOARD</h2>
+                <p class="text-[10px] font-bold text-stone-400 uppercase">Usimamizi wa wifi Mtaani</p>
+            </div>
+            <div class="flex gap-3">
+                <button onclick="backupData()" class="px-5 py-3 border-2 border-stone-100 rounded-2xl text-[10px] font-black uppercase text-stone-500 hover:bg-stone-50">Backup</button>
+                <button onclick="exitAdmin()" class="px-5 py-3 bg-red-50 text-red-500 rounded-2xl text-[10px] font-black uppercase tracking-widest">Logout</button>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Generator -->
+            <div class="card-white p-8 space-y-5 md:col-span-2">
+                <div class="flex items-center gap-3 mb-2">
+                    <i data-lucide="plus-circle" class="w-5 h-5 text-[#5d4037]"></i>
+                    <h3 class="text-xs font-black uppercase text-stone-400 tracking-widest">Tengeneza Vocha Mpya</h3>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <select id="adm-v-plan" class="p-5 border-2 border-stone-50 rounded-2xl text-sm font-bold bg-stone-50/50">
+                        <option value="Masaa 6">Masaa 6 (500/=)</option>
+                        <option value="Saa 24">Saa 24 (1,000/=)</option>
+                        <option value="Siku 3">Siku 3 (2,000/=)</option>
+                        <option value="Wiki 1">Wiki 1 (5,000/=)</option>
+                    </select>
+                    <input id="adm-v-count" type="number" value="10" class="p-5 border-2 border-stone-50 rounded-2xl text-center text-xl font-black bg-stone-50/50">
+                </div>
+                <button onclick="generateVouchers()" class="btn-brown w-full py-5 rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-stone-200">GENERATE VOUCHERS</button>
+            </div>
+
+            <!-- Total Stats -->
+            <div class="card-white p-8 flex flex-col justify-center items-center text-center space-y-3">
+                <i data-lucide="database" class="w-8 h-8 text-stone-200"></i>
+                <div>
+                    <p class="text-[10px] font-black uppercase text-stone-400 mb-1">Vocha Stock</p>
+                    <h4 id="adm-total-vouchers" class="text-6xl font-black text-[#5d4037]">0</h4>
+                </div>
+            </div>
+        </div>
+
+        <!-- Voucher Inventory -->
+        <div class="card-white overflow-hidden border border-stone-100">
+            <div class="p-6 bg-stone-50/50 border-b border-stone-100 flex justify-between items-center">
+                <span class="text-[10px] font-black uppercase tracking-widest text-stone-400">Inventory (Click code to copy)</span>
+                <button onclick="clearUsedVouchers()" class="text-[9px] font-black text-red-400 uppercase">Clear All</button>
+            </div>
+            <div id="v-list-container" class="p-8 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4 max-h-[400px] overflow-y-auto bg-white">
+                <!-- Vouchers appear here -->
+            </div>
+        </div>
+
+        <!-- Sessions List -->
+        <div class="card-white overflow-hidden border border-stone-100">
+            <div class="p-6 bg-stone-50/50 border-b border-stone-100">
+                <h3 class="text-[10px] font-black uppercase tracking-widest text-stone-400">Wateja Walio Hewani (Live Sessions)</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-stone-50/80 text-[10px] font-black uppercase text-stone-400 border-b border-stone-100">
+                        <tr>
+                            <th class="p-6">Simu ya Mteja</th>
+                            <th class="p-6">Kifurushi</th>
+                            <th class="p-6">Muda Unafika Kikomo</th>
+                            <th class="p-6 text-right">Hatua</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sessions-table-body" class="text-xs font-bold divide-y divide-stone-50">
+                        <!-- Live sessions appear here -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
-    <!-- SUPPORT MODAL -->
-    <div id="modal-support" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6 bg-slate-900/90 backdrop-blur-sm">
-        <div class="w-full max-w-md mtaani-card p-10 space-y-6">
-            <h3 class="text-2xl font-black">Ujumbe kwa Jeff</h3>
-            <p class="text-slate-500 text-sm">Andika shida yako hapa, Jeff atakujibu haraka.</p>
-            <input id="s-phone" type="tel" placeholder="Namba yako ya Simu" class="w-full p-4 border rounded-xl font-black">
-            <textarea id="s-msg" placeholder="Andika ujumbe wako..." class="w-full p-4 border rounded-xl font-medium h-32 resize-none"></textarea>
-            <button onclick="sendSupportMsg()" class="w-full py-5 bg-slate-900 text-white rounded-2xl font-black uppercase">TUMA UJUMBE</button>
-            <button onclick="closeSupport()" class="w-full text-slate-400 text-xs font-bold uppercase">Funga</button>
+    <!-- Admin Login Modal -->
+    <div id="admin-login-modal" class="hidden fixed inset-0 z-[100] bg-stone-900/90 flex items-center justify-center p-6 backdrop-blur-md">
+        <div class="bg-white p-10 rounded-[3rem] w-full max-w-sm shadow-2xl space-y-8 animate-in zoom-in duration-300">
+            <div class="text-center space-y-2">
+                <h3 class="text-2xl font-black text-[#5d4037]">Admin Login</h3>
+                <p class="text-[10px] font-bold text-stone-400 uppercase">Security Check Required</p>
+            </div>
+            <input id="adm-pass" type="password" placeholder="Passphrase" class="w-full p-6 bg-stone-50 border-2 border-stone-100 rounded-2xl text-center text-2xl tracking-widest">
+            <button onclick="verifyAdmin()" class="btn-brown w-full py-6 rounded-2xl font-black uppercase text-xs tracking-widest">VERIFY & ENTER</button>
+            <button onclick="document.getElementById('admin-login-modal').classList.add('hidden')" class="w-full text-[10px] font-black text-stone-300 uppercase py-2 hover:text-stone-500">Cancel</button>
         </div>
     </div>
 
-    <script type="module">
-        const JEFF_PHONE = "0779231924";
-        const BUCKET = 'mtaani_pro_v8_session_sync';
-        const CLOUD_API = `https://kvdb.io/K9pS6YJ7T3xY2ZqG1A5u5G/${BUCKET}`;
-        const EXPIRY_HOURS = 24;
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-10 z-[200] bg-[#5d4037] text-white px-8 py-5 rounded-[1.5rem] text-[11px] font-black uppercase tracking-widest shadow-2xl flex items-center gap-4">
+        <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i>
+        <span id="toast-msg">Copied!</span>
+    </div>
 
-        let state = {
-            orders: [],
-            nodes: [],
-            routers: [],
-            messages: [],
-            logs: [],
-            activeSessions: [], // Track current active users and expiry
-            isAdmin: sessionStorage.getItem('mtaani_auth') === 'true',
-            myId: getLocalId()
+    <script>
+        // --- CONFIG ---
+        const ADMIN_PASS = "mtaani"; // Neno la siri la Admin
+        const ADMIN_PHONE = "0779231924";
+
+        const PLAN_DURATIONS = {
+            "Masaa 6": 6 * 60 * 60 * 1000,
+            "Saa 24": 24 * 60 * 60 * 1000,
+            "Siku 3": 3 * 24 * 60 * 60 * 1000,
+            "Wiki 1": 7 * 24 * 60 * 60 * 1000
         };
 
-        function getLocalId() {
-            let id = localStorage.getItem('mtaani_node_id');
-            if(!id) {
-                id = 'MTAA-' + Math.floor(1000 + Math.random() * 8999);
-                localStorage.setItem('mtaani_node_id', id);
-            }
-            return id;
+        let timerInterval = null;
+
+        // --- PERSISTENCE (Taarifa kutunzwa) ---
+        function getDb() {
+            return {
+                vouchers: JSON.parse(localStorage.getItem('mtaani_vouchers')) || [],
+                sessions: JSON.parse(localStorage.getItem('mtaani_sessions')) || [],
+                currentSession: JSON.parse(localStorage.getItem('mtaani_active_user')) || null
+            };
         }
 
-        function save() { localStorage.setItem('mtaani_local_db', JSON.stringify(state)); }
-
-        async function syncPush() {
-            save();
-            try { await fetch(CLOUD_API, { method: 'POST', body: JSON.stringify(state) }); } 
-            catch(e) { console.warn("Sync Offline."); }
+        function saveDb(data) {
+            localStorage.setItem('mtaani_vouchers', JSON.stringify(data.vouchers));
+            localStorage.setItem('mtaani_sessions', JSON.stringify(data.sessions));
+            localStorage.setItem('mtaani_active_user', JSON.stringify(data.currentSession));
         }
 
-        async function syncPull() {
-            try {
-                const res = await fetch(CLOUD_API);
-                if(res.ok) {
-                    const data = await res.json();
-                    state = { ...state, ...data };
-                    checkMySession();
-                    render();
-                }
-            } catch(e) {}
-        }
-
-        function addLog(m) {
-            state.logs.unshift(`[${new Date().toLocaleTimeString()}] ${m}`);
-            if(state.logs.length > 100) state.logs.pop();
-            save();
-        }
-
-        // TIMER & EXPIRY LOGIC
-        function checkMySession() {
-            const mySess = state.activeSessions.find(s => s.nodeId === state.myId);
-            const statusDiv = document.getElementById('status-active');
-            const vForm = document.getElementById('voucher-form');
-
-            if(mySess) {
-                const remaining = mySess.expiry - Date.now();
-                if(remaining <= 0) {
-                    // EXPIRED!
-                    state.activeSessions = state.activeSessions.filter(s => s.nodeId !== state.myId);
-                    syncPush();
-                    alert("Kifurushi chako cha masaa 24 kimeisha. Tafadhali lipia tena!");
-                    statusDiv.classList.add('hidden');
-                    vForm.classList.remove('hidden');
+        // --- PAGE LOAD LOGIC ---
+        window.onload = () => {
+            const db = getDb();
+            // Angalia kama kuna session ambayo haijaisha
+            if (db.currentSession) {
+                const now = Date.now();
+                if (db.currentSession.expiry > now) {
+                    startSessionUI(db.currentSession.phone, db.currentSession.plan, db.currentSession.expiry);
                 } else {
-                    statusDiv.classList.remove('hidden');
-                    vForm.classList.add('hidden');
-                    updateTimerDisplay(remaining);
+                    // Session imeisha, iondoe
+                    db.currentSession = null;
+                    saveDb(db);
                 }
-            } else {
-                statusDiv.classList.add('hidden');
-                vForm.classList.remove('hidden');
             }
-        }
-
-        function updateTimerDisplay(ms) {
-            const hours = Math.floor(ms / (1000 * 60 * 60));
-            const mins = Math.floor((ms % (1000 * 60 * 60)) / (1000 * 60));
-            const secs = Math.floor((ms % (1000 * 60)) / 1000);
-            document.getElementById('timer-display').innerText = 
-                `Masaa ${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-        }
-
-        window.connectNow = async () => {
-            const v = document.getElementById('v-input').value.trim();
-            if(!v) return alert("Weka vocha kwanza!");
-
-            // Find order with this voucher
-            const order = state.orders.find(o => o.voucher === v);
-            
-            if(!order) {
-                alert("Vocha hii haipo. Hakikisha umeingiza namba sahihi!");
-                return;
-            }
-
-            if(order.status !== 'approved') {
-                alert("Vocha hii bado haijatolewa. Subiri kidogo au wasiliana na Jeff.");
-                return;
-            }
-
-            // Check if already used by someone else OR already expired
-            const existingSess = state.activeSessions.find(s => s.voucher === v);
-            if(existingSess && existingSess.nodeId !== state.myId) {
-                alert("Vocha hii inatumiwa na kifaa kingine!");
-                return;
-            }
-
-            // Create new session
-            const startTime = Date.now();
-            const expiry = startTime + (EXPIRY_HOURS * 60 * 60 * 1000);
-            
-            state.activeSessions.push({
-                nodeId: state.myId,
-                voucher: v,
-                name: order.name,
-                startTime: startTime,
-                expiry: expiry
-            });
-
-            addLog(`Mteja ${order.name} ameunganishwa na Vocha ${v}`);
-            await syncPush();
-            checkMySession();
-            notify("Umeunganishwa kikamilifu!");
-        };
-
-        window.disconnectManually = () => {
-            if(confirm("Je, unataka kujitoa kwenye WiFi?")) {
-                state.activeSessions = state.activeSessions.filter(s => s.nodeId !== state.myId);
-                syncPush();
-                checkMySession();
-            }
-        };
-
-        // ADMIN RENDER
-        function render() {
-            if(state.isAdmin) renderAdmin();
             lucide.createIcons();
+        };
+
+        // --- USER FUNCTIONS ---
+        function selectPackage(amt, plan) {
+            document.getElementById('pay-amount').innerText = amt + "/=";
+            document.getElementById('payment-box').classList.remove('hidden');
+            window.selectedPlan = plan;
+            window.selectedAmt = amt;
+            document.getElementById('payment-box').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function requestVoucherViaSms() {
+            const name = document.getElementById('u-name').value;
+            const phone = document.getElementById('u-phone').value;
+            if(!name || !phone) return alert("Tafadhali jaza jina na namba ya simu.");
+            const msg = `OMBI LA VOCHA:\nJina: ${name}\nNamba: ${phone}\nPackage: ${window.selectedPlan}\nNimeshalipia sasa hivi.`;
+            window.location.href = `sms:${ADMIN_PHONE}?body=${encodeURIComponent(msg)}`;
+        }
+
+        function connectToWifi() {
+            const code = document.getElementById('v-code').value.trim().toUpperCase();
+            const phone = document.getElementById('v-phone-activate').value.trim();
+            if(!code || !phone) return alert("Ingiza vocha na namba yako ya simu.");
+
+            const db = getDb();
+            const vIdx = db.vouchers.findIndex(v => v.code === code);
+
+            if(vIdx > -1) {
+                const v = db.vouchers[vIdx];
+                db.vouchers.splice(vIdx, 1); // Burn voucher
+                
+                const expiry = Date.now() + PLAN_DURATIONS[v.plan];
+                const sessionData = { phone, plan: v.plan, expiry };
+                
+                // Tunza session ya mteja
+                db.sessions = db.sessions.filter(s => s.phone !== phone);
+                db.sessions.push(sessionData);
+                db.currentSession = sessionData;
+                
+                saveDb(db);
+                startSessionUI(phone, v.plan, expiry);
+                showToast("IMEUNGANISHWA!");
+            } else {
+                alert("Vocha hii haipo au imeshatumika!");
+            }
+        }
+
+        function recoverSession() {
+            const phone = document.getElementById('v-phone-recover').value.trim();
+            if(!phone) return alert("Ingiza namba yako uliyotumia mwanzo.");
+            
+            const db = getDb();
+            const s = db.sessions.find(x => x.phone === phone);
+            
+            if(s && s.expiry > Date.now()) {
+                db.currentSession = s;
+                saveDb(db);
+                startSessionUI(s.phone, s.plan, s.expiry);
+                showToast("KARIBU TENA!");
+            } else {
+                alert("Namba hii haina kifurushi kinachofanya kazi sasa hivi.");
+            }
+        }
+
+        function startSessionUI(phone, plan, expiry) {
+            document.getElementById('login-container').classList.add('hidden');
+            document.getElementById('packages-section').classList.add('hidden');
+            document.getElementById('payment-box').classList.add('hidden');
+            document.getElementById('session-status').classList.remove('hidden');
+            
+            document.getElementById('status-phone').innerText = phone;
+            document.getElementById('status-plan').innerText = plan;
+            
+            if(timerInterval) clearInterval(timerInterval);
+            
+            timerInterval = setInterval(() => {
+                const now = Date.now();
+                const diff = expiry - now;
+                if(diff <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Muda wako umekwisha! Tafadhali nunua vocha nyingine.");
+                    disconnectSession();
+                    return;
+                }
+                const h = Math.floor(diff / (1000 * 60 * 60));
+                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const s = Math.floor((diff % (1000 * 60)) / 1000);
+                document.getElementById('live-timer').innerText = 
+                    `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+            }, 1000);
+        }
+
+        function disconnectSession() {
+            if(timerInterval) clearInterval(timerInterval);
+            const db = getDb();
+            db.currentSession = null;
+            saveDb(db);
+            window.location.reload();
+        }
+
+        // --- ADMIN FUNCTIONS ---
+        function showAdminLogin() { document.getElementById('admin-login-modal').classList.remove('hidden'); }
+        function exitAdmin() { document.getElementById('admin-view').classList.add('hidden'); document.getElementById('user-view').classList.remove('hidden'); }
+        
+        function verifyAdmin() {
+            if(document.getElementById('adm-pass').value === ADMIN_PASS) {
+                document.getElementById('admin-login-modal').classList.add('hidden');
+                document.getElementById('user-view').classList.add('hidden');
+                document.getElementById('admin-view').classList.remove('hidden');
+                renderAdmin();
+            } else alert("Neno la siri limekosewa!");
+        }
+
+        function generateVouchers() {
+            const c = parseInt(document.getElementById('adm-v-count').value);
+            const p = document.getElementById('adm-v-plan').value;
+            const db = getDb();
+            for(let i=0; i<c; i++) {
+                const code = "J-" + Math.floor(1000 + Math.random() * 8999);
+                db.vouchers.push({ code, plan: p });
+            }
+            saveDb(db); 
+            renderAdmin();
+            showToast("VOUCHERS GENERATED!");
         }
 
         function renderAdmin() {
-            document.getElementById('stat-rev').innerText = `Tsh ${state.orders.filter(o => o.status === 'approved').reduce((a, b) => a + b.price, 0).toLocaleString()}`;
-            document.getElementById('stat-pending').innerText = state.orders.filter(o => o.status === 'pending').length;
-            document.getElementById('stat-msg').innerText = state.messages.filter(m => !m.read).length;
-            document.getElementById('stat-active').innerText = state.activeSessions.length;
-
-            const msgBadge = document.getElementById('msg-badge');
-            if(state.messages.some(m => !m.read)) msgBadge.classList.remove('hidden');
-            else msgBadge.classList.add('hidden');
-
-            const ol = document.getElementById('adm-orders');
-            ol.innerHTML = state.orders.map(o => `
-                <tr class="border-b hover:bg-slate-50">
-                    <td class="px-8 py-5">
-                        <div class="font-black">${o.name}</div>
-                        <div class="text-[10px] text-slate-400 font-mono">${o.node}</div>
-                    </td>
-                    <td class="px-8 py-5"><div class="font-black text-sm">${o.phone}</div></td>
-                    <td class="px-8 py-5"><span class="bg-blue-50 text-blue-600 px-3 py-1 rounded-lg text-[10px] font-black uppercase">${o.plan}</span></td>
-                    <td class="px-8 py-5 text-right">
-                        ${o.status === 'pending' ? 
-                            `<button onclick="approveOrder(${o.id})" class="bg-emerald-600 text-white px-4 py-2 rounded-xl text-[10px] font-black uppercase">Approve</button>` : 
-                            `<div class="flex items-center gap-3 justify-end">
-                                <span class="text-emerald-600 font-black text-xs">Vocha: ${o.voucher}</span>
-                                <button onclick="sendVoucherSMS('${o.phone}', '${o.voucher}')" class="p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200"><i data-lucide="send" class="w-4 h-4"></i></button>
-                             </div>`
-                        }
-                    </td>
-                </tr>
+            const db = getDb();
+            document.getElementById('adm-total-vouchers').innerText = db.vouchers.length;
+            
+            document.getElementById('v-list-container').innerHTML = db.vouchers.map(v => `
+                <div onclick="copyToClipboard('${v.code}')" class="bg-stone-50 p-4 rounded-2xl text-center cursor-pointer border border-transparent hover:border-[#5d4037] hover:bg-white transition-all group">
+                    <p class="text-[7px] text-stone-300 uppercase font-black mb-1 group-hover:text-stone-400">${v.plan}</p>
+                    <p class="font-black text-[#5d4037] text-sm">${v.code}</p>
+                </div>
             `).join('');
 
-            const uc = document.getElementById('user-cards');
-            uc.innerHTML = state.nodes.map(n => {
-                const active = state.activeSessions.find(s => s.nodeId === n.id);
+            document.getElementById('sessions-table-body').innerHTML = db.sessions.map((s, idx) => {
+                const isExpired = s.expiry < Date.now();
                 return `
-                <div class="mtaani-card p-6 space-y-4">
-                    <div class="flex justify-between items-center">
-                        <div class="p-3 ${active ? 'bg-emerald-100 text-emerald-600' : 'bg-blue-50 text-blue-600'} rounded-2xl"><i data-lucide="user"></i></div>
-                        <div class="text-[9px] font-black uppercase ${active ? 'text-emerald-500' : 'text-slate-300'}">${active ? 'Connected' : 'Offline'}</div>
-                    </div>
-                    <div>
-                        <h4 class="font-black text-lg">${active ? active.name : (n.name || 'Anonymous')}</h4>
-                        <p class="text-[10px] font-mono text-slate-400">${n.id}</p>
-                        ${active ? `<p class="text-[10px] font-black text-emerald-600 uppercase mt-1">Expiry: ${new Date(active.expiry).toLocaleTimeString()}</p>` : ''}
-                    </div>
-                    <div class="pt-4 border-t flex justify-between items-center">
-                        <span class="text-[9px] font-black uppercase text-slate-400">${n.device}</span>
-                        <div class="flex gap-2">
-                             <button onclick="window.location.href='tel:${n.phone}'" class="text-blue-600"><i data-lucide="phone" class="w-4 h-4"></i></button>
-                             ${active ? `<button onclick="terminateSession('${n.id}')" class="text-red-500" title="Disconnect"><i data-lucide="zap-off" class="w-4 h-4"></i></button>` : ''}
-                        </div>
-                    </div>
-                </div>
-            `}).join('');
-
-            const il = document.getElementById('inbox-list');
-            il.innerHTML = state.messages.map(m => `
-                <div class="p-6 hover:bg-slate-50 flex justify-between items-start group">
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <span class="font-black text-slate-900">${m.phone}</span>
-                            ${!m.read ? '<span class="w-2 h-2 bg-blue-600 rounded-full"></span>' : ''}
-                        </div>
-                        <p class="text-sm text-slate-600 font-medium">${m.body}</p>
-                        <p class="text-[9px] text-slate-400 font-bold uppercase">${m.time}</p>
-                    </div>
-                    <button onclick="markRead(${m.id})" class="opacity-0 group-hover:opacity-100 p-2 bg-white border rounded-xl text-xs font-bold text-slate-400">Mark Read</button>
-                </div>
-            `).join('');
-
-            const rl = document.getElementById('router-list');
-            rl.innerHTML = state.routers.map(r => `<div class="mtaani-card p-6 border-2 border-slate-100"><i data-lucide="router" class="text-blue-600 mb-4"></i><h5 class="font-black">${r.name}</h5><p class="text-xs font-mono text-slate-400">${r.ip}</p></div>`).join('');
-            const lc = document.getElementById('log-container');
-            lc.innerHTML = state.logs.map(l => `<div class="py-1 border-b">${l}</div>`).join('');
-        }
-
-        window.terminateSession = async (nodeId) => {
-            if(confirm("Unataka kumtoa huyu mteja?")) {
-                state.activeSessions = state.activeSessions.filter(s => s.nodeId !== nodeId);
-                addLog(`Admin amemtoa mteja ${nodeId}`);
-                await syncPush();
-                renderAdmin();
-            }
-        };
-
-        window.approveOrder = async (id) => {
-            const idx = state.orders.findIndex(o => o.id === id);
-            if(idx !== -1) {
-                const voucher = 'V-' + Math.floor(10000 + Math.random() * 89999);
-                state.orders[idx].status = 'approved';
-                state.orders[idx].voucher = voucher;
-                addLog(`Vocha Mpya: ${voucher} kwenda ${state.orders[idx].name}`);
-                await syncPush();
-                notify(`Voucher ${voucher} tayari!`);
-                renderAdmin();
-            }
-        };
-
-        window.sendVoucherSMS = (phone, voucher) => {
-            const msg = `MTAANI WIFI: Habari, vocha yako ni ${voucher}. Ingiza kwenye portal sasa. Karibu tena!`;
-            window.location.href = `sms:${phone}?body=${encodeURIComponent(msg)}`;
-        };
-
-        window.switchView = (v) => {
-            document.getElementById('view-portal').classList.toggle('hidden', v !== 'portal');
-            document.getElementById('view-admin').classList.toggle('hidden', v !== 'admin');
-            document.getElementById('admin-sidebar').classList.toggle('hidden', v !== 'admin' || !state.isAdmin);
-            document.getElementById('admin-entry-btn').classList.toggle('hidden', v === 'admin');
-            document.getElementById('client-entry-btn').classList.toggle('hidden', v !== 'admin');
-            if(v === 'admin' && state.isAdmin) setAdminTab('dash');
-            syncPull();
-        };
-
-        window.setAdminTab = (t) => {
-            ['dash', 'users', 'messages', 'routers', 'config', 'logs'].forEach(tab => {
-                document.getElementById(`sec-${tab}`).classList.toggle('hidden', tab !== t);
-                document.getElementById(`tab-${tab}`).classList.toggle('active', tab === t);
-            });
+                    <tr class="${isExpired ? 'opacity-30' : ''}">
+                        <td class="p-6">
+                            <div class="flex items-center gap-2">
+                                <i data-lucide="phone" class="w-3 h-3 text-stone-300"></i>
+                                ${s.phone}
+                            </div>
+                        </td>
+                        <td class="p-6 uppercase text-[#5d4037] font-black">${s.plan}</td>
+                        <td class="p-6 ${isExpired ? 'text-red-400' : 'text-emerald-500'}">
+                            ${isExpired ? 'EXPIRED' : new Date(s.expiry).toLocaleTimeString()}
+                        </td>
+                        <td class="p-6 text-right">
+                            <button onclick="killSession(${idx})" class="text-red-400 hover:text-red-600 transition-colors">
+                                <i data-lucide="trash-2" class="w-4 h-4"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join('') || '<tr><td colspan="4" class="p-10 text-center text-stone-300">Hakuna wateja walio hewani sasa hivi.</td></tr>';
+            
             lucide.createIcons();
-        };
+        }
 
-        window.openPayment = (plan, price) => {
-            state.currentPlan = { plan, price };
-            document.getElementById('modal-pay').classList.remove('hidden');
-        };
-        window.closePayment = () => document.getElementById('modal-pay').classList.add('hidden');
-
-        window.sendOrder = async () => {
-            const name = document.getElementById('p-name').value;
-            const phone = document.getElementById('p-phone').value;
-            if(!name || !phone) return alert("Jaza jina na namba kwanza!");
-            const order = { id: Date.now(), node: state.myId, name, phone, plan: state.currentPlan.plan, price: state.currentPlan.price, status: 'pending', voucher: null };
-            state.orders.unshift(order);
-            await syncPush();
-            const message = `Habari Jeff, nimepata malipo ya Tsh 1,000. Jina: ${name}, Namba: ${phone}. Naomba vocha.`;
-            window.location.href = `sms:${JEFF_PHONE}?body=${encodeURIComponent(message)}`;
-            closePayment();
-        };
-
-        window.doLogin = () => {
-            const u = document.getElementById('adm-user').value.trim();
-            const p = document.getElementById('adm-pass').value;
-            if(u === 'jeff' && p === 'mtaani') {
-                state.isAdmin = true;
-                sessionStorage.setItem('mtaani_auth', 'true');
-                document.getElementById('admin-lock').classList.add('hidden');
-                document.getElementById('admin-main').classList.remove('hidden');
-                document.getElementById('admin-sidebar').classList.remove('hidden');
+        function killSession(idx) {
+            if(confirm("Je, unataka kufuta session hii? Mteja atatolewa internet.")) {
+                const db = getDb(); 
+                db.sessions.splice(idx, 1); 
+                saveDb(db); 
                 renderAdmin();
-            } else alert("Login Failed!");
-        };
-
-        window.doLogout = () => { sessionStorage.clear(); location.reload(); };
-
-        function notify(m) {
-            const t = document.getElementById('toast-sms');
-            document.getElementById('sms-msg').innerText = m;
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 5000);
+            }
         }
 
-        async function track() {
-            if(state.isAdmin) return;
-            const now = Date.now();
-            const dev = navigator.userAgent.includes("Mobile") ? "Simu" : "PC";
-            const idx = state.nodes.findIndex(n => n.id === state.myId);
-            if(idx === -1) { state.nodes.unshift({ id: state.myId, last: now, device: dev, phone: '' }); await syncPush(); }
-            else { state.nodes[idx].last = now; if(now % 10 === 0) await syncPush(); }
+        function clearUsedVouchers() {
+            if(confirm("Hii itafuta vocha zote zilizopo store. Una uhakika?")) {
+                const db = getDb();
+                db.vouchers = [];
+                saveDb(db);
+                renderAdmin();
+            }
         }
 
-        // STARTUP
-        const localData = localStorage.getItem('mtaani_local_db');
-        if(localData) state = JSON.parse(localData);
-        if(state.isAdmin) switchView('admin');
+        function backupData() {
+            const db = getDb();
+            const blob = new Blob([JSON.stringify(db)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `mtaani_backup_${new Date().toLocaleDateString()}.json`;
+            a.click();
+            showToast("BACKUP SAVED!");
+        }
 
-        syncPull();
-        setInterval(syncPull, 10000);
-        setInterval(track, 15000);
-        setInterval(checkMySession, 1000); // UI Timer Update
+        function copyToClipboard(txt) {
+            navigator.clipboard.writeText(txt).then(() => {
+                const t = document.getElementById('toast');
+                document.getElementById('toast-msg').innerText = "COPIED: " + txt;
+                t.classList.add('show');
+                setTimeout(() => t.classList.remove('show'), 2000);
+            });
+        }
+
         lucide.createIcons();
     </script>
 </body>

@@ -1,6 +1,6 @@
 {
-  "name": "Mtaani Wifi Hub",
-  "description": "Hotspot management system with real-time admin sync",
+  "name": "biashara yenyewe",
+  "description": "Hotspot management",
   "requestFramePermissions": [
     "geolocation"
   ]
