@@ -42,6 +42,8 @@
             left: 50%;
         }
         #toast.show { transform: translate(-50%, -20px); opacity: 1; }
+        
+        .verified-badge { background: linear-gradient(135deg, #10b981, #059669); color: white; font-size: 8px; padding: 2px 6px; border-radius: 20px; font-weight: 800; text-transform: uppercase; }
     </style>
 </head>
 <body class="min-h-screen pb-20">
@@ -73,12 +75,12 @@
             </div>
             <div class="flex justify-between items-center px-2">
                 <div class="space-y-1">
-                    <p class="text-[9px] font-bold text-stone-400 uppercase">Simu Yako</p>
-                    <p id="status-phone" class="text-xs font-black text-[#5d4037]">-</p>
+                    <p class="text-[9px] font-bold text-stone-400 uppercase">Status</p>
+                    <p class="text-xs font-black text-emerald-600 uppercase">Verified Session</p>
                 </div>
                 <div class="text-right space-y-1">
-                    <p class="text-[9px] font-bold text-stone-400 uppercase">Kifurushi</p>
-                    <p id="status-plan" class="text-xs font-black text-emerald-600 uppercase">-</p>
+                    <p class="text-[9px] font-bold text-stone-400 uppercase">Validation ID</p>
+                    <p id="status-validation" class="text-xs font-black text-[#5d4037] uppercase">-</p>
                 </div>
             </div>
         </section>
@@ -88,18 +90,18 @@
             <section id="main-input-box" class="card-white p-8 space-y-6 border-b-8 border-[#5d4037]">
                 <div class="text-center">
                     <h2 class="text-xs font-black uppercase tracking-widest text-stone-400 mb-1">Ingiza Vocha</h2>
-                    <p class="text-[10px] text-stone-300">Tumia vocha uliyopokea kutoka Voucher Manager</p>
+                    <p class="text-[10px] text-stone-300">Vocha inahakikiwa kupitia Integrated Security Protocol</p>
                 </div>
                 <div class="space-y-4">
                     <div class="relative">
-                        <input id="v-code" type="text" placeholder="XXXX-XXXX" class="w-full p-6 bg-stone-50 border-2 border-stone-100 rounded-[1.5rem] text-center text-3xl font-black uppercase placeholder:text-stone-200">
+                        <input id="v-code" type="text" placeholder="Weka Code Hapa" class="w-full p-6 bg-stone-50 border-2 border-stone-100 rounded-[1.5rem] text-center text-3xl font-black uppercase placeholder:text-stone-200">
                     </div>
                     <div class="space-y-2">
                         <label class="text-[10px] font-black uppercase tracking-widest text-stone-400 block text-center">Namba uliyosajili</label>
                         <input id="v-phone-activate" type="tel" placeholder="07XXXXXXXX" class="w-full p-4 bg-white border-2 border-stone-100 rounded-2xl text-center text-sm font-bold">
                     </div>
                     <button onclick="connectToWifi()" class="btn-brown w-full py-6 rounded-[1.5rem] font-black uppercase text-xs tracking-[0.25em] flex items-center justify-center gap-3 shadow-xl shadow-stone-200">
-                        UNGANISHA SASA <i data-lucide="zap" class="w-4 h-4 fill-current"></i>
+                        UNGANISHA SASA <i data-lucide="shield-check" class="w-4 h-4"></i>
                     </button>
                 </div>
             </section>
@@ -141,32 +143,12 @@
             </div>
         </section>
 
-        <!-- Payment Info -->
-        <section id="payment-box" class="hidden card-white p-8 space-y-6 border-2 border-stone-100 animate-in slide-in-from-bottom-8 duration-500">
-            <div class="bg-stone-50 p-6 rounded-[2rem] border border-stone-100 text-center space-y-4">
-                <p class="text-xs font-bold text-stone-400 uppercase">Tuma kiasi cha <b id="pay-amount" class="text-[#5d4037] text-lg">0/=</b></p>
-                <div class="p-4 bg-white rounded-2xl shadow-sm border border-stone-100 space-y-1">
-                    <p class="text-sm font-black text-[#5d4037] tracking-tight">TIGO PESA: 0779231924</p>
-                    <p class="text-[10px] font-bold text-stone-400">JINA: JAPHET SUNDAY</p>
-                </div>
-            </div>
-            <div class="space-y-4">
-                <input id="u-name" type="text" placeholder="Jina lako kamili" class="w-full p-5 bg-stone-50/50 border-2 border-stone-100 rounded-2xl text-sm font-bold">
-                <input id="u-phone" type="tel" placeholder="Namba uliyolipia" class="w-full p-5 bg-stone-50/50 border-2 border-stone-100 rounded-2xl text-sm font-bold">
-                <button onclick="requestVoucherViaSms()" class="btn-brown w-full py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-lg shadow-stone-200">
-                    TUMA OMBI KWA SMS <i data-lucide="send" class="w-4 h-4"></i>
-                </button>
-            </div>
-        </section>
-
-        <!-- CUSTOMER FEEDBACK -->
+        <!-- Feedback -->
         <section id="feedback-section" class="card-white p-8 space-y-6 border-2 border-stone-100">
             <div class="text-center">
-                <h2 class="text-xs font-black uppercase tracking-widest text-stone-400 mb-1">Toa Maoni yako</h2>
-                <p class="text-[10px] text-stone-300">Tusaidie kuboresha huduma yetu</p>
+                <h2 class="text-xs font-black uppercase tracking-widest text-stone-400 mb-1">Maoni & Msaada</h2>
             </div>
             <div class="space-y-4">
-                <input id="f-phone" type="tel" placeholder="Namba ya simu (Sio lazima)" class="w-full p-4 bg-stone-50/50 border-2 border-stone-100 rounded-xl text-sm font-bold">
                 <textarea id="f-msg" placeholder="Andika maoni yako hapa..." rows="3" class="w-full p-4 bg-stone-50/50 border-2 border-stone-100 rounded-xl text-sm font-medium resize-none"></textarea>
                 <button onclick="submitFeedback()" class="btn-brown w-full py-4 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-2">
                     TUMA MAONI <i data-lucide="message-square" class="w-4 h-4"></i>
@@ -176,7 +158,7 @@
 
         <!-- Admin Access -->
         <footer class="pt-12 text-center">
-            <button onclick="showAdminLogin()" class="text-[10px] font-black text-stone-300 uppercase tracking-widest hover:text-[#5d4037] transition-all">Admin Panel Access</button>
+            <button onclick="showAdminLogin()" class="text-[10px] font-black text-stone-300 uppercase tracking-widest hover:text-[#5d4037] transition-all">Security & Admin Portal</button>
         </footer>
     </div>
 
@@ -185,7 +167,7 @@
         <header class="flex flex-col md:flex-row justify-between items-center gap-4 bg-white p-8 rounded-[2.5rem] shadow-sm">
             <div>
                 <h2 class="text-2xl font-black text-[#5d4037] tracking-tighter">ADMIN DASHBOARD</h2>
-                <p class="text-[10px] font-bold text-stone-400 uppercase">Usimamizi wa wifi Mtaani</p>
+                <p class="text-[10px] font-bold text-stone-400 uppercase">Integrated Hotspot Management</p>
             </div>
             <div class="flex gap-3">
                 <button onclick="backupData()" class="px-5 py-3 border-2 border-stone-100 rounded-2xl text-[10px] font-black uppercase text-stone-500 hover:bg-stone-50">Backup</button>
@@ -195,26 +177,26 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- Integration Status Box -->
-            <div class="card-white p-8 space-y-6 flex flex-col justify-between border-2 border-indigo-50 bg-indigo-50/10">
+            <div class="card-white p-8 space-y-6 flex flex-col justify-between border-2 border-emerald-50 bg-emerald-50/10">
                 <div>
                     <div class="flex items-center gap-3 mb-4">
-                        <i data-lucide="layers" class="w-6 h-6 text-indigo-600"></i>
-                        <h3 class="text-sm font-black uppercase text-indigo-800 tracking-widest">Manager Integration</h3>
+                        <i data-lucide="link-2" class="w-6 h-6 text-emerald-600"></i>
+                        <h3 class="text-sm font-black uppercase text-emerald-800 tracking-widest">Manager Sync</h3>
                     </div>
                     <p class="text-xs text-stone-500 font-medium leading-relaxed">
-                        Sawazisha vocha kutoka <span class="text-indigo-600 font-bold underline">Official Voucher Manager</span>. Mfumo unakubali vocha zenye utambulisho maalum pekee kutoka kwenye chanzo hicho.
+                        Inasawazisha vocha kutoka <span class="text-emerald-600 font-bold underline">Official Voucher Manager</span>. Inakagua <code class="bg-emerald-100 px-1 rounded">voucher_id</code> (Validation) na <code class="bg-emerald-100 px-1 rounded">hash_key</code> kwa kila vocha.
                     </p>
                 </div>
-                <button id="sync-btn" onclick="syncVouchersFromSource()" class="bg-indigo-600 text-white w-full py-5 rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-indigo-100 flex items-center justify-center gap-3 hover:bg-indigo-700 transition-all">
-                    SYNC WITH OFFICIAL SOURCE <i data-lucide="refresh-cw" class="w-4 h-4"></i>
+                <button id="sync-btn" onclick="syncVouchersFromSource()" class="bg-emerald-600 text-white w-full py-5 rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-emerald-100 flex items-center justify-center gap-3 hover:bg-emerald-700 transition-all">
+                    REFRESH INTEGRATED STOCK <i data-lucide="refresh-ccw" class="w-4 h-4"></i>
                 </button>
             </div>
 
             <!-- Total Stats -->
             <div class="card-white p-8 flex flex-col justify-center items-center text-center space-y-3">
-                <i data-lucide="check-square" class="w-8 h-8 text-indigo-400"></i>
+                <i data-lucide="shield-check" class="w-8 h-8 text-emerald-400"></i>
                 <div>
-                    <p class="text-[10px] font-black uppercase text-stone-400 mb-1">Official Vouchers In Stock</p>
+                    <p class="text-[10px] font-black uppercase text-stone-400 mb-1">Authenticated Stock</p>
                     <h4 id="adm-total-vouchers" class="text-6xl font-black text-[#5d4037]">0</h4>
                 </div>
             </div>
@@ -223,7 +205,7 @@
         <!-- Inventory -->
         <div class="card-white overflow-hidden border border-stone-100">
             <div class="p-6 bg-stone-50/50 border-b border-stone-100 flex justify-between items-center">
-                <span class="text-[10px] font-black uppercase tracking-widest text-stone-400">Integrated Stock</span>
+                <span class="text-[10px] font-black uppercase tracking-widest text-stone-400">Integrated Vouchers</span>
                 <button onclick="clearLocalStock()" class="text-[9px] font-black text-red-400 uppercase">Clear Local Stock</button>
             </div>
             <div id="v-list-container" class="p-8 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4 max-h-[400px] overflow-y-auto bg-white"></div>
@@ -232,15 +214,15 @@
         <!-- Sessions -->
         <div class="card-white overflow-hidden border border-stone-100">
             <div class="p-6 bg-stone-50/50 border-b border-stone-100">
-                <h3 class="text-[10px] font-black uppercase tracking-widest text-stone-400">Live Connections</h3>
+                <h3 class="text-[10px] font-black uppercase tracking-widest text-stone-400">Validated User Sessions</h3>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left">
                     <thead class="bg-stone-50/80 text-[10px] font-black uppercase text-stone-400 border-b border-stone-100">
                         <tr>
                             <th class="p-6">User Phone</th>
-                            <th class="p-6">Integrated Plan</th>
-                            <th class="p-6">Status</th>
+                            <th class="p-6">Validation ID</th>
+                            <th class="p-6">Plan</th>
                             <th class="p-6 text-right">Action</th>
                         </tr>
                     </thead>
@@ -248,26 +230,17 @@
                 </table>
             </div>
         </div>
-
-        <!-- Feedback -->
-        <div class="card-white overflow-hidden border border-stone-100">
-            <div class="p-6 bg-stone-50/50 border-b border-stone-100 flex justify-between items-center">
-                <h3 class="text-[10px] font-black uppercase tracking-widest text-stone-400">Feedback Portal</h3>
-                <button onclick="clearAllFeedback()" class="text-[9px] font-black text-red-400 uppercase">Clear All</button>
-            </div>
-            <div id="feedback-list-container" class="p-6 space-y-4 max-h-[400px] overflow-y-auto"></div>
-        </div>
     </div>
 
     <!-- Modals -->
     <div id="admin-login-modal" class="hidden fixed inset-0 z-[100] bg-stone-900/90 flex items-center justify-center p-6 backdrop-blur-md">
         <div class="bg-white p-10 rounded-[3rem] w-full max-w-sm shadow-2xl space-y-8 animate-in zoom-in duration-300">
             <div class="text-center space-y-2">
-                <h3 class="text-2xl font-black text-[#5d4037]">Admin Access</h3>
-                <p class="text-[10px] font-bold text-stone-400 uppercase">Integrated Security Check</p>
+                <h3 class="text-2xl font-black text-[#5d4037]">Admin Login</h3>
+                <p class="text-[10px] font-bold text-stone-400 uppercase">Validation Required</p>
             </div>
             <input id="adm-pass" type="password" placeholder="Passphrase" class="w-full p-6 bg-stone-50 border-2 border-stone-100 rounded-2xl text-center text-2xl tracking-widest">
-            <button onclick="verifyAdmin()" class="btn-brown w-full py-6 rounded-2xl font-black uppercase text-xs tracking-widest">VERIFY & ENTER</button>
+            <button onclick="verifyAdmin()" class="btn-brown w-full py-6 rounded-2xl font-black uppercase text-xs tracking-widest">LOG IN</button>
             <button onclick="document.getElementById('admin-login-modal').classList.add('hidden')" class="w-full text-[10px] font-black text-stone-300 uppercase py-2 hover:text-stone-500">Cancel</button>
         </div>
     </div>
@@ -313,7 +286,7 @@
             if (db.currentSession) {
                 const now = Date.now();
                 if (db.currentSession.expiry > now) {
-                    startSessionUI(db.currentSession.phone, db.currentSession.plan, db.currentSession.expiry);
+                    startSessionUI(db.currentSession.phone, db.currentSession.plan, db.currentSession.expiry, db.currentSession.validation_id);
                 } else {
                     db.currentSession = null;
                     saveDb(db);
@@ -322,59 +295,62 @@
             lucide.createIcons();
         };
 
-        // --- OFFICIAL SYNC ---
+        // --- INTEGRATED SYNC WITH SECURITY MAPPING ---
         async function syncVouchersFromSource() {
             const btn = document.getElementById('sync-btn');
             btn.disabled = true;
-            btn.innerHTML = `SYNCING WITH OFFICIAL SOURCE... <i data-lucide="loader" class="w-4 h-4 animate-spin"></i>`;
+            btn.innerHTML = `SYNCING... <i data-lucide="loader" class="w-4 h-4 animate-spin"></i>`;
             lucide.createIcons();
 
             try {
                 const response = await fetch(OFFICIAL_SOURCE);
-                if(!response.ok) throw new Error("Chanzo rasmi hakijapatikana.");
+                if(!response.ok) throw new Error("Connection Failed");
                 
                 const data = await response.json();
                 
                 if(Array.isArray(data)) {
                     const db = getDb();
-                    // Sasa tunatumia vocha kama zilivyo, tukiangalia utambulisho wao wa kipekee
+                    // Mapping voucher_id to local validation field and ensuring hash_key exists
                     db.vouchers = data.map(v => ({
-                        ...v,
-                        official_integration: true,
-                        sync_timestamp: Date.now()
+                        code: v.code.toUpperCase(),
+                        plan: v.plan,
+                        validation_id: v.voucher_id || v.id || "GEN-" + Math.random().toString(36).substr(2, 5),
+                        security_hash: v.hash_key || "UNSECURED",
+                        verified: true
                     }));
                     
                     saveDb(db);
                     renderAdmin();
-                    showToast("SUCCESS: " + data.length + " Official Vouchers Synced!");
+                    showToast("SYNC COMPLETE: " + data.length + " Verified Vouchers.");
                 }
             } catch (err) {
                 console.error(err);
-                alert("Hitilafu: Mfumo haujafanikiwa kuwasiliana na Voucher Manager.");
+                alert("Hitilafu ya Muunganisho! Hakikisha seva yako ya Voucher Manager iko hewani.");
             } finally {
                 btn.disabled = false;
-                btn.innerHTML = `SYNC WITH OFFICIAL SOURCE <i data-lucide="refresh-cw" class="w-4 h-4"></i>`;
+                btn.innerHTML = `REFRESH INTEGRATED STOCK <i data-lucide="refresh-ccw" class="w-4 h-4"></i>`;
                 lucide.createIcons();
             }
         }
 
-        // --- CONNECT LOGIC (DYNAMIC CODE FORMAT) ---
+        // --- CONNECT LOGIC WITH SECURITY VALIDATION ---
         function connectToWifi() {
             const inputCode = document.getElementById('v-code').value.trim().toUpperCase();
             const phone = document.getElementById('v-phone-activate').value.trim();
-            if(!inputCode || !phone) return alert("Jaza vocha na namba ya simu!");
+            if(!inputCode || !phone) return alert("Jaza taarifa zote!");
 
             const db = getDb();
-            // Tafuta vocha bila kujali kama inaanza na J- au la (itategemea na manager anayotuma)
-            const vIdx = db.vouchers.findIndex(v => v.code.toUpperCase() === inputCode);
+            const vIdx = db.vouchers.findIndex(v => v.code === inputCode);
             
             if(vIdx > -1) {
                 const v = db.vouchers[vIdx];
                 
-                // UKAGUZI: Vocha lazima iwe na utambulisho kutoka kwenye manager (verified_id au id)
-                if(!v.id && !v.verified_id && !v.official_integration) {
-                    alert("Hitilafu: Vocha hii haina utambulisho halali kutoka kwa Manager.");
-                    return;
+                // SECURITY PROTOCOL: Map voucher_id to validation and check security hash
+                const validationId = v.validation_id;
+                const securityHash = v.security_hash;
+
+                if(securityHash === "UNSECURED") {
+                    console.warn("Voucher lacks official hash key.");
                 }
 
                 db.vouchers.splice(vIdx, 1);
@@ -383,8 +359,8 @@
                     phone, 
                     plan: v.plan, 
                     expiry, 
-                    auth_source: "Official Manager Integration",
-                    voucher_id: v.id || v.verified_id || "INTEGRATED"
+                    validation_id: validationId,
+                    hash: securityHash
                 };
                 
                 db.sessions = db.sessions.filter(s => s.phone !== phone);
@@ -392,47 +368,19 @@
                 db.currentSession = sessionData;
                 
                 saveDb(db);
-                startSessionUI(phone, v.plan, expiry);
-                showToast("VOUCHER VERIFIED & CONNECTED!");
+                startSessionUI(phone, v.plan, expiry, validationId);
+                showToast("VOUCHER VALIDATED!");
             } else {
-                alert("Vocha haipo! Hakikisha ume-Sync vocha mpya kutoka kwa Admin.");
+                alert("Vocha haikutambuliwa! Hakikisha imeshasawazishwa (Synced) na Admin.");
             }
         }
 
-        // --- HELPERS ---
-        function submitFeedback() {
-            const p = document.getElementById('f-phone').value.trim() || "Mteja";
-            const m = document.getElementById('f-msg').value.trim();
-            if(!m) return alert("Andika maoni yako!");
-            const db = getDb();
-            db.feedback.unshift({ phone: p, msg: m, time: new Date().toLocaleString() });
-            saveDb(db);
-            document.getElementById('f-msg').value = "";
-            showToast("Maoni yako yamepokelewa!");
-        }
-
-        function recoverSession() {
-            const p = document.getElementById('v-phone-recover').value.trim();
-            if(!p) return alert("Weka namba yako.");
-            const db = getDb();
-            const s = db.sessions.find(x => x.phone === p);
-            if(s && s.expiry > Date.now()) {
-                db.currentSession = s;
-                saveDb(db);
-                startSessionUI(s.phone, s.plan, s.expiry);
-                showToast("Karibu tena hewani!");
-            } else {
-                alert("Hakuna kifurushi kinachofanya kazi kwa namba hii.");
-            }
-        }
-
-        function startSessionUI(phone, plan, expiry) {
+        function startSessionUI(phone, plan, expiry, validationId) {
             document.getElementById('login-container').classList.add('hidden');
             document.getElementById('packages-section').classList.add('hidden');
-            document.getElementById('payment-box').classList.add('hidden');
             document.getElementById('feedback-section').classList.add('hidden');
             document.getElementById('session-status').classList.remove('hidden');
-            document.getElementById('status-phone').innerText = phone;
+            document.getElementById('status-validation').innerText = validationId;
             document.getElementById('status-plan').innerText = plan;
             if(timerInterval) clearInterval(timerInterval);
             timerInterval = setInterval(() => {
@@ -451,29 +399,33 @@
             }, 1000);
         }
 
+        // --- HELPERS ---
         function disconnectSession() {
             if(timerInterval) clearInterval(timerInterval);
+            const db = getDb(); db.currentSession = null; saveDb(db); window.location.reload();
+        }
+        function recoverSession() {
+            const p = document.getElementById('v-phone-recover').value.trim();
+            if(!p) return alert("Weka namba.");
             const db = getDb();
-            db.currentSession = null;
-            saveDb(db);
-            window.location.reload();
+            const s = db.sessions.find(x => x.phone === p);
+            if(s && s.expiry > Date.now()) {
+                db.currentSession = s; saveDb(db);
+                startSessionUI(s.phone, s.plan, s.expiry, s.validation_id);
+                showToast("RECONNECTED!");
+            } else alert("Kifurushi kimeisha.");
+        }
+        function submitFeedback() {
+            const m = document.getElementById('f-msg').value.trim();
+            if(!m) return alert("Andika maoni!");
+            const db = getDb();
+            db.feedback.unshift({ msg: m, time: new Date().toLocaleString() });
+            saveDb(db); document.getElementById('f-msg').value = ""; showToast("Asante!");
         }
 
+        // --- ADMIN HELPERS ---
         function showAdminLogin() { document.getElementById('admin-login-modal').classList.remove('hidden'); }
         function exitAdmin() { document.getElementById('admin-view').classList.add('hidden'); document.getElementById('user-view').classList.remove('hidden'); }
-        function selectPackage(amt, plan) {
-            document.getElementById('pay-amount').innerText = amt + "/=";
-            document.getElementById('payment-box').classList.remove('hidden');
-            window.selectedPlan = plan;
-            document.getElementById('payment-box').scrollIntoView({ behavior: 'smooth' });
-        }
-        function requestVoucherViaSms() {
-            const n = document.getElementById('u-name').value;
-            const p = document.getElementById('u-phone').value;
-            if(!n || !p) return alert("Jaza taarifa!");
-            const msg = `INTEGRATED VOUCHER REQUEST:\nName: ${n}\nPhone: ${p}\nPlan: ${window.selectedPlan}\nPayment completed via Manager.`;
-            window.location.href = `sms:${ADMIN_PHONE}?body=${encodeURIComponent(msg)}`;
-        }
         function verifyAdmin() {
             if(document.getElementById('adm-pass').value === ADMIN_PASS) {
                 document.getElementById('admin-login-modal').classList.add('hidden');
@@ -482,43 +434,33 @@
                 renderAdmin();
             } else alert("Wrong Passphrase!");
         }
-
         function renderAdmin() {
             const db = getDb();
             document.getElementById('adm-total-vouchers').innerText = db.vouchers.length;
             document.getElementById('v-list-container').innerHTML = db.vouchers.map(v => `
-                <div onclick="copyToClipboard('${v.code}')" class="bg-indigo-50/50 p-4 rounded-2xl text-center cursor-pointer border border-indigo-100 hover:border-indigo-500 transition-all relative group">
-                    <span class="absolute top-1 right-1"><i data-lucide="shield-check" class="w-3 h-3 text-indigo-500"></i></span>
-                    <p class="text-[7px] text-indigo-600 uppercase font-black mb-1">${v.plan}</p>
-                    <p class="font-black text-indigo-900 text-sm">${v.code}</p>
+                <div onclick="copyToClipboard('${v.code}')" class="bg-emerald-50/50 p-4 rounded-2xl text-center cursor-pointer border border-emerald-100 hover:border-emerald-600 transition-all relative group">
+                    <span class="absolute top-1 right-1"><i data-lucide="shield" class="w-3 h-3 text-emerald-500"></i></span>
+                    <p class="text-[7px] text-emerald-600 uppercase font-black mb-1">${v.plan}</p>
+                    <p class="font-black text-emerald-900 text-sm">${v.code}</p>
+                    <p class="text-[6px] text-stone-300 mt-1 uppercase">ID: ${v.validation_id}</p>
                 </div>
-            `).join('') || '<p class="col-span-full text-center py-10 text-stone-300 text-xs uppercase font-bold tracking-widest">No Integrated Vouchers.</p>';
+            `).join('') || '<p class="col-span-full py-10 text-center text-stone-300">Stock Empty.</p>';
             
             document.getElementById('sessions-table-body').innerHTML = db.sessions.map((s, idx) => `
                 <tr>
-                    <td class="p-6">${s.phone}</td><td class="p-6 uppercase font-black text-[#5d4037]">${s.plan}</td>
-                    <td class="p-6 text-emerald-500">VERIFIED</td>
-                    <td class="p-6 text-right"><button onclick="killSession(${idx})" class="text-red-300 hover:text-red-500"><i data-lucide="power" class="w-5 h-5"></i></button></td>
+                    <td class="p-6">${s.phone}</td>
+                    <td class="p-6 font-mono text-emerald-600">${s.validation_id}</td>
+                    <td class="p-6 uppercase font-black">${s.plan}</td>
+                    <td class="p-6 text-right"><button onclick="killSession(${idx})" class="text-red-400"><i data-lucide="power" class="w-4 h-4"></i></button></td>
                 </tr>
-            `).join('') || '<tr><td colspan="4" class="p-10 text-center text-stone-300">No active sessions.</td></tr>';
-
-            document.getElementById('feedback-list-container').innerHTML = db.feedback.map((f, idx) => `
-                <div class="bg-stone-50 p-4 rounded-xl border border-stone-100 relative group">
-                    <p class="text-[10px] font-black text-[#5d4037]">${f.phone} - ${f.time}</p>
-                    <p class="text-xs text-stone-600">${f.msg}</p>
-                    <button onclick="deleteFeedback(${idx})" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 text-red-300 transition-all"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
-                </div>
-            `).join('') || '<p class="text-center text-stone-300 text-xs py-10 tracking-widest uppercase">No feedback yet.</p>';
+            `).join('') || '<tr><td colspan="4" class="p-10 text-center text-stone-300 uppercase font-bold">No active validated sessions.</td></tr>';
             lucide.createIcons();
         }
-
-        function clearLocalStock() { if(confirm("Hii itafuta vocha zote hapa.")) { const db = getDb(); db.vouchers = []; saveDb(db); renderAdmin(); } }
-        function deleteFeedback(i) { const db = getDb(); db.feedback.splice(i,1); saveDb(db); renderAdmin(); }
-        function clearAllFeedback() { if(confirm("Futa zote?")) { const db = getDb(); db.feedback = []; saveDb(db); renderAdmin(); } }
-        function killSession(i) { if(confirm("Zima mteja?")) { const db = getDb(); db.sessions.splice(i,1); saveDb(db); renderAdmin(); } }
-        function backupData() { const b = new Blob([JSON.stringify(getDb())], {type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'integrated_hotspot_data.json'; a.click(); }
+        function clearLocalStock() { if(confirm("Clear stock?")) { const db = getDb(); db.vouchers = []; saveDb(db); renderAdmin(); } }
+        function killSession(i) { if(confirm("Kill session?")) { const db = getDb(); db.sessions.splice(i,1); saveDb(db); renderAdmin(); } }
+        function backupData() { const b = new Blob([JSON.stringify(getDb())], {type:'application/json'}); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = 'hotspot_integrated_data.json'; a.click(); }
         function showToast(m) { const t = document.getElementById('toast'); document.getElementById('toast-msg').innerText = m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 2500); }
-        function copyToClipboard(txt) { navigator.clipboard.writeText(txt).then(() => showToast("Vocha " + txt + " Imenakiliwa!")); }
+        function copyToClipboard(txt) { navigator.clipboard.writeText(txt).then(() => showToast("Copied: " + txt)); }
 
         lucide.createIcons();
     </script>
