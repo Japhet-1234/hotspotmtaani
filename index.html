@@ -26,7 +26,7 @@
         .card-white { background: white; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
         .hidden { display: none; }
         
-        input:focus, select:focus { 
+        input:focus, select:focus, textarea:focus { 
             border-color: var(--primary-brown) !important; 
             outline: none; 
             box-shadow: 0 0 0 4px rgba(93, 64, 55, 0.08); 
@@ -60,7 +60,7 @@
             <p class="text-[11px] font-extrabold text-stone-400 uppercase tracking-[0.4em] mt-3">Internet Isiyo na Kikomo</p>
         </header>
 
-        <!-- LIVE SESSION STATUS (Auto-detects active session) -->
+        <!-- LIVE SESSION STATUS -->
         <section id="session-status" class="hidden card-white p-8 border-t-8 border-emerald-500 bg-emerald-50/20 space-y-6 animate-in fade-in slide-in-from-top-4 duration-700">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-3">
@@ -85,9 +85,8 @@
             </div>
         </section>
 
-        <!-- Main Interaction Box (Login) -->
+        <!-- Main Interaction Box -->
         <div id="login-container" class="space-y-6">
-            <!-- Voucher Input Section -->
             <section id="main-input-box" class="card-white p-8 space-y-6 border-b-8 border-[#5d4037]">
                 <div class="text-center">
                     <h2 class="text-xs font-black uppercase tracking-widest text-stone-400 mb-1">Weka Vocha</h2>
@@ -107,7 +106,6 @@
                 </div>
             </section>
 
-            <!-- RECOVERY SECTION -->
             <section id="recovery-box" class="bg-stone-200/40 p-6 rounded-[2.5rem] border-2 border-dashed border-stone-300 space-y-4">
                 <div class="text-center">
                     <h3 class="text-[11px] font-black uppercase tracking-widest text-stone-500">Ulikatika Internet?</h3>
@@ -122,7 +120,7 @@
             </section>
         </div>
 
-        <!-- Package Selection -->
+        <!-- Packages -->
         <section id="packages-section" class="space-y-5">
             <h2 class="text-xs font-black uppercase tracking-widest text-stone-500 text-center">Ofa za Internet (Unlimited)</h2>
             <div class="grid grid-cols-2 gap-4">
@@ -145,7 +143,7 @@
             </div>
         </section>
 
-        <!-- Payment Info Box -->
+        <!-- Payment Info -->
         <section id="payment-box" class="hidden card-white p-8 space-y-6 border-2 border-stone-100 animate-in slide-in-from-bottom-8 duration-500">
             <div class="bg-stone-50 p-6 rounded-[2rem] border border-stone-100 text-center space-y-4">
                 <p class="text-xs font-bold text-stone-400 uppercase">Tuma kiasi cha <b id="pay-amount" class="text-[#5d4037] text-lg">0/=</b></p>
@@ -159,6 +157,21 @@
                 <input id="u-phone" type="tel" placeholder="Namba uliyolipia" class="w-full p-5 bg-stone-50/50 border-2 border-stone-100 rounded-2xl text-sm font-bold">
                 <button onclick="requestVoucherViaSms()" class="btn-brown w-full py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] flex items-center justify-center gap-3 shadow-lg shadow-stone-200">
                     TUMA OMBI KWA SMS <i data-lucide="send" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- CUSTOMER FEEDBACK -->
+        <section id="feedback-section" class="card-white p-8 space-y-6 border-2 border-stone-100">
+            <div class="text-center">
+                <h2 class="text-xs font-black uppercase tracking-widest text-stone-400 mb-1">Toa Maoni yako</h2>
+                <p class="text-[10px] text-stone-300">Tusaidie kuboresha huduma yetu</p>
+            </div>
+            <div class="space-y-4">
+                <input id="f-phone" type="tel" placeholder="Namba ya simu (Sio lazima)" class="w-full p-4 bg-stone-50/50 border-2 border-stone-100 rounded-xl text-sm font-bold">
+                <textarea id="f-msg" placeholder="Andika maoni yako hapa..." rows="3" class="w-full p-4 bg-stone-50/50 border-2 border-stone-100 rounded-xl text-sm font-medium resize-none"></textarea>
+                <button onclick="submitFeedback()" class="btn-brown w-full py-4 rounded-xl font-black text-[10px] uppercase tracking-[0.2em] flex items-center justify-center gap-2">
+                    TUMA MAONI <i data-lucide="message-square" class="w-4 h-4"></i>
                 </button>
             </div>
         </section>
@@ -182,30 +195,28 @@
             </div>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <!-- Generator -->
-            <div class="card-white p-8 space-y-5 md:col-span-2">
-                <div class="flex items-center gap-3 mb-2">
-                    <i data-lucide="plus-circle" class="w-5 h-5 text-[#5d4037]"></i>
-                    <h3 class="text-xs font-black uppercase text-stone-400 tracking-widest">Tengeneza Vocha Mpya</h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Voucher Sync (Updated) -->
+            <div class="card-white p-8 space-y-6 flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center gap-3 mb-4">
+                        <i data-lucide="refresh-cw" class="w-6 h-6 text-emerald-500"></i>
+                        <h3 class="text-sm font-black uppercase text-stone-400 tracking-widest">Voucher Sync</h3>
+                    </div>
+                    <p class="text-xs text-stone-400 font-medium leading-relaxed">
+                        Chukua vocha mpya kutoka kwenye <span class="text-[#5d4037] font-bold">Voucher Manager</span>. Vocha zilizowekwa huko zitaingizwa hapa ili wateja waweze kuzitumia.
+                    </p>
                 </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <select id="adm-v-plan" class="p-5 border-2 border-stone-50 rounded-2xl text-sm font-bold bg-stone-50/50">
-                        <option value="Masaa 6">Masaa 6 (500/=)</option>
-                        <option value="Saa 24">Saa 24 (1,000/=)</option>
-                        <option value="Siku 3">Siku 3 (2,000/=)</option>
-                        <option value="Wiki 1">Wiki 1 (5,000/=)</option>
-                    </select>
-                    <input id="adm-v-count" type="number" value="10" class="p-5 border-2 border-stone-50 rounded-2xl text-center text-xl font-black bg-stone-50/50">
-                </div>
-                <button onclick="generateVouchers()" class="btn-brown w-full py-5 rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-stone-200">GENERATE VOUCHERS</button>
+                <button id="sync-btn" onclick="syncVouchersFromSource()" class="btn-brown w-full py-5 rounded-2xl font-black uppercase text-xs tracking-widest shadow-lg shadow-stone-200 flex items-center justify-center gap-3">
+                    SYNC FROM MANAGER <i data-lucide="cloud-download" class="w-4 h-4"></i>
+                </button>
             </div>
 
             <!-- Total Stats -->
             <div class="card-white p-8 flex flex-col justify-center items-center text-center space-y-3">
                 <i data-lucide="database" class="w-8 h-8 text-stone-200"></i>
                 <div>
-                    <p class="text-[10px] font-black uppercase text-stone-400 mb-1">Vocha Stock</p>
+                    <p class="text-[10px] font-black uppercase text-stone-400 mb-1">Vocha Zinazofanya Kazi</p>
                     <h4 id="adm-total-vouchers" class="text-6xl font-black text-[#5d4037]">0</h4>
                 </div>
             </div>
@@ -214,12 +225,10 @@
         <!-- Voucher Inventory -->
         <div class="card-white overflow-hidden border border-stone-100">
             <div class="p-6 bg-stone-50/50 border-b border-stone-100 flex justify-between items-center">
-                <span class="text-[10px] font-black uppercase tracking-widest text-stone-400">Inventory (Click code to copy)</span>
-                <button onclick="clearUsedVouchers()" class="text-[9px] font-black text-red-400 uppercase">Clear All</button>
+                <span class="text-[10px] font-black uppercase tracking-widest text-stone-400">Inventory (Vocha zilizosomwa kutoka Manager)</span>
+                <button onclick="clearUsedVouchers()" class="text-[9px] font-black text-red-400 uppercase">Clear Local Stock</button>
             </div>
-            <div id="v-list-container" class="p-8 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4 max-h-[400px] overflow-y-auto bg-white">
-                <!-- Vouchers appear here -->
-            </div>
+            <div id="v-list-container" class="p-8 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-4 max-h-[400px] overflow-y-auto bg-white"></div>
         </div>
 
         <!-- Sessions List -->
@@ -237,11 +246,18 @@
                             <th class="p-6 text-right">Hatua</th>
                         </tr>
                     </thead>
-                    <tbody id="sessions-table-body" class="text-xs font-bold divide-y divide-stone-50">
-                        <!-- Live sessions appear here -->
-                    </tbody>
+                    <tbody id="sessions-table-body" class="text-xs font-bold divide-y divide-stone-50"></tbody>
                 </table>
             </div>
+        </div>
+
+        <!-- FEEDBACK LIST -->
+        <div class="card-white overflow-hidden border border-stone-100">
+            <div class="p-6 bg-stone-50/50 border-b border-stone-100 flex justify-between items-center">
+                <h3 class="text-[10px] font-black uppercase tracking-widest text-stone-400">Maoni ya Wateja</h3>
+                <button onclick="clearAllFeedback()" class="text-[9px] font-black text-red-400 uppercase">Futa Yote</button>
+            </div>
+            <div id="feedback-list-container" class="p-6 space-y-4 max-h-[400px] overflow-y-auto"></div>
         </div>
     </div>
 
@@ -265,9 +281,9 @@
     </div>
 
     <script>
-        // --- CONFIG ---
-        const ADMIN_PASS = "mtaani"; // Neno la siri la Admin
+        const ADMIN_PASS = "mtaani";
         const ADMIN_PHONE = "0779231924";
+        const EXTERNAL_SOURCE = "https://japhet-1234.github.io/voucher-manager-/vouchers.json";
 
         const PLAN_DURATIONS = {
             "Masaa 6": 6 * 60 * 60 * 1000,
@@ -278,12 +294,12 @@
 
         let timerInterval = null;
 
-        // --- PERSISTENCE (Taarifa kutunzwa) ---
         function getDb() {
             return {
                 vouchers: JSON.parse(localStorage.getItem('mtaani_vouchers')) || [],
                 sessions: JSON.parse(localStorage.getItem('mtaani_sessions')) || [],
-                currentSession: JSON.parse(localStorage.getItem('mtaani_active_user')) || null
+                currentSession: JSON.parse(localStorage.getItem('mtaani_active_user')) || null,
+                feedback: JSON.parse(localStorage.getItem('mtaani_feedback')) || []
             };
         }
 
@@ -291,18 +307,16 @@
             localStorage.setItem('mtaani_vouchers', JSON.stringify(data.vouchers));
             localStorage.setItem('mtaani_sessions', JSON.stringify(data.sessions));
             localStorage.setItem('mtaani_active_user', JSON.stringify(data.currentSession));
+            localStorage.setItem('mtaani_feedback', JSON.stringify(data.feedback));
         }
 
-        // --- PAGE LOAD LOGIC ---
         window.onload = () => {
             const db = getDb();
-            // Angalia kama kuna session ambayo haijaisha
             if (db.currentSession) {
                 const now = Date.now();
                 if (db.currentSession.expiry > now) {
                     startSessionUI(db.currentSession.phone, db.currentSession.plan, db.currentSession.expiry);
                 } else {
-                    // Session imeisha, iondoe
                     db.currentSession = null;
                     saveDb(db);
                 }
@@ -310,7 +324,59 @@
             lucide.createIcons();
         };
 
+        // --- EXTERNAL SYNC (NEW) ---
+        async function syncVouchersFromSource() {
+            const btn = document.getElementById('sync-btn');
+            btn.disabled = true;
+            btn.innerHTML = `SYNCING... <i data-lucide="loader" class="w-4 h-4 animate-spin"></i>`;
+            lucide.createIcons();
+
+            try {
+                // Tunatumia fetch kupata vocha kutoka link uliyotoa. 
+                // Kumbuka: Link hiyo inapaswa kurudisha faili la JSON (mfano vouchers.json)
+                const response = await fetch(EXTERNAL_SOURCE);
+                if(!response.ok) throw new Error("Chanzo hakijapatikana");
+                
+                const newVouchers = await response.json();
+                
+                if(Array.isArray(newVouchers)) {
+                    const db = getDb();
+                    // Tunachanganya vocha za sasa na mpya bila kurudia zilizopo
+                    const existingCodes = new Set(db.vouchers.map(v => v.code));
+                    const addedCount = 0;
+                    
+                    newVouchers.forEach(v => {
+                        if(v.code && !existingCodes.has(v.code)) {
+                            db.vouchers.push(v);
+                        }
+                    });
+                    
+                    saveDb(db);
+                    renderAdmin();
+                    showToast("SYNC COMPLETE!");
+                }
+            } catch (error) {
+                console.error(error);
+                alert("Hitilafu imetokea wakati wa kusawazisha. Hakikisha 'vouchers.json' ipo kwenye chanzo.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `SYNC FROM MANAGER <i data-lucide="cloud-download" class="w-4 h-4"></i>`;
+                lucide.createIcons();
+            }
+        }
+
         // --- USER FUNCTIONS ---
+        function submitFeedback() {
+            const phone = document.getElementById('f-phone').value.trim() || "Anonymous";
+            const msg = document.getElementById('f-msg').value.trim();
+            if(!msg) return alert("Andika maoni yako kwanza!");
+            const db = getDb();
+            db.feedback.unshift({ phone, msg, time: new Date().toLocaleString() });
+            saveDb(db);
+            document.getElementById('f-msg').value = "";
+            showToast("MAONI YAMETUMWA!");
+        }
+
         function selectPackage(amt, plan) {
             document.getElementById('pay-amount').innerText = amt + "/=";
             document.getElementById('payment-box').classList.remove('hidden');
@@ -322,53 +388,45 @@
         function requestVoucherViaSms() {
             const name = document.getElementById('u-name').value;
             const phone = document.getElementById('u-phone').value;
-            if(!name || !phone) return alert("Tafadhali jaza jina na namba ya simu.");
-            const msg = `OMBI LA VOCHA:\nJina: ${name}\nNamba: ${phone}\nPackage: ${window.selectedPlan}\nNimeshalipia sasa hivi.`;
+            if(!name || !phone) return alert("Jaza jina na namba ya simu.");
+            const msg = `OMBI LA VOCHA:\nJina: ${name}\nNamba: ${phone}\nPackage: ${window.selectedPlan}\nNimeshalipia sasa hivi kupitia Voucher Manager.`;
             window.location.href = `sms:${ADMIN_PHONE}?body=${encodeURIComponent(msg)}`;
         }
 
         function connectToWifi() {
             const code = document.getElementById('v-code').value.trim().toUpperCase();
             const phone = document.getElementById('v-phone-activate').value.trim();
-            if(!code || !phone) return alert("Ingiza vocha na namba yako ya simu.");
-
+            if(!code || !phone) return alert("Ingiza vocha na namba yako.");
             const db = getDb();
             const vIdx = db.vouchers.findIndex(v => v.code === code);
-
             if(vIdx > -1) {
                 const v = db.vouchers[vIdx];
-                db.vouchers.splice(vIdx, 1); // Burn voucher
-                
+                db.vouchers.splice(vIdx, 1);
                 const expiry = Date.now() + PLAN_DURATIONS[v.plan];
                 const sessionData = { phone, plan: v.plan, expiry };
-                
-                // Tunza session ya mteja
                 db.sessions = db.sessions.filter(s => s.phone !== phone);
                 db.sessions.push(sessionData);
                 db.currentSession = sessionData;
-                
                 saveDb(db);
                 startSessionUI(phone, v.plan, expiry);
                 showToast("IMEUNGANISHWA!");
             } else {
-                alert("Vocha hii haipo au imeshatumika!");
+                alert("Vocha hii haipo! Hakikisha imeshasawazishwa (Synced) na Admin.");
             }
         }
 
         function recoverSession() {
             const phone = document.getElementById('v-phone-recover').value.trim();
-            if(!phone) return alert("Ingiza namba yako uliyotumia mwanzo.");
-            
+            if(!phone) return alert("Ingiza namba yako.");
             const db = getDb();
             const s = db.sessions.find(x => x.phone === phone);
-            
             if(s && s.expiry > Date.now()) {
                 db.currentSession = s;
                 saveDb(db);
                 startSessionUI(s.phone, s.plan, s.expiry);
                 showToast("KARIBU TENA!");
             } else {
-                alert("Namba hii haina kifurushi kinachofanya kazi sasa hivi.");
+                alert("Namba hii haina kifurushi kinachofanya kazi.");
             }
         }
 
@@ -376,27 +434,24 @@
             document.getElementById('login-container').classList.add('hidden');
             document.getElementById('packages-section').classList.add('hidden');
             document.getElementById('payment-box').classList.add('hidden');
+            document.getElementById('feedback-section').classList.add('hidden');
             document.getElementById('session-status').classList.remove('hidden');
-            
             document.getElementById('status-phone').innerText = phone;
             document.getElementById('status-plan').innerText = plan;
-            
             if(timerInterval) clearInterval(timerInterval);
-            
             timerInterval = setInterval(() => {
                 const now = Date.now();
                 const diff = expiry - now;
                 if(diff <= 0) {
                     clearInterval(timerInterval);
-                    alert("Muda wako umekwisha! Tafadhali nunua vocha nyingine.");
+                    alert("Muda wako umekwisha!");
                     disconnectSession();
                     return;
                 }
                 const h = Math.floor(diff / (1000 * 60 * 60));
                 const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 const s = Math.floor((diff % (1000 * 60)) / 1000);
-                document.getElementById('live-timer').innerText = 
-                    `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+                document.getElementById('live-timer').innerText = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
             }, 1000);
         }
 
@@ -421,71 +476,59 @@
             } else alert("Neno la siri limekosewa!");
         }
 
-        function generateVouchers() {
-            const c = parseInt(document.getElementById('adm-v-count').value);
-            const p = document.getElementById('adm-v-plan').value;
-            const db = getDb();
-            for(let i=0; i<c; i++) {
-                const code = "J-" + Math.floor(1000 + Math.random() * 8999);
-                db.vouchers.push({ code, plan: p });
-            }
-            saveDb(db); 
-            renderAdmin();
-            showToast("VOUCHERS GENERATED!");
-        }
-
         function renderAdmin() {
             const db = getDb();
             document.getElementById('adm-total-vouchers').innerText = db.vouchers.length;
-            
             document.getElementById('v-list-container').innerHTML = db.vouchers.map(v => `
                 <div onclick="copyToClipboard('${v.code}')" class="bg-stone-50 p-4 rounded-2xl text-center cursor-pointer border border-transparent hover:border-[#5d4037] hover:bg-white transition-all group">
                     <p class="text-[7px] text-stone-300 uppercase font-black mb-1 group-hover:text-stone-400">${v.plan}</p>
                     <p class="font-black text-[#5d4037] text-sm">${v.code}</p>
                 </div>
             `).join('');
-
             document.getElementById('sessions-table-body').innerHTML = db.sessions.map((s, idx) => {
                 const isExpired = s.expiry < Date.now();
-                return `
-                    <tr class="${isExpired ? 'opacity-30' : ''}">
-                        <td class="p-6">
-                            <div class="flex items-center gap-2">
-                                <i data-lucide="phone" class="w-3 h-3 text-stone-300"></i>
-                                ${s.phone}
-                            </div>
-                        </td>
-                        <td class="p-6 uppercase text-[#5d4037] font-black">${s.plan}</td>
-                        <td class="p-6 ${isExpired ? 'text-red-400' : 'text-emerald-500'}">
-                            ${isExpired ? 'EXPIRED' : new Date(s.expiry).toLocaleTimeString()}
-                        </td>
-                        <td class="p-6 text-right">
-                            <button onclick="killSession(${idx})" class="text-red-400 hover:text-red-600 transition-colors">
-                                <i data-lucide="trash-2" class="w-4 h-4"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            }).join('') || '<tr><td colspan="4" class="p-10 text-center text-stone-300">Hakuna wateja walio hewani sasa hivi.</td></tr>';
+                return `<tr class="${isExpired ? 'opacity-30' : ''}">
+                    <td class="p-6">${s.phone}</td><td class="p-6 uppercase text-[#5d4037] font-black">${s.plan}</td>
+                    <td class="p-6 ${isExpired ? 'text-red-400' : 'text-emerald-500'}">${isExpired ? 'EXPIRED' : new Date(s.expiry).toLocaleTimeString()}</td>
+                    <td class="p-6 text-right"><button onclick="killSession(${idx})" class="text-red-400"><i data-lucide="trash-2" class="w-4 h-4"></i></button></td>
+                </tr>`;
+            }).join('') || '<tr><td colspan="4" class="p-10 text-center text-stone-300">Hakuna wateja walio hewani.</td></tr>';
+            
+            document.getElementById('feedback-list-container').innerHTML = db.feedback.map((f, idx) => `
+                <div class="bg-stone-50 p-5 rounded-2xl border border-stone-100 space-y-2 relative group">
+                    <div class="flex justify-between items-center">
+                        <span class="text-[10px] font-black text-[#5d4037]">${f.phone}</span>
+                        <span class="text-[9px] text-stone-400">${f.time}</span>
+                    </div>
+                    <p class="text-xs text-stone-600 font-medium">${f.msg}</p>
+                    <button onclick="deleteFeedback(${idx})" class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 text-red-300 hover:text-red-500 transition-all">
+                        <i data-lucide="x" class="w-3 h-3"></i>
+                    </button>
+                </div>
+            `).join('') || '<p class="text-center text-stone-300 text-xs py-10">Hakuna maoni yoyote bado.</p>';
             
             lucide.createIcons();
         }
 
+        function deleteFeedback(idx) {
+            const db = getDb(); db.feedback.splice(idx, 1); saveDb(db); renderAdmin();
+        }
+
+        function clearAllFeedback() {
+            if(confirm("Futa maoni yote?")) {
+                const db = getDb(); db.feedback = []; saveDb(db); renderAdmin();
+            }
+        }
+
         function killSession(idx) {
-            if(confirm("Je, unataka kufuta session hii? Mteja atatolewa internet.")) {
-                const db = getDb(); 
-                db.sessions.splice(idx, 1); 
-                saveDb(db); 
-                renderAdmin();
+            if(confirm("Futa session hii?")) {
+                const db = getDb(); db.sessions.splice(idx, 1); saveDb(db); renderAdmin();
             }
         }
 
         function clearUsedVouchers() {
-            if(confirm("Hii itafuta vocha zote zilizopo store. Una uhakika?")) {
-                const db = getDb();
-                db.vouchers = [];
-                saveDb(db);
-                renderAdmin();
+            if(confirm("Futa stock ya hapa ndani?")) {
+                const db = getDb(); db.vouchers = []; saveDb(db); renderAdmin();
             }
         }
 
