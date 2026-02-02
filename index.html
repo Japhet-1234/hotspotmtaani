@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>wifi Mtaani | Hotspot System</title>
+    <title>wifi Mtaani | Mfumo wa Vocha</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -26,10 +26,10 @@
         .card-white { background: white; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
         .hidden { display: none; }
         
-        input:focus, select:focus, textarea:focus { 
+        textarea:focus, input:focus { 
             border-color: var(--primary-brown) !important; 
             outline: none; 
-            box-shadow: 0 0 0 4px rgba(93, 64, 55, 0.08); 
+            box-shadow: 0 0 0 4px rgba(93, 64, 55, 0.1); 
         }
         
         .pulse-emerald { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
@@ -43,13 +43,8 @@
         }
         #toast.show { transform: translate(-50%, -20px); opacity: 1; }
         
-        .security-badge { font-size: 7px; padding: 2px 6px; border-radius: 10px; font-weight: 800; text-transform: uppercase; }
-        .badge-authorized { background: #dcfce7; color: #166534; }
-        .badge-pending { background: #fef9c3; color: #854d0e; }
-
-        /* Custom scrollbar for receipt box */
-        #v-receipt-input::-webkit-scrollbar { width: 4px; }
-        #v-receipt-input::-webkit-scrollbar-thumb { background: #e5e5e5; border-radius: 10px; }
+        .badge-used { background: #fee2e2; color: #991b1b; padding: 2px 8px; border-radius: 12px; font-size: 8px; font-weight: 800; text-transform: uppercase; }
+        .receipt-code-display { font-family: 'Courier New', monospace; letter-spacing: 2px; }
     </style>
 </head>
 <body class="min-h-screen pb-20">
@@ -59,11 +54,11 @@
         
         <!-- Header -->
         <header class="text-center py-8">
-            <div class="inline-block p-5 bg-white rounded-[2rem] mb-6 shadow-sm border border-stone-100">
+            <div class="inline-block p-5 bg-white rounded-[2.5rem] mb-6 shadow-sm border border-stone-100">
                 <i data-lucide="wifi" class="w-12 h-12 text-[#5d4037]"></i>
             </div>
             <h1 class="text-4xl font-black uppercase tracking-tighter text-[#5d4037]">wifi Mtaani</h1>
-            <p class="text-[11px] font-extrabold text-stone-400 uppercase tracking-[0.4em] mt-3">Internet Isiyo na Kikomo</p>
+            <p class="text-[11px] font-extrabold text-stone-400 uppercase tracking-[0.4em] mt-3">Hotspot Management System</p>
         </header>
 
         <!-- LIVE SESSION STATUS -->
@@ -82,77 +77,41 @@
             <div class="flex justify-between items-center px-2">
                 <div class="space-y-1">
                     <p class="text-[9px] font-bold text-stone-400 uppercase">Authorization</p>
-                    <p class="text-xs font-black text-emerald-600 uppercase">Verified Transaction</p>
+                    <p class="text-xs font-black text-emerald-600 uppercase">Active Session</p>
                 </div>
                 <div class="text-right space-y-1">
-                    <p class="text-[9px] font-bold text-stone-400 uppercase">Receipt ID</p>
-                    <p id="status-validation" class="text-xs font-black text-[#5d4037] uppercase">-</p>
+                    <p class="text-[9px] font-bold text-stone-400 uppercase">Kodi Iliyotumika</p>
+                    <p id="status-v-code" class="text-xs font-black text-[#5d4037] uppercase receipt-code-display">-</p>
                 </div>
             </div>
         </section>
 
         <!-- Main Interaction Box -->
         <div id="login-container" class="space-y-6">
-            <section id="main-input-box" class="card-white p-8 space-y-6 border-b-8 border-[#5d4037]">
+            <section class="card-white p-8 space-y-6 border-b-8 border-[#5d4037]">
                 <div class="text-center">
-                    <h2 class="text-xs font-black uppercase tracking-widest text-stone-400 mb-1">Bandika Risiti Hapa</h2>
-                    <p class="text-[9px] text-stone-400 px-4 italic leading-relaxed">Lazima ubandike risiti nzima yenye KODI na ID ili kuthibitisha muunganisho.</p>
+                    <h2 class="text-xs font-black uppercase tracking-widest text-stone-400 mb-1">Bandika Risiti ya Vocha</h2>
+                    <p class="text-[9px] text-stone-400 italic">Lazima risiti iwe na KODI na ID</p>
                 </div>
+                
                 <div class="space-y-4">
-                    <div class="relative">
-                        <textarea id="v-receipt-input" rows="6" placeholder="Bandika risiti hapa...\nMfano:\nKODI: HM-XXXX\nID: XXXXXXXX" class="w-full p-4 bg-stone-50 border-2 border-stone-100 rounded-[1.5rem] text-left text-[11px] font-mono placeholder:text-stone-300 resize-none overflow-y-auto leading-relaxed"></textarea>
-                    </div>
+                    <textarea id="receipt-text" rows="8" placeholder="--- HOTSPOT MTAANI ---&#10;RISITI YA VOCHA&#10;----------------------&#10;KODI: A-0001a&#10;...&#10;ID: Q4VMY7T8N" class="w-full p-4 bg-stone-50 border-2 border-stone-100 rounded-3xl text-[11px] font-mono leading-relaxed placeholder:text-stone-200 focus:bg-white transition-all"></textarea>
+                    
                     <div class="space-y-2">
                         <label class="text-[10px] font-black uppercase tracking-widest text-stone-400 block text-center">Namba yako ya Simu</label>
-                        <input id="v-phone-activate" type="tel" placeholder="07XXXXXXXX" class="w-full p-4 bg-white border-2 border-stone-100 rounded-2xl text-center text-sm font-bold">
+                        <input id="user-phone" type="tel" placeholder="07XXXXXXXX" class="w-full p-4 bg-white border-2 border-stone-100 rounded-2xl text-center text-sm font-bold">
                     </div>
-                    <button onclick="connectToWifi()" class="btn-brown w-full py-6 rounded-[1.5rem] font-black uppercase text-xs tracking-[0.2em] flex items-center justify-center gap-3 shadow-xl shadow-stone-200">
+
+                    <button onclick="activateVoucher()" class="btn-brown w-full py-6 rounded-3xl font-black uppercase text-xs tracking-[0.2em] flex items-center justify-center gap-3 shadow-xl shadow-stone-200">
                         ANZA INTERNET <i data-lucide="zap" class="w-4 h-4 fill-current"></i>
                     </button>
                 </div>
             </section>
         </div>
 
-        <!-- Packages -->
-        <section id="packages-section" class="space-y-5">
-            <h2 class="text-xs font-black uppercase tracking-widest text-stone-500 text-center">Vifurushi Vinavyokubalika</h2>
-            <div class="grid grid-cols-2 gap-4">
-                <div onclick="selectPackage(500, 'Masaa 6')" class="card-white p-6 text-center cursor-pointer border-2 border-transparent hover:border-[#5d4037] active:bg-stone-50 transition-all">
-                    <p class="text-[10px] font-black text-stone-400 uppercase mb-1">Masaa 6</p>
-                    <p class="text-2xl font-black text-[#5d4037]">500/=</p>
-                </div>
-                <div onclick="selectPackage(1000, 'Saa 24')" class="card-white p-6 text-center cursor-pointer border-2 border-transparent hover:border-[#5d4037] active:bg-stone-50 transition-all">
-                    <p class="text-[10px] font-black text-stone-400 uppercase mb-1">Saa 24</p>
-                    <p class="text-2xl font-black text-[#5d4037]">1,000/=</p>
-                </div>
-                <div onclick="selectPackage(2000, 'Siku 3')" class="card-white p-6 text-center cursor-pointer border-2 border-transparent hover:border-[#5d4037] active:bg-stone-50 transition-all">
-                    <p class="text-[10px] font-black text-stone-400 uppercase mb-1">Siku 3</p>
-                    <p class="text-2xl font-black text-[#5d4037]">2,000/=</p>
-                </div>
-                <div onclick="selectPackage(5000, 'Wiki 1')" class="card-white p-6 text-center cursor-pointer border-2 border-transparent hover:border-[#5d4037] active:bg-stone-50 transition-all">
-                    <p class="text-[10px] font-black text-stone-400 uppercase mb-1">Wiki 1</p>
-                    <p class="text-2xl font-black text-[#5d4037]">5,000/=</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Payment Info -->
-        <section id="payment-box" class="hidden card-white p-8 space-y-6 border-2 border-stone-100 animate-in slide-in-from-bottom-8 duration-500">
-            <div class="bg-stone-50 p-6 rounded-[2rem] border border-stone-100 text-center space-y-4">
-                <p class="text-xs font-bold text-stone-400 uppercase">Tuma kiasi cha <b id="pay-amount" class="text-[#5d4037] text-lg">0/=</b></p>
-                <div class="p-4 bg-white rounded-2xl shadow-sm border border-stone-100 space-y-1">
-                    <p class="text-sm font-black text-[#5d4037] tracking-tight">LIPA KWA TIGO PESA: 0779231924</p>
-                    <p class="text-[10px] font-bold text-stone-400 uppercase">Jina: JAPHET SUNDAY</p>
-                </div>
-            </div>
-            <button onclick="requestVoucherViaSms()" class="btn-brown w-full py-5 rounded-2xl font-black text-[11px] uppercase tracking-[0.2em] flex items-center justify-center gap-3">
-                OMBA VOCHA KWA SMS <i data-lucide="send" class="w-4 h-4"></i>
-            </button>
-        </section>
-
         <!-- Admin Access -->
-        <footer class="pt-12 text-center">
-            <button onclick="showAdminLogin()" class="text-[10px] font-black text-stone-300 uppercase tracking-widest hover:text-[#5d4037] transition-all">Admin Secure Access</button>
+        <footer class="pt-8 text-center">
+            <button onclick="showAdminLogin()" class="text-[10px] font-black text-stone-300 uppercase tracking-widest hover:text-[#5d4037] transition-all">Mfumo wa Usimamizi (Admin)</button>
         </footer>
     </div>
 
@@ -160,57 +119,43 @@
     <div id="admin-view" class="hidden max-w-5xl mx-auto p-4 md:p-8 space-y-8">
         <header class="flex flex-col md:flex-row justify-between items-center gap-4 bg-white p-8 rounded-[2.5rem] shadow-sm">
             <div>
-                <h2 class="text-2xl font-black text-[#5d4037] tracking-tighter uppercase">Integrated Manager</h2>
-                <div class="flex items-center gap-2">
-                    <div class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                    <p class="text-[10px] font-bold text-stone-400 uppercase">Live JSON Feed Synchronization</p>
-                </div>
+                <h2 class="text-2xl font-black text-[#5d4037] tracking-tighter uppercase">Dashibodi ya Admin</h2>
+                <p class="text-[10px] font-bold text-stone-400 uppercase">Kumbukumbu za Vocha Zilizotumika</p>
             </div>
-            <button onclick="exitAdmin()" class="px-8 py-3 bg-red-50 text-red-500 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-red-100 transition-all">Toka Dashibodi</button>
+            <button onclick="exitAdmin()" class="px-8 py-3 bg-red-50 text-red-500 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-red-100">Funga Dashibodi</button>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="card-white p-8 text-center space-y-2 border-b-4 border-emerald-500">
-                <p class="text-[10px] font-black text-stone-400 uppercase">Validated Stock</p>
-                <h4 id="adm-total-vouchers" class="text-5xl font-black text-[#5d4037]">0</h4>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="card-white p-8 text-center space-y-2">
+                <p class="text-[10px] font-black text-stone-400 uppercase">Jumla ya Vocha Zilizotumika</p>
+                <h4 id="adm-used-count" class="text-6xl font-black text-[#5d4037]">0</h4>
             </div>
-            <div class="card-white p-8 text-center space-y-2 border-b-4 border-indigo-500">
-                <p class="text-[10px] font-black text-stone-400 uppercase">Active Sessions</p>
-                <h4 id="adm-total-sessions" class="text-5xl font-black text-[#5d4037]">0</h4>
-            </div>
-            <div class="card-white p-8 text-center space-y-2 border-b-4 border-amber-500">
-                <p class="text-[10px] font-black text-stone-400 uppercase">Security Status</p>
-                <div class="flex flex-col items-center justify-center h-full">
-                    <span class="text-xs font-black text-emerald-600 uppercase">Protocol Active</span>
-                    <p class="text-[8px] text-stone-300">Receipt ID Verification Enabled</p>
+            <div class="card-white p-8 text-center space-y-2">
+                <p class="text-[10px] font-black text-stone-400 uppercase">Hali ya Usalama</p>
+                <div class="flex items-center justify-center gap-2 h-full">
+                    <div class="w-3 h-3 bg-emerald-500 rounded-full animate-pulse"></div>
+                    <span class="text-sm font-black text-emerald-600 uppercase tracking-widest">Active Protection</span>
                 </div>
             </div>
         </div>
 
-        <!-- Inventory List -->
+        <!-- History List -->
         <div class="card-white overflow-hidden border border-stone-100">
             <div class="p-6 bg-stone-50/50 border-b border-stone-100 flex justify-between items-center">
-                <span class="text-[10px] font-black uppercase tracking-widest text-stone-400">Authenticated Stock (KODI & ID Pair)</span>
-                <span id="sync-status" class="text-[9px] font-bold text-emerald-500 uppercase">Synced Just Now</span>
-            </div>
-            <div id="v-list-container" class="p-8 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 max-h-[400px] overflow-y-auto bg-white"></div>
-        </div>
-
-        <!-- Session Table -->
-        <div class="card-white overflow-hidden border border-stone-100">
-            <div class="p-6 bg-stone-50/50 border-b border-stone-100">
-                <h3 class="text-[10px] font-black uppercase tracking-widest text-stone-400">Active Validated Transactions</h3>
+                <span class="text-[10px] font-black uppercase tracking-widest text-stone-400">Historia ya Matumizi</span>
+                <button onclick="clearHistory()" class="text-[9px] font-black text-red-400 uppercase hover:underline">Futa Historia</button>
             </div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left">
                     <thead class="bg-stone-50/80 text-[10px] font-black uppercase text-stone-400 border-b border-stone-100">
                         <tr>
-                            <th class="p-6">User Phone</th>
-                            <th class="p-6">Receipt ID</th>
-                            <th class="p-6 text-right">Action</th>
+                            <th class="p-6">KODI</th>
+                            <th class="p-6">ID YA RISITI</th>
+                            <th class="p-6">NAMBA YA SIMU</th>
+                            <th class="p-6">MUDA WA MATUMIZI</th>
                         </tr>
                     </thead>
-                    <tbody id="sessions-table-body" class="text-xs font-bold divide-y divide-stone-50"></tbody>
+                    <tbody id="history-table-body" class="text-xs font-bold divide-y divide-stone-50"></tbody>
                 </table>
             </div>
         </div>
@@ -220,230 +165,77 @@
     <div id="admin-login-modal" class="hidden fixed inset-0 z-[100] bg-stone-900/90 flex items-center justify-center p-6 backdrop-blur-md">
         <div class="bg-white p-10 rounded-[3rem] w-full max-w-sm shadow-2xl space-y-8 animate-in zoom-in duration-300">
             <div class="text-center space-y-2">
-                <h3 class="text-2xl font-black text-[#5d4037]">Admin Secure Login</h3>
-                <p class="text-[10px] font-bold text-stone-400 uppercase">Authorization Required</p>
+                <h3 class="text-2xl font-black text-[#5d4037]">Admin Security</h3>
+                <p class="text-[10px] font-bold text-stone-400 uppercase">Weka Nenosiri</p>
             </div>
             <input id="adm-pass" type="password" placeholder="Passphrase" class="w-full p-6 bg-stone-50 border-2 border-stone-100 rounded-2xl text-center text-2xl tracking-widest">
-            <button onclick="verifyAdmin()" class="btn-brown w-full py-6 rounded-2xl font-black uppercase text-xs tracking-widest">AUTHENTICATE</button>
-            <button onclick="document.getElementById('admin-login-modal').classList.add('hidden')" class="w-full text-[10px] font-black text-stone-300 uppercase py-2 hover:text-stone-500">Ghairi</button>
+            <button onclick="verifyAdmin()" class="btn-brown w-full py-6 rounded-2xl font-black uppercase text-xs tracking-widest">INGIA</button>
+            <button onclick="document.getElementById('admin-login-modal').classList.add('hidden')" class="w-full text-[10px] font-black text-stone-300 uppercase py-2">Ghairi</button>
         </div>
     </div>
 
-    <div id="toast" class="fixed bottom-10 z-[200] bg-[#5d4037] text-white px-8 py-5 rounded-[1.5rem] text-[11px] font-black uppercase tracking-widest shadow-2xl flex items-center gap-4">
+    <div id="toast" class="fixed bottom-10 z-[200] bg-[#5d4037] text-white px-8 py-5 rounded-2xl text-[11px] font-black uppercase tracking-widest shadow-2xl flex items-center gap-4">
         <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i>
         <span id="toast-msg">Success!</span>
     </div>
 
     <script>
+        // --- CONFIGURATION ---
         const ADMIN_PASS = "mtaani";
-        const ADMIN_PHONE = "0779231924";
-        const OFFICIAL_SOURCE = "https://japhet-1234.github.io/voucher-manager-/vouchers.json";
-
-        const PLAN_DURATIONS = {
-            "Masaa 6": 6 * 60 * 60 * 1000,
-            "Saa 24": 24 * 60 * 60 * 1000,
-            "Siku 3": 3 * 24 * 60 * 60 * 1000,
-            "Wiki 1": 7 * 24 * 60 * 60 * 1000
-        };
+        const VOUCHER_REGEX = /^[A-Z]-\d{4}[a-z]$/; // Format: A-0001a, A-9999z, B-0001a
 
         let timerInterval = null;
 
+        // --- DATABASE HELPERS ---
         function getDb() {
             return {
-                vouchers: JSON.parse(localStorage.getItem('mtaani_vouchers')) || [],
-                sessions: JSON.parse(localStorage.getItem('mtaani_sessions')) || [],
-                currentSession: JSON.parse(localStorage.getItem('mtaani_active_user')) || null
+                usedVouchers: JSON.parse(localStorage.getItem('mtaani_used_vouchers')) || [],
+                activeSession: JSON.parse(localStorage.getItem('mtaani_active_user')) || null
             };
         }
 
-        function saveDb(data) {
-            localStorage.setItem('mtaani_vouchers', JSON.stringify(data.vouchers));
-            localStorage.setItem('mtaani_sessions', JSON.stringify(data.sessions));
-            localStorage.setItem('mtaani_active_user', JSON.stringify(data.currentSession));
+        function saveDb(db) {
+            localStorage.setItem('mtaani_used_vouchers', JSON.stringify(db.usedVouchers));
+            localStorage.setItem('mtaani_active_user', JSON.stringify(db.activeSession));
         }
 
         window.onload = () => {
             const db = getDb();
-            if (db.currentSession) {
+            if (db.activeSession) {
                 const now = Date.now();
-                if (db.currentSession.expiry > now) {
-                    startSessionUI(db.currentSession.phone, db.currentSession.plan, db.currentSession.expiry, db.currentSession.validation_id);
+                if (db.activeSession.expiry > now) {
+                    startSessionUI(db.activeSession);
                 } else {
-                    db.currentSession = null;
+                    db.activeSession = null;
                     saveDb(db);
                 }
             }
             lucide.createIcons();
         };
 
-        // --- RECEIPT PARSER ---
+        // --- CORE LOGIC ---
         function parseReceipt(text) {
-            const kodiMatch = text.match(/KODI:\s*([^\n\r\s]+)/i);
-            const idMatch = text.match(/ID:\s*([^\n\r\s]+)/i);
-            
+            // Extract KODI and ID from the official format
+            const kodiMatch = text.match(/KODI:\s*([A-Z]-\d{4}[a-z])/i);
+            const idMatch = text.match(/ID:\s*([A-Z0-9]+)/i);
+            const mudaMatch = text.match(/MUDA:\s*([^\n\r]+)/i);
+
             return {
-                code: kodiMatch ? kodiMatch[1].trim().toUpperCase() : null,
-                validation_id: idMatch ? idMatch[1].trim() : null
+                code: kodiMatch ? kodiMatch[1].trim() : null,
+                id: idMatch ? idMatch[1].trim() : null,
+                durationRaw: mudaMatch ? mudaMatch[1].trim() : "SAA 6 UNLIMITED"
             };
         }
 
-        // --- AUTOMATIC SYNCHRONIZATION ---
-        async function autoSyncVouchers() {
-            try {
-                const response = await fetch(OFFICIAL_SOURCE);
-                if(!response.ok) return console.warn("Auto-sync failed.");
-                
-                const data = await response.json();
-                
-                if(Array.isArray(data)) {
-                    const db = getDb();
-                    db.vouchers = data.map(v => ({
-                        code: v.code.toUpperCase(),
-                        plan: v.plan,
-                        validation_id: v.voucher_id || v.id || "UNMAPPED", 
-                        hash_key: v.hash_key || "NULL"
-                    }));
-                    saveDb(db);
-                    renderAdmin();
-                }
-            } catch (err) {
-                console.error("Critical connection error.");
-            }
-        }
+        function activateVoucher() {
+            const receiptText = document.getElementById('receipt-text').value.trim();
+            const phone = document.getElementById('user-phone').value.trim();
 
-        // --- CONNECT LOGIC ---
-        function connectToWifi() {
-            const receiptText = document.getElementById('v-receipt-input').value.trim();
-            const phone = document.getElementById('v-phone-activate').value.trim();
-            
-            if(!receiptText) return alert("Bandika Risiti kwanza!");
-            if(!phone) return alert("Weka namba yako ya simu!");
-
-            const extracted = parseReceipt(receiptText);
-            
-            if(!extracted.code || !extracted.validation_id) {
-                alert("MFUMO UMEKATAA: Risiti haina utambulisho sahihi (KODI na ID). Hakikisha umebandika risiti yote kama ilivyo.");
-                return;
+            if(!receiptText || !phone) {
+                return alert("Jaza risiti na namba ya simu!");
             }
 
-            const db = getDb();
-            const vIdx = db.vouchers.findIndex(v => v.code === extracted.code);
-            
-            if(vIdx > -1) {
-                const v = db.vouchers[vIdx];
-                
-                // CRITICAL CHECK: Does the ID in receipt match the ID in Database?
-                if(v.validation_id !== extracted.validation_id) {
-                    alert("UTAMBULISHO BATILI: ID ya risiti hailingani na KODI iliyotolewa. Muunganisho umekataliwa.");
-                    return;
-                }
+            const data = parseReceipt(receiptText);
 
-                db.vouchers.splice(vIdx, 1);
-                const expiry = Date.now() + (PLAN_DURATIONS[v.plan] || 3600000);
-                const sessionData = { 
-                    phone, 
-                    plan: v.plan, 
-                    expiry, 
-                    validation_id: v.validation_id
-                };
-                
-                db.sessions = db.sessions.filter(s => s.phone !== phone);
-                db.sessions.push(sessionData);
-                db.currentSession = sessionData;
-                
-                saveDb(db);
-                startSessionUI(phone, v.plan, expiry, v.validation_id);
-                showToast("UTAMBULISHO UMEKUBALIWA!");
-            } else {
-                alert("KODI HAIJAJULIKANA: Vocha hii haimo kwenye hifadhi ya data au tayari imeshatumika.");
-            }
-        }
-
-        function startSessionUI(phone, plan, expiry, validationId) {
-            document.getElementById('login-container').classList.add('hidden');
-            document.getElementById('packages-section').classList.add('hidden');
-            document.getElementById('payment-box').classList.add('hidden');
-            document.getElementById('session-status').classList.remove('hidden');
-            document.getElementById('status-validation').innerText = validationId;
-            
-            if(timerInterval) clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                const now = Date.now();
-                const diff = expiry - now;
-                if(diff <= 0) {
-                    clearInterval(timerInterval);
-                    alert("Muda wa kifurushi umeisha.");
-                    disconnectSession();
-                    return;
-                }
-                const h = Math.floor(diff / (1000 * 60 * 60));
-                const m = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const s = Math.floor((diff % (1000 * 60)) / 1000);
-                document.getElementById('live-timer').innerText = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
-            }, 1000);
-        }
-
-        function selectPackage(amt, plan) {
-            document.getElementById('pay-amount').innerText = amt + "/=";
-            document.getElementById('payment-box').classList.remove('hidden');
-            window.selectedPlan = plan;
-            document.getElementById('payment-box').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function requestVoucherViaSms() {
-            const p = document.getElementById('v-phone-activate').value || "07XXXXXXXX";
-            const msg = `MUUNGANISHO WA VOCHA:\nNamba: ${p}\nKifurushi: ${window.selectedPlan}\nNimelipia kupitia mfumo.`;
-            window.location.href = `sms:${ADMIN_PHONE}?body=${encodeURIComponent(msg)}`;
-        }
-
-        function disconnectSession() {
-            if(timerInterval) clearInterval(timerInterval);
-            const db = getDb(); db.currentSession = null; saveDb(db); window.location.reload();
-        }
-
-        function showAdminLogin() { document.getElementById('admin-login-modal').classList.remove('hidden'); }
-        function exitAdmin() { document.getElementById('admin-view').classList.add('hidden'); document.getElementById('user-view').classList.remove('hidden'); }
-        
-        async function verifyAdmin() {
-            if(document.getElementById('adm-pass').value === ADMIN_PASS) {
-                document.getElementById('admin-login-modal').classList.add('hidden');
-                document.getElementById('user-view').classList.add('hidden');
-                document.getElementById('admin-view').classList.remove('hidden');
-                await autoSyncVouchers();
-                renderAdmin();
-            } else alert("Msimbo Batili!");
-        }
-
-        function renderAdmin() {
-            const db = getDb();
-            document.getElementById('adm-total-vouchers').innerText = db.vouchers.length;
-            document.getElementById('adm-total-sessions').innerText = db.sessions.length;
-            
-            document.getElementById('v-list-container').innerHTML = db.vouchers.map(v => `
-                <div onclick="copyToClipboard('${v.code}')" class="bg-stone-50 p-4 rounded-2xl text-center border border-stone-100 hover:border-[#5d4037] transition-all relative">
-                    <span class="security-badge absolute -top-1 -right-1 badge-authorized">Auth</span>
-                    <p class="text-[7px] text-stone-400 uppercase font-black mb-1">${v.plan}</p>
-                    <p class="font-black text-[#5d4037] text-sm">${v.code}</p>
-                    <p class="text-[6px] text-stone-400 mt-1 uppercase truncate font-bold">Req ID: ${v.validation_id}</p>
-                </div>
-            `).join('') || '<p class="col-span-full py-10 text-center text-stone-300 uppercase font-bold text-xs">Hifadhi haina data yoyote.</p>';
-            
-            document.getElementById('sessions-table-body').innerHTML = db.sessions.map((s, idx) => `
-                <tr>
-                    <td class="p-6">${s.phone}</td>
-                    <td class="p-6 font-mono text-indigo-600">${s.validation_id}</td>
-                    <td class="p-6 text-right"><button onclick="killSession(${idx})" class="text-red-400 hover:text-red-600"><i data-lucide="power" class="w-4 h-4"></i></button></td>
-                </tr>
-            `).join('') || '<tr><td colspan="3" class="p-10 text-center text-stone-200 uppercase font-bold">Hakuna wateja waliyounganishwa.</td></tr>';
-            
-            lucide.createIcons();
-        }
-
-        function killSession(i) { if(confirm("Zima muunganisho huu?")) { const db = getDb(); db.sessions.splice(i,1); saveDb(db); renderAdmin(); } }
-        function showToast(m) { const t = document.getElementById('toast'); document.getElementById('toast-msg').innerText = m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'), 2500); }
-        function copyToClipboard(txt) { navigator.clipboard.writeText(txt).then(() => showToast("Vocha " + txt + " Imenakiliwa!")); }
-
-        lucide.createIcons();
-    </script>
-</body>
-</html>
+            if(!data.code || !data.id) {
+                alert("RISITI BATILI: Mfumo haujaweza kusoma KODI au ID ya risiti. Hakikisha umebandika risiti yote kama iliv
