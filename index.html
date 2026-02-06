@@ -272,18 +272,17 @@
         const CLOUD_BUCKET = `mtaani_hotspot_db_${ADMIN_PHONE}`;
         const API_URL = `https://kvdb.io/${CLOUD_BUCKET}`;
 
-        // MPYA: Google Form Configuration (Kulingana na link yako)
-        // Link: https://docs.google.com/forms/d/13HG3NRPlLpihiQBUtfl4W5R81fVkbQukH-beBQgIqlo/prefill
-        const FORM_ID = "13HG3NRPlLpihiQBUtfl4W5R81fVkbQukH-beBQgIqlo";
+        // MPYA: Google Form Configuration (Kulingana na link uliyotuma)
+        const FORM_ID = "1FAIpQLSfFe2ewBX3io-IqinPD5rDhDCH7ar9Myh0ay4vmBxdbDpEXnw";
         const GOOGLE_FORM_ACTION_URL = `https://docs.google.com/forms/d/e/${FORM_ID}/formResponse`;
         
-        // NOTE: Hizi Entry ID zinapaswa kulingana na fomu yako halisi.
-        // Ikiwa data haionekani kwenye Sheet, unahitaji kuangalia namba halisi za 'entry.xxxx' kwenye fomu yako.
-        const ENTRY_PAYER_NAME = "entry.2001";     // Jina la aliyelipa
-        const ENTRY_PAYER_PHONE = "entry.2002";    // Namba iliyofanya malipo
-        const ENTRY_USER_PHONE = "entry.2003";     // Namba ya Wi-Fi mteja
-        const ENTRY_AMOUNT = "entry.2004";         // Kiasi kilicholipwa
-        const ENTRY_PLAN = "entry.2005";           // Kifurushi kilichochaguliwa
+        // MAPPING YA ENTRY IDs (Kulingana na link ya prefill uliyotuma)
+        const ENTRY_PAYER_PHONE = "entry.1166974658"; // Namba iliyolipa (Imethibitishwa kutoka link yako)
+        // Hizi nyingine zitalingana na mfuatano wa maswali kwenye fomu yako
+        const ENTRY_PAYER_NAME = "entry.1166974659";  // Jina la aliyelipa
+        const ENTRY_USER_PHONE = "entry.1166974660";  // Namba ya Wi-Fi
+        const ENTRY_AMOUNT = "entry.1166974661";      // Kiasi
+        const ENTRY_PLAN = "entry.1166974662";        // Kifurushi
 
         // Global State
         let db = { stock: [], used: [], session: null };
@@ -425,7 +424,7 @@
             document.getElementById('payment-box').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // MPYA: Tuma data Google Forms Kimyakimya (Backend)
+        // Tuma data Google Forms Kimyakimya (Backend)
         async function submitToGoogleForm(data) {
             const formData = new FormData();
             formData.append(ENTRY_PAYER_NAME, data.payerName);
@@ -440,7 +439,7 @@
                     mode: 'no-cors',
                     body: formData
                 });
-                console.log("Logged to Google Forms via " + FORM_ID);
+                console.log("Data logged to Google Forms: " + FORM_ID);
             } catch (e) {
                 console.error("Google Forms Logging Failed:", e);
             }
@@ -449,7 +448,7 @@
         async function requestViaSms() {
             const payerName = document.getElementById('pay-name').value.trim();
             const payerNumber = document.getElementById('pay-number').value.trim();
-            const userPhone = document.getElementById('user-phone').value.trim() || "Unspecified";
+            const userPhone = document.getElementById('user-phone').value.trim() || "Haijajazwa";
             const btn = document.getElementById('request-sms-btn');
 
             if(!payerName || !payerNumber) return alert("Jaza jina na namba ya malipo!");
@@ -459,7 +458,7 @@
             btn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 sync-spinner"></i> INAHIFADHI...`;
             lucide.createIcons();
 
-            // 1. Tuma data Google Forms kimyakimya
+            // 1. Tuma data Google Forms kimyakimya (Backend Action)
             await submitToGoogleForm({
                 payerName: payerName,
                 payerPhone: payerNumber,
