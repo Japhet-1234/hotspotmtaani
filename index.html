@@ -156,7 +156,7 @@
                         </div>
                     </div>
                 </div>
-                <button onclick="requestViaSms()" class="btn-brown w-full py-5 rounded-2xl font-black text-[11px] uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-stone-200">
+                <button id="request-sms-btn" onclick="requestViaSms()" class="btn-brown w-full py-5 rounded-2xl font-black text-[11px] uppercase tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-stone-200">
                     OMBA VOCHA KWA SMS <i data-lucide="send" class="w-4 h-4"></i>
                 </button>
             </section>
@@ -272,11 +272,24 @@
         const CLOUD_BUCKET = `mtaani_hotspot_db_${ADMIN_PHONE}`;
         const API_URL = `https://kvdb.io/${CLOUD_BUCKET}`;
 
+        // MPYA: Google Form Configuration (Kulingana na link yako)
+        // Link: https://docs.google.com/forms/d/13HG3NRPlLpihiQBUtfl4W5R81fVkbQukH-beBQgIqlo/prefill
+        const FORM_ID = "13HG3NRPlLpihiQBUtfl4W5R81fVkbQukH-beBQgIqlo";
+        const GOOGLE_FORM_ACTION_URL = `https://docs.google.com/forms/d/e/${FORM_ID}/formResponse`;
+        
+        // NOTE: Hizi Entry ID zinapaswa kulingana na fomu yako halisi.
+        // Ikiwa data haionekani kwenye Sheet, unahitaji kuangalia namba halisi za 'entry.xxxx' kwenye fomu yako.
+        const ENTRY_PAYER_NAME = "entry.2001";     // Jina la aliyelipa
+        const ENTRY_PAYER_PHONE = "entry.2002";    // Namba iliyofanya malipo
+        const ENTRY_USER_PHONE = "entry.2003";     // Namba ya Wi-Fi mteja
+        const ENTRY_AMOUNT = "entry.2004";         // Kiasi kilicholipwa
+        const ENTRY_PLAN = "entry.2005";           // Kifurushi kilichochaguliwa
+
         // Global State
         let db = { stock: [], used: [], session: null };
         let sheetMode = false;
 
-        // --- CLOUD SYNC LOGIC (FOR MULTI-DEVICE SUPPORT) ---
+        // --- CLOUD SYNC ---
         async function cloudPull() {
             setSyncStatus('syncing');
             try {
@@ -289,7 +302,6 @@
                     setSyncStatus('online');
                     if(!document.getElementById('admin-view').classList.contains('hidden')) renderAdmin();
                 } else {
-                    // Initialize bucket if first time
                     await cloudPush();
                 }
             } catch(e) {
@@ -342,7 +354,6 @@
                 startSessionUI(db.session);
             }
             lucide.createIcons();
-            // Regular sync to ensure cross-device consistency
             setInterval(cloudPull, 15000);
         };
 
@@ -358,7 +369,6 @@
             btn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 sync-spinner"></i> INAHAKIKI MTANDAONI...`;
             lucide.createIcons();
 
-            // Check cloud one last time before activating
             await cloudPull();
 
             const stockIndex = db.stock.findIndex(v => v.code === code);
@@ -386,7 +396,7 @@
             db.session = session;
             
             saveLocal();
-            await cloudPush(); // Mark as used in cloud immediately
+            await cloudPush();
             
             startSessionUI(session);
             showToast("IMEKUBALIWA! KIFAA CHAKO KIMEUNGANISHWA.");
@@ -415,12 +425,57 @@
             document.getElementById('payment-box').scrollIntoView({ behavior: 'smooth' });
         }
 
-        function requestViaSms() {
+        // MPYA: Tuma data Google Forms Kimyakimya (Backend)
+        async function submitToGoogleForm(data) {
+            const formData = new FormData();
+            formData.append(ENTRY_PAYER_NAME, data.payerName);
+            formData.append(ENTRY_PAYER_PHONE, data.payerPhone);
+            formData.append(ENTRY_USER_PHONE, data.userPhone);
+            formData.append(ENTRY_AMOUNT, data.amount);
+            formData.append(ENTRY_PLAN, data.plan);
+
+            try {
+                await fetch(GOOGLE_FORM_ACTION_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: formData
+                });
+                console.log("Logged to Google Forms via " + FORM_ID);
+            } catch (e) {
+                console.error("Google Forms Logging Failed:", e);
+            }
+        }
+
+        async function requestViaSms() {
             const payerName = document.getElementById('pay-name').value.trim();
             const payerNumber = document.getElementById('pay-number').value.trim();
+            const userPhone = document.getElementById('user-phone').value.trim() || "Unspecified";
+            const btn = document.getElementById('request-sms-btn');
+
             if(!payerName || !payerNumber) return alert("Jaza jina na namba ya malipo!");
 
-            const msg = `Habari Japhet, nimefanya malipo ya ${window.selectedAmount} kwa ajili ya ${window.selectedPlan}. Jina: ${payerName}, Namba ya Malipo: ${payerNumber}. Tafadhali nitumie vocha.`;
+            // Onyesha 'Inatuma' kwa muda mfupi
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 sync-spinner"></i> INAHIFADHI...`;
+            lucide.createIcons();
+
+            // 1. Tuma data Google Forms kimyakimya
+            await submitToGoogleForm({
+                payerName: payerName,
+                payerPhone: payerNumber,
+                userPhone: userPhone,
+                amount: window.selectedAmount,
+                plan: window.selectedPlan
+            });
+
+            // 2. Fungua SMS
+            const msg = `Habari Japhet, nimefanya malipo ya ${window.selectedAmount} kwa ajili ya ${window.selectedPlan}. Jina: ${payerName}, Namba ya Malipo: ${payerNumber}. Tafadhali nitumie vocha yangu hapa ${userPhone}.`;
+            
+            // Rudisha kitufe hali ya kawaida
+            btn.disabled = false;
+            btn.innerHTML = `OMBA VOCHA KWA SMS <i data-lucide="send" class="w-4 h-4"></i>`;
+            lucide.createIcons();
+
             window.location.href = `sms:${ADMIN_PHONE}?body=${encodeURIComponent(msg)}`;
         }
 
@@ -442,7 +497,6 @@
             document.getElementById('adm-stock-count').innerText = db.stock.length;
             document.getElementById('adm-used-count').innerText = db.used.length;
 
-            // Grid view
             document.getElementById('adm-stock-list').innerHTML = db.stock.map(v => `
                 <div onclick="copyCode('${v.code}')" class="bg-white border-2 border-stone-100 p-6 rounded-3xl text-center cursor-pointer hover:border-[#5d4037] hover:bg-stone-50 transition-all shadow-sm group">
                     <p class="text-xs font-black text-stone-300 group-hover:text-stone-400 mb-1 uppercase">Voucher</p>
@@ -450,11 +504,9 @@
                 </div>
             `).join('') || '<div class="col-span-full py-20 text-center"><p class="text-stone-300 font-bold uppercase text-xs">Stoo haina vocha yoyote</p></div>';
 
-            // Sheet view
             const sheetText = db.stock.map((v, i) => `${i + 1}. ${v.code}`).join('\n');
             document.getElementById('sheet-content').innerText = sheetText || 'No data to show in sheet.';
 
-            // History
             document.getElementById('adm-history-body').innerHTML = db.used.slice().reverse().map(v => `
                 <tr class="hover:bg-stone-50 transition-colors">
                     <td class="p-5 font-black text-emerald-600 font-mono tracking-widest">${v.code}</td>
