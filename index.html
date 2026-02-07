@@ -272,15 +272,15 @@
         const CLOUD_BUCKET = `mtaani_hotspot_db_${ADMIN_PHONE}`;
         const API_URL = `https://kvdb.io/${CLOUD_BUCKET}`;
 
-        // MPYA: Google Form Configuration (Kulingana na link uliyotuma)
+        // MPYA: Google Form Configuration (Kulingana na link yako)
+        // Form: https://docs.google.com/forms/d/e/1FAIpQLSfFe2ewBX3io-IqinPD5rDhDCH7ar9Myh0ay4vmBxdbDpEXnw/viewform
         const FORM_ID = "1FAIpQLSfFe2ewBX3io-IqinPD5rDhDCH7ar9Myh0ay4vmBxdbDpEXnw";
         const GOOGLE_FORM_ACTION_URL = `https://docs.google.com/forms/d/e/${FORM_ID}/formResponse`;
         
-        // MAPPING YA ENTRY IDs (Kulingana na link ya prefill uliyotuma)
-        const ENTRY_PAYER_PHONE = "entry.1166974658"; // Namba iliyolipa (Imethibitishwa kutoka link yako)
-        // Hizi nyingine zitalingana na mfuatano wa maswali kwenye fomu yako
-        const ENTRY_PAYER_NAME = "entry.1166974659";  // Jina la aliyelipa
-        const ENTRY_USER_PHONE = "entry.1166974660";  // Namba ya Wi-Fi
+        // MAPPING YA ENTRY IDs (Kulingana na link ya prefill: entry.1166974658=use+me)
+        const ENTRY_PAYER_PHONE = "entry.1166974658"; // Namba iliyotumia kufanyia malipo (Kama ulivyoomba)
+        const ENTRY_PAYER_NAME = "entry.1166974659";  // Jina la namba hiyo
+        const ENTRY_USER_PHONE = "entry.1166974660";  // Namba ya Wi-Fi/Mteja
         const ENTRY_AMOUNT = "entry.1166974661";      // Kiasi
         const ENTRY_PLAN = "entry.1166974662";        // Kifurushi
 
@@ -439,7 +439,7 @@
                     mode: 'no-cors',
                     body: formData
                 });
-                console.log("Data logged to Google Forms: " + FORM_ID);
+                console.log("Logged to Google Forms via " + FORM_ID);
             } catch (e) {
                 console.error("Google Forms Logging Failed:", e);
             }
