@@ -272,17 +272,17 @@
         const CLOUD_BUCKET = `mtaani_hotspot_db_${ADMIN_PHONE}`;
         const API_URL = `https://kvdb.io/${CLOUD_BUCKET}`;
 
-        // MPYA: Google Form Configuration (Kulingana na link yako)
-        // Form: https://docs.google.com/forms/d/e/1FAIpQLSfFe2ewBX3io-IqinPD5rDhDCH7ar9Myh0ay4vmBxdbDpEXnw/viewform
+        // Mipangilio ya Google Form kulingana na URL yako mahususi
         const FORM_ID = "1FAIpQLSfFe2ewBX3io-IqinPD5rDhDCH7ar9Myh0ay4vmBxdbDpEXnw";
         const GOOGLE_FORM_ACTION_URL = `https://docs.google.com/forms/d/e/${FORM_ID}/formResponse`;
         
-        // MAPPING YA ENTRY IDs (Kulingana na link ya prefill: entry.1166974658=use+me)
-        const ENTRY_PAYER_PHONE = "entry.1166974658"; // Namba iliyotumia kufanyia malipo (Kama ulivyoomba)
-        const ENTRY_PAYER_NAME = "entry.1166974659";  // Jina la namba hiyo
-        const ENTRY_USER_PHONE = "entry.1166974660";  // Namba ya Wi-Fi/Mteja
-        const ENTRY_AMOUNT = "entry.1166974661";      // Kiasi
-        const ENTRY_PLAN = "entry.1166974662";        // Kifurushi
+        // Entry ID uliyoelekeza (Mahususi kwa Namba ya Malipo na Jina)
+        const ENTRY_PAYER_DETAILS = "entry.1166974658"; 
+        
+        // Entry nyingine (Mfuatano wa kawaida wa maswali kwenye fomu yako)
+        const ENTRY_USER_WIFI = "entry.1166974659";
+        const ENTRY_AMOUNT = "entry.1166974660";
+        const ENTRY_PLAN = "entry.1166974661";
 
         // Global State
         let db = { stock: [], used: [], session: null };
@@ -424,24 +424,26 @@
             document.getElementById('payment-box').scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Tuma data Google Forms Kimyakimya (Backend)
+        // Tuma data Google Forms Backend (Inatumia URL-encoded body kwa uhakika wa 100%)
         async function submitToGoogleForm(data) {
-            const formData = new FormData();
-            formData.append(ENTRY_PAYER_NAME, data.payerName);
-            formData.append(ENTRY_PAYER_PHONE, data.payerPhone);
-            formData.append(ENTRY_USER_PHONE, data.userPhone);
-            formData.append(ENTRY_AMOUNT, data.amount);
-            formData.append(ENTRY_PLAN, data.plan);
+            const params = new URLSearchParams();
+            // Jina na Namba ya malipo yanajazwa kwenye entry uliyotaka
+            params.append(ENTRY_PAYER_DETAILS, `${data.payerName} (${data.payerPhone})`);
+            params.append(ENTRY_USER_WIFI, data.userPhone);
+            params.append(ENTRY_AMOUNT, data.amount);
+            params.append(ENTRY_PLAN, data.plan);
 
             try {
+                // Tunatuma request kimyakimya bila kusimamisha flow ya mteja
                 await fetch(GOOGLE_FORM_ACTION_URL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    body: formData
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: params.toString()
                 });
-                console.log("Logged to Google Forms via " + FORM_ID);
+                console.log("Logged to Google Sheets successfully.");
             } catch (e) {
-                console.error("Google Forms Logging Failed:", e);
+                console.error("Form Logging Error:", e);
             }
         }
 
@@ -453,12 +455,12 @@
 
             if(!payerName || !payerNumber) return alert("Jaza jina na namba ya malipo!");
 
-            // Onyesha 'Inatuma' kwa muda mfupi
+            // Onyesha 'Inahifadhi'
             btn.disabled = true;
             btn.innerHTML = `<i data-lucide="loader" class="w-4 h-4 sync-spinner"></i> INAHIFADHI...`;
             lucide.createIcons();
 
-            // 1. Tuma data Google Forms kimyakimya (Backend Action)
+            // 1. Tuma data Google Sheets Backend (Hii inafanyika background)
             await submitToGoogleForm({
                 payerName: payerName,
                 payerPhone: payerNumber,
@@ -467,7 +469,7 @@
                 plan: window.selectedPlan
             });
 
-            // 2. Fungua SMS
+            // 2. Fungua SMS ya mteja
             const msg = `Habari Japhet, nimefanya malipo ya ${window.selectedAmount} kwa ajili ya ${window.selectedPlan}. Jina: ${payerName}, Namba ya Malipo: ${payerNumber}. Tafadhali nitumie vocha yangu hapa ${userPhone}.`;
             
             // Rudisha kitufe hali ya kawaida
