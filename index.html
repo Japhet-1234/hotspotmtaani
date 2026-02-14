@@ -222,7 +222,7 @@
         </footer>
     </div>
 
-    <!-- MAIN MODAL (PAYMENT & LOGIN INSIDE) -->
+    <!-- MAIN MODAL -->
     <div id="payment-modal">
         <div class="card-main w-full max-w-sm p-8 space-y-6 animate-in zoom-in-95 duration-200">
             <div class="flex justify-between items-start">
@@ -233,20 +233,18 @@
                 <button onclick="closePayment()" class="p-2 bg-slate-100 rounded-full hover:bg-slate-200 transition-colors"><i data-lucide="x" class="w-5 h-5 text-slate-400"></i></button>
             </div>
             
-            <!-- TABS -->
             <div class="flex gap-2 p-1.5 bg-slate-100 rounded-2xl">
                 <button id="tab-pay" onclick="switchTab('pay')" class="tab-btn active">Omba Vocha</button>
                 <button id="tab-login" onclick="switchTab('login')" class="tab-btn">Weka Vocha</button>
             </div>
 
-            <!-- PAYMENT FORM SECTION -->
+            <!-- SECTION PAY -->
             <div id="section-pay" class="space-y-6">
                 <div class="bg-brown/5 border border-brown/10 p-6 rounded-2xl text-center space-y-1">
                     <p class="text-[10px] font-black text-brown uppercase opacity-60">Lipa kwa Tigo Pesa</p>
                     <p class="text-3xl font-black text-brown tracking-tighter">0779231924</p>
                     <p class="text-[11px] font-bold text-slate-400">Jina: Japhet Sunday</p>
                 </div>
-
                 <form onsubmit="submitRequest(event)" class="space-y-4">
                     <div class="space-y-2">
                         <label class="text-[10px] font-black text-slate-400 uppercase ml-2">Jina lako la Malipo</label>
@@ -262,7 +260,7 @@
                 </form>
             </div>
 
-            <!-- LOGIN FORM SECTION -->
+            <!-- SECTION LOGIN -->
             <div id="section-login" class="hidden space-y-6">
                 <div class="text-center py-4 bg-slate-50 rounded-2xl">
                     <p class="text-[12px] text-slate-500 font-medium px-4">Ingiza namba ya vocha hapa chini ili kuanza kutumia internet.</p>
@@ -292,10 +290,10 @@
         </div>
         <div id="admin-dashboard" class="hidden space-y-6">
             <div class="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                <button onclick="filterAdminVouchers('Saa 1')" class="adm-tab px-5 py-3 bg-slate-100 rounded-2xl text-[10px] font-black uppercase text-brown">Saa 1</button>
-                <button onclick="filterAdminVouchers('Masaa 6')" class="adm-tab px-5 py-3 bg-slate-100 rounded-2xl text-[10px] font-black uppercase text-brown">Masaa 6</button>
-                <button onclick="filterAdminVouchers('Saa 24')" class="adm-tab px-5 py-3 bg-slate-100 rounded-2xl text-[10px] font-black uppercase text-brown">Saa 24</button>
-                <button onclick="filterAdminVouchers('Siku 3')" class="adm-tab px-5 py-3 bg-slate-100 rounded-2xl text-[10px] font-black uppercase text-brown">Siku 3</button>
+                <button onclick="filterAdminVouchers('Saa 1')" class="px-5 py-3 bg-slate-100 rounded-2xl text-[10px] font-black uppercase text-brown">Saa 1</button>
+                <button onclick="filterAdminVouchers('Masaa 6')" class="px-5 py-3 bg-slate-100 rounded-2xl text-[10px] font-black uppercase text-brown">Masaa 6</button>
+                <button onclick="filterAdminVouchers('Saa 24')" class="px-5 py-3 bg-slate-100 rounded-2xl text-[10px] font-black uppercase text-brown">Saa 24</button>
+                <button onclick="filterAdminVouchers('Siku 3')" class="px-5 py-3 bg-slate-100 rounded-2xl text-[10px] font-black uppercase text-brown">Siku 3</button>
             </div>
             <div class="card-main p-6">
                 <h3 id="current-tab-name" class="text-xs font-black text-slate-400 uppercase mb-5 tracking-widest">Vocha</h3>
@@ -304,12 +302,11 @@
         </div>
     </div>
 
-    <!-- AI CHAT WIDGET -->
+    <!-- AI CHAT -->
     <div id="ai-chat-window" class="fixed bottom-6 right-6 z-50">
         <button onclick="toggleAiChat()" id="bot-btn" class="w-16 h-16 bg-brown text-white rounded-[1.8rem] shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all">
             <i data-lucide="bot" class="w-8 h-8"></i>
         </button>
-
         <div id="ai-chat-content" class="hidden absolute bottom-20 right-0 w-[320px] h-[450px] card-main overflow-hidden flex flex-col animate-in slide-in-from-bottom-5">
             <header class="bg-brown p-5 text-white flex justify-between items-center">
                 <div class="flex items-center gap-2">
@@ -319,11 +316,11 @@
                 <button onclick="toggleAiChat()"><i data-lucide="x" class="w-4 h-4"></i></button>
             </header>
             <div id="chat-messages" class="flex-1 p-5 overflow-y-auto space-y-4 bg-slate-50/50 text-[13px] font-medium leading-relaxed">
-                <div class="bg-white p-4 rounded-2xl rounded-bl-none border border-slate-100 shadow-sm max-w-[90%]">Mambo! Mimi ni AI wa <b>WIFI MTAANI</b>. Una swali lolote kuhusu huduma yetu?</div>
+                <div class="bg-white p-4 rounded-2xl rounded-bl-none border border-slate-100 shadow-sm max-w-[90%]">Mambo! Mimi ni AI wa <b>WIFI MTAANI</b>. Una swali lolote?</div>
             </div>
             <div class="p-4 bg-white border-t border-slate-100 flex gap-2">
-                <input id="ai-input" type="text" placeholder="Andika hapa..." class="flex-1 bg-slate-50 rounded-xl px-4 py-2.5 text-sm outline-none border border-transparent focus:border-brown/10" onkeypress="if(event.key==='Enter') sendToAi()">
-                <button onclick="sendToAi()" class="p-3 bg-brown text-white rounded-xl shadow-md transition-transform active:scale-90"><i data-lucide="send" class="w-4 h-4"></i></button>
+                <input id="ai-input" type="text" placeholder="Uliza swali..." class="flex-1 bg-slate-50 rounded-xl px-4 py-2.5 text-sm outline-none border border-transparent focus:border-brown/10" onkeypress="if(event.key==='Enter') sendToAi()">
+                <button onclick="sendToAi()" class="p-3 bg-brown text-white rounded-xl active:scale-90"><i data-lucide="send" class="w-4 h-4"></i></button>
             </div>
         </div>
     </div>
@@ -341,7 +338,6 @@
         let currentSelected = { amt: 0, plan: "" };
         const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
 
-        // Attached to window for HTML accessibility
         window.openPayment = (amt, plan) => {
             currentSelected = { amt, plan };
             document.getElementById('modal-title').innerText = "Huduma ya Vocha";
@@ -366,17 +362,12 @@
             const loginSec = document.getElementById('section-login');
             const payTab = document.getElementById('tab-pay');
             const loginTab = document.getElementById('tab-login');
-
             if(tab === 'pay') {
-                paySec.classList.remove('hidden');
-                loginSec.classList.add('hidden');
-                payTab.classList.add('active');
-                loginTab.classList.remove('active');
+                paySec.classList.remove('hidden'); loginSec.classList.add('hidden');
+                payTab.classList.add('active'); loginTab.classList.remove('active');
             } else {
-                paySec.classList.add('hidden');
-                loginSec.classList.remove('hidden');
-                payTab.classList.remove('active');
-                loginTab.classList.add('active');
+                paySec.classList.add('hidden'); loginSec.classList.remove('hidden');
+                payTab.classList.remove('active'); loginTab.classList.add('active');
             }
         };
 
@@ -384,8 +375,8 @@
             e.preventDefault();
             const name = document.getElementById('req-name').value;
             const phone = document.getElementById('req-phone').value;
-            const msg = `Habari Japhet, nimefanya malipo ya ${currentSelected.amt} kwa ajili ya ${currentSelected.plan}. Jina: ${name}, Namba: ${phone}. Nitumie vocha yangu tafadhali.`;
-            alert("Maombi yako yametumwa kwa Japhet Sunday! Vocha itatumwa kwa SMS hivi punde.");
+            const msg = `Habari Japhet, nimefanya malipo ya ${currentSelected.amt} kwa ${currentSelected.plan}. Jina: ${name}, Namba: ${phone}. Nitumie vocha.`;
+            alert("Maombi yako yametumwa! Utapata vocha hivi punde kwa SMS.");
             window.location.href = `sms:0779231924?body=${encodeURIComponent(msg)}`;
             window.closePayment();
         };
@@ -393,11 +384,9 @@
         window.handleLogin = () => {
             const vcode = document.getElementById('login-vcode').value.trim();
             if(!vcode) return alert("Ingiza namba ya vocha!");
-            
             document.sendin.username.value = vcode;
             document.sendin.password.value = vcode;
-            
-            alert(`Inajaribu kuunganisha vocha: ${vcode}. Tafadhali subiri...`);
+            alert(`Inajaribu kuunganisha...`);
             setTimeout(() => { document.sendin.submit(); }, 1500);
         };
 
@@ -406,13 +395,11 @@
         
         window.verifyAdmin = () => {
             const pass = document.getElementById('adm-pass').value;
-            if(pass === "admin123") {
+            if(pass === "mtaani") {
                 document.getElementById('admin-login-sec').classList.add('hidden');
                 document.getElementById('admin-dashboard').classList.remove('hidden');
                 window.filterAdminVouchers('Saa 1');
-            } else {
-                alert("Passcode imekataa!");
-            }
+            } else { alert("Passcode imekataa!"); }
         };
 
         window.filterAdminVouchers = (plan) => {
@@ -425,7 +412,7 @@
                 div.innerText = v;
                 div.onclick = () => {
                     navigator.clipboard.writeText(v);
-                    const old = div.innerText; div.innerText = "COPIED";
+                    const old = div.innerText; div.innerText = "YAKO!";
                     setTimeout(() => div.innerText = old, 1000);
                 };
                 list.appendChild(div);
@@ -433,42 +420,36 @@
         };
 
         window.toggleAiChat = () => {
-            const content = document.getElementById('ai-chat-content');
-            content.classList.toggle('hidden');
+            document.getElementById('ai-chat-content').classList.toggle('hidden');
         };
 
         window.sendToAi = async () => {
             const input = document.getElementById('ai-input');
             const msg = input.value.trim();
             if(!msg) return;
-            
             const container = document.getElementById('chat-messages');
             const userDiv = document.createElement('div');
-            userDiv.className = 'bg-brown text-white p-4 rounded-2xl rounded-br-none self-end max-w-[90%] shadow-sm ml-auto';
+            userDiv.className = 'bg-brown text-white p-4 rounded-2xl rounded-br-none self-end max-w-[90%] ml-auto';
             userDiv.innerText = msg;
             container.appendChild(userDiv);
             input.value = '';
             container.scrollTop = container.scrollHeight;
-
             try {
                 const response = await ai.models.generateContent({
                     model: 'gemini-3-flash-preview',
                     contents: msg,
                     config: {
-                        systemInstruction: "Wewe ni msaidizi wa WIFI MTAANI. Bosi wako ni Japhet Sunday (0779231924). Bei: 200 (Saa 1), 500 (Masaa 6), 1000 (Saa 24). Mteja akitaka vocha mwambie abofye kifurushi kwanza."
+                        systemInstruction: "Wewe ni msaidizi wa WIFI MTAANI. Bosi ni Japhet (0779231924). Bei: 200, 500, 1000. Mteja bofya kifurushi kulipia."
                     }
                 });
                 const aiDiv = document.createElement('div');
-                aiDiv.className = 'bg-white p-4 rounded-2xl rounded-bl-none border border-slate-100 shadow-sm max-w-[90%]';
+                aiDiv.className = 'bg-white p-4 rounded-2xl rounded-bl-none border border-slate-100 max-w-[90%]';
                 aiDiv.innerText = response.text;
                 container.appendChild(aiDiv);
                 container.scrollTop = container.scrollHeight;
-            } catch(e) {
-                console.error("AI Error:", e);
-            }
+            } catch(e) { console.error(e); }
         };
 
-        // Initialize Icons
         lucide.createIcons();
     </script>
 </body>
