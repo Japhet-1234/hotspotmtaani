@@ -42,7 +42,6 @@
         .btn-primary:hover { background-color: var(--maroon-hover); transform: translateY(-2px); }
         .btn-primary:active { transform: scale(0.96); }
 
-        /* Enhanced Shadows for Package Cards */
         .pkg-card {
             background: var(--card-white);
             border-radius: 32px;
@@ -89,7 +88,6 @@
             padding: 20px;
         }
 
-        /* Enhanced Shadows for Instructions */
         .instruction-step {
             display: flex;
             gap: 16px;
@@ -140,6 +138,27 @@
             color: var(--maroon);
         }
 
+        /* GLASS GLOW DASHBOARD STYLES */
+        .glass-glow {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(128, 0, 0, 0.1);
+            position: relative;
+        }
+        .glass-glow::after {
+            content: '';
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background: radial-gradient(circle, rgba(128,0,0,0.05) 0%, transparent 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
         .hidden { display: none; }
 
         @keyframes fadeInDown {
@@ -147,6 +166,8 @@
             to { opacity: 1; transform: translateY(0); }
         }
         .animate-greeting { animation: fadeInDown 0.8s ease-out forwards; }
+        
+        .typing-indicator { font-style: italic; font-size: 11px; color: var(--text-gray); }
     </style>
 </head>
 <body class="min-h-screen">
@@ -159,7 +180,6 @@
 
     <div id="app" class="max-w-md mx-auto px-6 py-12 space-y-12">
         
-        <!-- HEADER WITH DYNAMIC GREETING -->
         <header class="text-center space-y-4">
             <div id="greeting-container" class="animate-greeting">
                 <p id="greeting-text" class="text-sm font-bold text-maroon opacity-80 uppercase tracking-widest mb-1"></p>
@@ -177,10 +197,8 @@
             </div>
         </header>
 
-        <!-- PACKAGES -->
         <section id="packages-section" class="space-y-12">
             <div class="grid grid-cols-2 gap-6">
-                <!-- Each card passes duration in hours -->
                 <div class="pkg-card" onclick="openPayment(200, 'Saa 1', 1)">
                     <div class="inline-flex p-3 bg-maroon/5 rounded-2xl mb-4">
                         <i data-lucide="zap" class="w-7 h-7 text-maroon"></i>
@@ -211,7 +229,6 @@
                 </div>
             </div>
 
-            <!-- INSTRUCTIONS WITH ENHANCED SHADOWS -->
             <div class="space-y-6 bg-white/30 p-8 rounded-[3rem] border border-white/50 shadow-inner">
                 <h4 class="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em] text-center mb-4">Jinsi ya Kujiunga</h4>
                 <div class="grid gap-5">
@@ -241,13 +258,12 @@
             </div>
         </section>
 
-        <!-- FOOTER -->
-        <footer class="text-center pt-10 opacity-20">
-            <button onclick="showAdmin()" class="text-[9px] font-black uppercase tracking-[0.3em] hover:text-maroon transition-colors">Admin Dashboard Login</button>
+        <footer class="text-center pt-10 opacity-30">
+            <button onclick="showAdmin()" class="text-[10px] font-black uppercase tracking-[0.3em] hover:text-maroon transition-colors">Admin Dashboard Login</button>
         </footer>
     </div>
 
-    <!-- MODAL -->
+    <!-- PAYMENT MODAL -->
     <div id="payment-modal">
         <div class="bg-white w-full max-w-sm rounded-[3rem] p-8 space-y-8 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.5)] animate-in fade-in zoom-in duration-300">
             <div class="flex justify-between items-start">
@@ -263,9 +279,7 @@
                 <button id="tab-login" onclick="switchTab('login')" class="tab-trigger">Weka Vocha</button>
             </div>
 
-            <!-- PAY -->
             <div id="section-pay" class="space-y-6">
-                <!-- EXPIRE TIME PREVIEW -->
                 <div id="expiry-preview" class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex items-center justify-between">
                     <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Muda wa Kuisha:</span>
                     <span id="expiry-time" class="text-[13px] font-black text-maroon">--:--</span>
@@ -285,7 +299,6 @@
                 </form>
             </div>
 
-            <!-- LOGIN -->
             <div id="section-login" class="hidden space-y-6">
                 <div class="space-y-4">
                     <p class="text-[11px] text-center text-slate-500 font-semibold px-4 italic">Ingiza vocha uliyopewa na Japhet kuanza kutumia internet.</p>
@@ -298,37 +311,37 @@
         </div>
     </div>
 
-    <!-- ADMIN MODAL -->
-    <div id="admin-modal" class="hidden fixed inset-0 z-[100] bg-dim-cream p-6 overflow-y-auto">
+    <!-- ADMIN MODAL WITH GLASS GLOW -->
+    <div id="admin-modal" class="hidden fixed inset-0 z-[100] bg-dim-cream/80 backdrop-blur-xl p-6 overflow-y-auto">
         <div class="max-w-md mx-auto space-y-8 py-10">
             <div class="flex justify-between items-center">
                 <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tight">Admin System</h2>
-                <button onclick="hideAdmin()" class="p-3 bg-white rounded-2xl shadow-md text-slate-400"><i data-lucide="x" class="w-6 h-6"></i></button>
+                <button onclick="hideAdmin()" class="p-3 bg-white/50 rounded-2xl shadow-md text-slate-400"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
 
-            <div id="admin-login-sec" class="bg-white p-8 rounded-[3rem] shadow-2xl border border-slate-100 space-y-6">
-                <p class="text-sm font-semibold text-slate-400 text-center">Ingiza Passcode 'mtaani'</p>
-                <input id="adm-pass" type="password" placeholder="••••••••" class="input-elegant text-center text-3xl">
+            <div id="admin-login-sec" class="bg-white/40 glass-glow p-8 rounded-[3rem] space-y-6">
+                <p class="text-sm font-semibold text-slate-600 text-center">Ingiza Passcode 'mtaani'</p>
+                <input id="adm-pass" type="password" placeholder="••••••••" class="input-elegant text-center text-3xl bg-white/60">
                 <button onclick="verifyAdmin()" class="btn-primary w-full py-5 rounded-2xl font-black uppercase tracking-widest">INGIA DASHBOARD</button>
             </div>
 
             <div id="admin-dashboard" class="hidden space-y-8">
                 <div class="flex gap-2 overflow-x-auto pb-4 scrollbar-hide">
-                    <button onclick="filterAdminVouchers('Saa 1')" class="px-6 py-4 bg-white rounded-2xl text-[10px] font-black uppercase text-slate-500 shadow-sm border border-slate-100 whitespace-nowrap active:bg-maroon active:text-white transition-all">Saa 1</button>
-                    <button onclick="filterAdminVouchers('Masaa 6')" class="px-6 py-4 bg-white rounded-2xl text-[10px] font-black uppercase text-slate-500 shadow-sm border border-slate-100 whitespace-nowrap active:bg-maroon active:text-white transition-all">Masaa 6</button>
-                    <button onclick="filterAdminVouchers('Saa 24')" class="px-6 py-4 bg-white rounded-2xl text-[10px] font-black uppercase text-slate-500 shadow-sm border border-slate-100 whitespace-nowrap active:bg-maroon active:text-white transition-all">Saa 24</button>
-                    <button onclick="filterAdminVouchers('Siku 3')" class="px-6 py-4 bg-white rounded-2xl text-[10px] font-black uppercase text-slate-500 shadow-sm border border-slate-100 whitespace-nowrap active:bg-maroon active:text-white transition-all">Siku 3</button>
+                    <button onclick="filterAdminVouchers('Saa 1')" class="px-6 py-4 bg-white/60 glass-glow rounded-2xl text-[10px] font-black uppercase text-slate-500 whitespace-nowrap active:bg-maroon active:text-white transition-all">Saa 1</button>
+                    <button onclick="filterAdminVouchers('Masaa 6')" class="px-6 py-4 bg-white/60 glass-glow rounded-2xl text-[10px] font-black uppercase text-slate-500 whitespace-nowrap active:bg-maroon active:text-white transition-all">Masaa 6</button>
+                    <button onclick="filterAdminVouchers('Saa 24')" class="px-6 py-4 bg-white/60 glass-glow rounded-2xl text-[10px] font-black uppercase text-slate-500 whitespace-nowrap active:bg-maroon active:text-white transition-all">Saa 24</button>
+                    <button onclick="filterAdminVouchers('Siku 3')" class="px-6 py-4 bg-white/60 glass-glow rounded-2xl text-[10px] font-black uppercase text-slate-500 whitespace-nowrap active:bg-maroon active:text-white transition-all">Siku 3</button>
                 </div>
                 
-                <div class="bg-white p-8 rounded-[3rem] shadow-2xl border border-slate-100">
-                    <h3 id="current-tab-name" class="text-xs font-black text-slate-400 uppercase tracking-widest mb-6">Stock za Vocha</h3>
+                <div class="bg-white/40 glass-glow p-8 rounded-[3rem]">
+                    <h3 id="current-tab-name" class="text-xs font-black text-slate-500 uppercase tracking-widest mb-6">Stock za Vocha</h3>
                     <div id="voucher-list" class="grid grid-cols-2 gap-3"></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- AI CHAT -->
+    <!-- AI CHAT COMPONENT -->
     <div class="fixed bottom-8 right-8 z-50">
         <button onclick="toggleAiChat()" class="w-16 h-16 bg-maroon text-white rounded-2xl shadow-2xl flex items-center justify-center hover:scale-110 active:scale-90 transition-all">
             <i data-lucide="sparkles" class="w-8 h-8"></i>
@@ -348,8 +361,8 @@
             </div>
 
             <div class="p-4 bg-white border-t border-slate-100 flex gap-2">
-                <input id="ai-input" type="text" placeholder="Uliza swali..." class="flex-1 bg-slate-100 rounded-xl px-4 py-3 text-sm outline-none border border-transparent focus:border-maroon/20" onkeypress="if(event.key==='Enter') sendToAi()">
-                <button onclick="sendToAi()" class="p-4 bg-maroon text-white rounded-xl shadow-lg active:scale-95"><i data-lucide="send" class="w-4 h-4"></i></button>
+                <input id="ai-input" type="text" placeholder="Uliza swali..." class="flex-1 bg-slate-100 rounded-xl px-4 py-3 text-sm outline-none border border-transparent focus:border-maroon/20">
+                <button id="ai-send-btn" onclick="sendToAi()" class="p-4 bg-maroon text-white rounded-xl shadow-lg active:scale-95"><i data-lucide="send" class="w-4 h-4"></i></button>
             </div>
         </div>
     </div>
@@ -364,10 +377,11 @@
             "Siku 3": ["3D-ULTRA", "3D-MEGA", "3D-POWER"]
         };
 
-        let currentSelected = { amt: 0, plan: "", hours: 0 };
         const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+        let chatSession = null;
+        let currentSelected = { amt: 0, plan: "", hours: 0 };
 
-        // GREETING LOGIC
+        // INITIALIZE UI
         window.addEventListener('DOMContentLoaded', () => {
             const hour = new Date().getHours();
             let greeting = "Habari ya Leo!";
@@ -376,14 +390,24 @@
             else if (hour < 19) greeting = "Habari za Jioni!";
             else greeting = "Habari za Usiku!";
             
-            document.getElementById('greeting-text').innerText = greeting;
-            lucide.createIcons();
+            const greetEl = document.getElementById('greeting-text');
+            if(greetEl) greetEl.innerText = greeting;
+            
+            // Listen for Enter key on AI input
+            const aiIn = document.getElementById('ai-input');
+            if(aiIn) {
+                aiIn.addEventListener('keypress', (e) => {
+                    if(e.key === 'Enter') window.sendToAi();
+                });
+            }
+
+            if(typeof lucide !== 'undefined') lucide.createIcons();
         });
 
         // TIME CALCULATION LOGIC
         function calculateExpiry(hours) {
             const now = new Date();
-            now.setHours(now.getHours() + hours);
+            now.setTime(now.getTime() + (hours * 60 * 60 * 1000));
             return now.toLocaleTimeString('sw-TZ', { hour: '2-digit', minute: '2-digit' });
         }
 
@@ -391,7 +415,7 @@
             currentSelected = { amt, plan, hours };
             document.getElementById('modal-title').innerText = "Kifurushi Chako";
             document.getElementById('modal-plan-name').innerText = `${plan} • TSH ${amt}/=`;
-            document.getElementById('expiry-time').innerText = `Saa ${calculateExpiry(hours)}`;
+            document.getElementById('expiry-time').innerText = `${calculateExpiry(hours)}`;
             window.switchTab('pay');
             document.getElementById('payment-modal').style.display = 'flex';
         };
@@ -423,21 +447,24 @@
 
         window.submitRequest = (e) => {
             e.preventDefault();
-            const name = document.getElementById('req-name').value;
-            const phone = document.getElementById('req-phone').value;
+            const name = document.getElementById('req-name').value.trim();
+            const phone = document.getElementById('req-phone').value.trim();
             const expiry = calculateExpiry(currentSelected.hours);
-            const msg = `Habari Japhet Sunday, nimefanya malipo ya ${currentSelected.amt} kwa ${currentSelected.plan}. Jina: ${name}, Namba: ${phone}. Nitumie vocha. Mfumo unasema nitaunganishwa mpaka saa ${expiry}.`;
-            alert("Maombi yametumwa! Ujumbe wa malipo umenakiliwa. Subiri vocha kutoka kwa Japhet Sunday.");
+            const msg = `Habari Japhet Sunday,\nnimefanya malipo ya TSH ${currentSelected.amt} kwa ajili ya kifurushi cha ${currentSelected.plan}.\nJina: ${name}\nNamba: ${phone}\nMuda utakaisha: Saa ${expiry}`;
+            
+            alert("Maombi yametumwa! Ujumbe wako wa SMS unajipanga hivi punde.");
             window.location.href = `sms:0779231924?body=${encodeURIComponent(msg)}`;
             window.closePayment();
         };
 
         window.handleLogin = () => {
             const vcode = document.getElementById('login-vcode').value.trim();
-            if(!vcode) return alert("Tafadhali weka vocha kwanza!");
+            if(!vcode) return alert("Tafadhali weka namba ya vocha!");
+            
             document.sendin.username.value = vcode;
             document.sendin.password.value = vcode;
-            alert(`Inaunganisha... Vocha yako ya ${vcode} inafanyiwa kazi.`);
+            
+            alert(`Inaunganisha... Vocha yako inahakikiwa sasa hivi.`);
             setTimeout(() => { document.sendin.submit(); }, 1500);
         };
 
@@ -445,26 +472,30 @@
         window.hideAdmin = () => document.getElementById('admin-modal').classList.add('hidden');
         
         window.verifyAdmin = () => {
-            const pass = document.getElementById('adm-pass').value;
+            const pass = document.getElementById('adm-pass').value.trim().toLowerCase();
             if(pass === "mtaani") {
                 document.getElementById('admin-login-sec').classList.add('hidden');
                 document.getElementById('admin-dashboard').classList.remove('hidden');
                 window.filterAdminVouchers('Saa 1');
-            } else { alert("Passcode siyo sahihi! Jaribu tena."); }
+            } else { alert("Passcode siyo sahihi! Jaribu 'mtaani'."); }
         };
 
         window.filterAdminVouchers = (plan) => {
-            document.getElementById('current-tab-name').innerText = `Vouchers: ${plan}`;
+            const tabName = document.getElementById('current-tab-name');
+            if(tabName) tabName.innerText = `Vouchers: ${plan}`;
             const list = document.getElementById('voucher-list');
+            if(!list) return;
             list.innerHTML = '';
             (VOUCHER_DB[plan] || []).forEach(v => {
                 const div = document.createElement('div');
-                div.className = 'voucher-code';
+                div.className = 'voucher-code glass-glow bg-white/40';
                 div.innerText = v;
                 div.onclick = () => {
-                    navigator.clipboard.writeText(v);
-                    const old = div.innerText; div.innerText = "COPIED!";
-                    setTimeout(() => div.innerText = old, 1000);
+                    navigator.clipboard.writeText(v).then(() => {
+                        const oldText = div.innerText;
+                        div.innerText = "COPIED!";
+                        setTimeout(() => div.innerText = oldText, 1000);
+                    });
                 };
                 list.appendChild(div);
             });
@@ -478,29 +509,43 @@
             const input = document.getElementById('ai-input');
             const msg = input.value.trim();
             if(!msg) return;
+
             const container = document.getElementById('chat-messages');
-            
             const userDiv = document.createElement('div');
             userDiv.className = 'bg-maroon text-white p-4 rounded-2xl rounded-tr-none self-end max-w-[85%] ml-auto shadow-md';
             userDiv.innerText = msg;
             container.appendChild(userDiv);
+            
             input.value = '';
             container.scrollTop = container.scrollHeight;
 
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'typing-indicator pl-2';
+            loadingDiv.innerText = 'Inafikiria...';
+            container.appendChild(loadingDiv);
+            container.scrollTop = container.scrollHeight;
+
             try {
-                const response = await ai.models.generateContent({
-                    model: 'gemini-3-flash-preview',
-                    contents: msg,
-                    config: {
-                        systemInstruction: "Wewe ni msaidizi wa WIFI MTAANI. Mmiliki ni Japhet Sunday (0779231924). Bei: 200 (Saa 1), 500 (Masaa 6), 1000 (Saa 24). Karibisha wateja kulingana na muda (asubuhi/mchana/jioni). Rangi zetu ni Dim Cream na Maroon. Mteja akitaka vocha mwambie aguse kadi ya kifurushi."
-                    }
-                });
+                if (!chatSession) {
+                    chatSession = ai.chats.create({
+                        model: 'gemini-3-flash-preview',
+                        config: {
+                            systemInstruction: "Wewe ni msaidizi wa WIFI MTAANI. Mmiliki: Japhet Sunday (0779231924). Bei: 200 (Saa 1), 500 (Masaa 6), 1000 (Saa 24). Karibisha wateja kulingana na muda. Mteja akitaka kununua, agusa kadi husika."
+                        }
+                    });
+                }
+                const response = await chatSession.sendMessage({ message: msg });
+                loadingDiv.remove();
+                
                 const aiDiv = document.createElement('div');
                 aiDiv.className = 'bg-white p-4 rounded-2xl rounded-tl-none border border-slate-100 max-w-[85%] text-slate-600 shadow-sm';
                 aiDiv.innerText = response.text;
                 container.appendChild(aiDiv);
                 container.scrollTop = container.scrollHeight;
-            } catch(e) { console.error(e); }
+            } catch(e) { 
+                loadingDiv.innerText = 'Samahani, kuna tatizo la mtandao.';
+                console.error(e); 
+            }
         };
     </script>
 </body>
