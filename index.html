@@ -137,7 +137,7 @@
         }
         .voucher-code:hover { background: rgba(128, 0, 0, 0.1); }
 
-        /* GLASS GLOW ADMIN STYLE */
+        /* GLASS GLOW STYLES */
         .glass-panel {
             background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(25px) saturate(180%);
@@ -150,6 +150,27 @@
         .glass-glow-inner {
             box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5), 0 10px 30px rgba(128, 0, 0, 0.05);
         }
+
+        .glass-notification {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(128, 0, 0, 0.1);
+            border-radius: 24px;
+            padding: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            z-index: 2000;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            transform: translateY(-150%);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .glass-notification.show { transform: translateY(0); }
 
         .hidden { display: none !important; }
 
@@ -164,6 +185,18 @@
 </head>
 <body class="min-h-screen">
 
+    <!-- NOTIFICATION SYSTEM -->
+    <div id="notification-box" class="glass-notification">
+        <div id="notif-icon-box" class="p-3 bg-maroon/10 rounded-xl">
+            <i id="notif-icon" data-lucide="bell" class="w-6 h-6 text-maroon"></i>
+        </div>
+        <div class="flex-1">
+            <p id="notif-title" class="text-[10px] font-black uppercase tracking-widest text-maroon mb-0.5">Taarifa</p>
+            <p id="notif-msg" class="text-[13px] font-bold text-slate-700 leading-tight">Umeunganishwa kikamilifu.</p>
+        </div>
+        <button onclick="hideNotification()" class="p-2 opacity-30 hover:opacity-100 transition-opacity"><i data-lucide="x" class="w-4 h-4"></i></button>
+    </div>
+
     <form name="sendin" action="$(link-login-only)" method="post" class="hidden">
         <input type="hidden" name="username" />
         <input type="hidden" name="password" />
@@ -171,9 +204,8 @@
     </form>
 
     <div id="app" class="max-w-md mx-auto px-6 py-12 space-y-12">
-        
         <header class="text-center space-y-4">
-            <div id="greeting-container" class="animate-greeting">
+            <div id="greeting-container">
                 <p id="greeting-text" class="text-sm font-bold text-maroon opacity-80 uppercase tracking-widest mb-1"></p>
                 <h2 class="text-xl font-black text-slate-700">Karibu WIFI MTAANI</h2>
             </div>
@@ -363,25 +395,45 @@
     <script type="module">
         import { GoogleGenAI } from "@google/genai";
 
-        // Global DB
+        // Global Data
         const VOUCHER_DB = {
-            "Saa 1": ["1H-9921", "1H-1033", "1H-5500", "1H-2022"],
-            "Masaa 6": ["6H-P821", "6H-Q992", "6H-R001"],
-            "Saa 24": ["24H-PLAT", "24H-FAST"],
-            "Siku 3": ["3D-ULTRA", "3D-MEGA"]
+            "Saa 1": { price: 200, codes: ["1H-9921", "1H-1033", "1H-5500"], hours: 1 },
+            "Masaa 6": { price: 500, codes: ["6H-P821", "6H-Q992", "6H-R001"], hours: 6 },
+            "Saa 24": { price: 1000, codes: ["24H-PLAT", "24H-FAST"], hours: 24 },
+            "Siku 3": { price: 2000, codes: ["3D-ULTRA", "3D-MEGA"], hours: 72 }
         };
 
-        // UI Persistence Helpers
         let currentSelected = { amt: 0, plan: "", hours: 0 };
         let chatSession = null;
         let aiClient = null;
+        let notifTimeout = null;
 
-        // BIND FUNCTIONS TO WINDOW (Fix for "vitu kukataa kubonyezeka")
+        // --- NOTIFICATION ENGINE ---
+        window.showNotification = (title, msg, icon = "bell") => {
+            const box = document.getElementById('notification-box');
+            document.getElementById('notif-title').innerText = title;
+            document.getElementById('notif-msg').innerText = msg;
+            
+            // Icon handling
+            const iconBox = document.getElementById('notif-icon-box');
+            iconBox.innerHTML = `<i data-lucide="${icon}" class="w-6 h-6 text-maroon"></i>`;
+            lucide.createIcons();
+
+            box.classList.add('show');
+            if(notifTimeout) clearTimeout(notifTimeout);
+            notifTimeout = setTimeout(window.hideNotification, 10000); // 10 seconds display
+        };
+
+        window.hideNotification = () => {
+            document.getElementById('notification-box').classList.remove('show');
+        };
+
+        // --- CORE FUNCTIONS ---
         window.openPayment = (amt, plan, hours) => {
             currentSelected = { amt, plan, hours };
             document.getElementById('modal-title').innerText = "Kifurushi Chako";
             document.getElementById('modal-plan-name').innerText = `${plan} • TSH ${amt}/=`;
-            document.getElementById('expiry-time').innerText = calculateExpiry(hours);
+            document.getElementById('expiry-time').innerText = getExpiryString(hours);
             window.switchTab('pay');
             document.getElementById('payment-modal').style.display = 'flex';
         };
@@ -415,7 +467,7 @@
             e.preventDefault();
             const name = document.getElementById('req-name').value;
             const phone = document.getElementById('req-phone').value;
-            const expiry = calculateExpiry(currentSelected.hours);
+            const expiry = getExpiryString(currentSelected.hours);
             const msg = `Habari Japhet,\nnimefanya malipo ya TSH ${currentSelected.amt} kwa ${currentSelected.plan}.\nJina: ${name}\nNamba: ${phone}\nMuda utakaisha: Saa ${expiry}`;
             alert("Maombi yametumwa! Ujumbe wako wa SMS unajipanga...");
             window.location.href = `sms:0779231924?body=${encodeURIComponent(msg)}`;
@@ -423,13 +475,65 @@
         };
 
         window.handleLogin = () => {
-            const vcode = document.getElementById('login-vcode').value.trim();
+            const vcode = document.getElementById('login-vcode').value.trim().toUpperCase();
             if(!vcode) return alert("Weka vocha tafadhali!");
+
+            // Local simulation logic for notifications
+            let planInfo = null;
+            for(let key in VOUCHER_DB) {
+                if(VOUCHER_DB[key].codes.includes(vcode)) {
+                    planInfo = { ...VOUCHER_DB[key], name: key };
+                    break;
+                }
+            }
+
+            // If we found a valid plan in our local DB, set up notifications
+            if(planInfo) {
+                const now = new Date();
+                const expiryDate = new Date(now.getTime() + planInfo.hours * 60 * 60 * 1000);
+                const expiryString = expiryDate.toLocaleTimeString('sw-TZ', { hour: '2-digit', minute: '2-digit' });
+                
+                // 1. Join Notification
+                window.showNotification(
+                    "JIUNGE SUCCESS", 
+                    `Hongera! Umeunganishwa na ${planInfo.name} (TSH ${planInfo.price}). Internet itakata saa ${expiryString}.`,
+                    "shield-check"
+                );
+
+                // Store for persistence (reloads)
+                localStorage.setItem('active_session', JSON.stringify({
+                    expiry: expiryDate.getTime(),
+                    planName: planInfo.name,
+                    expiryStr: expiryString
+                }));
+
+                // Schedule 15 min warning
+                scheduleExpiryWarning(expiryDate.getTime());
+            }
+
             document.sendin.username.value = vcode;
             document.sendin.password.value = vcode;
-            alert("Inahakiki... Subiri kidogo.");
-            setTimeout(() => { document.sendin.submit(); }, 1200);
+            
+            setTimeout(() => { document.sendin.submit(); }, 3000);
         };
+
+        function scheduleExpiryWarning(expiryTimestamp) {
+            const warningTime = expiryTimestamp - (15 * 60 * 1000); // 15 mins before
+            const now = new Date().getTime();
+            const delay = warningTime - now;
+
+            if(delay > 0) {
+                setTimeout(() => {
+                    const expiryDate = new Date(expiryTimestamp);
+                    const timeStr = expiryDate.toLocaleTimeString('sw-TZ', { hour: '2-digit', minute: '2-digit' });
+                    window.showNotification(
+                        "ONYO LA MUDA", 
+                        `Baki ya muda wako ni dakika 15. Internet itakata saa ${timeStr}. Lipia sasa ili uendelee kufurahia.`,
+                        "alert-triangle"
+                    );
+                }, delay);
+            }
+        }
 
         window.showAdmin = () => document.getElementById('admin-modal').style.display = 'flex';
         window.hideAdmin = () => document.getElementById('admin-modal').style.display = 'none';
@@ -440,9 +544,7 @@
                 document.getElementById('admin-login-sec').classList.add('hidden');
                 document.getElementById('admin-dashboard').classList.remove('hidden');
                 window.filterAdminVouchers('Saa 1');
-            } else {
-                alert("Namba ya siri si sahihi!");
-            }
+            } else { alert("Namba ya siri si sahihi!"); }
         };
 
         window.filterAdminVouchers = (plan) => {
@@ -450,7 +552,7 @@
             tabName.innerText = `Vocha za ${plan}`;
             const list = document.getElementById('voucher-list');
             list.innerHTML = '';
-            (VOUCHER_DB[plan] || []).forEach(v => {
+            (VOUCHER_DB[plan].codes || []).forEach(v => {
                 const div = document.createElement('div');
                 div.className = 'voucher-code glass-panel';
                 div.innerText = v;
@@ -495,7 +597,7 @@
                     chatSession = aiClient.chats.create({
                         model: 'gemini-3-flash-preview',
                         config: {
-                            systemInstruction: "Wewe ni msaidizi wa Hotspot inaitwa WIFI MTAANI. Mmiliki ni Japhet (0779231924). Bei: Saa 1 (200/=), Masaa 6 (500/=), Saa 24 (1000/=). Jibu kwa Kiswahili kifupi na msaada."
+                            systemInstruction: "Wewe ni msaidizi wa Hotspot 'WIFI MTAANI'. Mmiliki ni Japhet (0779231924). Bei: Saa 1 (200/=), Masaa 6 (500/=), Saa 24 (1000/=). Jibu kwa Kiswahili kirafiki."
                         }
                     });
                 }
@@ -509,24 +611,29 @@
                 container.scrollTop = container.scrollHeight;
             } catch(err) {
                 loading.innerText = "Mtandao umekwama kidogo...";
-                console.error(err);
             }
         };
 
-        function calculateExpiry(hours) {
+        function getExpiryString(hours) {
             const d = new Date();
             d.setHours(d.getHours() + hours);
             return d.toLocaleTimeString('sw-TZ', { hour: '2-digit', minute: '2-digit' });
         }
 
-        // INIT UI ELEMENTS
+        // INIT
         window.addEventListener('DOMContentLoaded', () => {
             const h = new Date().getHours();
-            let g = "Karibu!";
-            if(h < 12) g = "Habari za Asubuhi!";
-            else if(h < 17) g = "Habari za Mchana!";
-            else g = "Habari za Jioni!";
+            let g = h < 12 ? "Habari za Asubuhi!" : h < 17 ? "Habari za Mchana!" : "Habari za Jioni!";
             document.getElementById('greeting-text').innerText = g;
+
+            // Check for existing session
+            const saved = localStorage.getItem('active_session');
+            if(saved) {
+                const session = JSON.parse(saved);
+                if(session.expiry > new Date().getTime()) {
+                    scheduleExpiryWarning(session.expiry);
+                }
+            }
 
             document.getElementById('ai-input').addEventListener('keypress', (e) => {
                 if(e.key === 'Enter') window.sendToAi();
