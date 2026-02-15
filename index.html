@@ -31,6 +31,7 @@
             color: var(--text-dark); 
             margin: 0;
             padding: 0;
+            overflow-x: hidden;
         }
 
         .btn-primary { 
@@ -52,7 +53,6 @@
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 1px solid var(--border-soft);
             position: relative;
-            overflow: hidden;
         }
         .pkg-card:hover { 
             transform: translateY(-10px); 
@@ -76,12 +76,12 @@
             box-shadow: 0 0 0 4px rgba(128, 0, 0, 0.05); 
         }
 
-        #payment-modal {
+        .modal-overlay {
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(46, 32, 27, 0.75);
-            backdrop-filter: blur(10px);
+            background: rgba(46, 32, 27, 0.7);
+            backdrop-filter: blur(8px);
             z-index: 1000;
             align-items: center;
             justify-content: center;
@@ -96,7 +96,6 @@
             background: rgba(255, 255, 255, 0.9);
             border-radius: 28px;
             border: 1px solid var(--border-soft);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
 
         .step-badge {
@@ -110,7 +109,6 @@
             justify-content: center;
             font-size: 14px;
             font-weight: 800;
-            box-shadow: 0 4px 6px rgba(128, 0, 0, 0.2);
         }
 
         .tab-trigger {
@@ -124,11 +122,10 @@
             transition: all 0.3s;
         }
         .tab-trigger.active { background: var(--maroon); color: white; }
-        .tab-trigger:not(.active) { color: var(--text-gray); }
 
         .voucher-code {
             padding: 14px;
-            background: var(--dim-cream);
+            background: rgba(255, 255, 255, 0.3);
             border-radius: 16px;
             border: 1px dashed var(--maroon);
             text-align: center;
@@ -136,36 +133,31 @@
             font-weight: 800;
             cursor: pointer;
             color: var(--maroon);
+            transition: 0.3s;
         }
+        .voucher-code:hover { background: rgba(128, 0, 0, 0.1); }
 
-        /* GLASS GLOW DASHBOARD STYLES */
-        .glass-glow {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        /* GLASS GLOW ADMIN STYLE */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(25px) saturate(180%);
+            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.4);
             box-shadow: 0 8px 32px 0 rgba(128, 0, 0, 0.1);
-            position: relative;
-        }
-        .glass-glow::after {
-            content: '';
-            position: absolute;
-            top: -20px;
-            left: -20px;
-            right: -20px;
-            bottom: -20px;
-            background: radial-gradient(circle, rgba(128,0,0,0.05) 0%, transparent 70%);
-            z-index: -1;
-            pointer-events: none;
+            border-radius: 3rem;
         }
 
-        .hidden { display: none; }
+        .glass-glow-inner {
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5), 0 10px 30px rgba(128, 0, 0, 0.05);
+        }
 
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-10px); }
+        .hidden { display: none !important; }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .animate-greeting { animation: fadeInDown 0.8s ease-out forwards; }
+        .animate-up { animation: slideUp 0.5s ease-out forwards; }
         
         .typing-indicator { font-style: italic; font-size: 11px; color: var(--text-gray); }
     </style>
@@ -197,7 +189,7 @@
             </div>
         </header>
 
-        <section id="packages-section" class="space-y-12">
+        <section id="packages-section" class="space-y-12 animate-up">
             <div class="grid grid-cols-2 gap-6">
                 <div class="pkg-card" onclick="openPayment(200, 'Saa 1', 1)">
                     <div class="inline-flex p-3 bg-maroon/5 rounded-2xl mb-4">
@@ -259,19 +251,19 @@
         </section>
 
         <footer class="text-center pt-10 opacity-30">
-            <button onclick="showAdmin()" class="text-[10px] font-black uppercase tracking-[0.3em] hover:text-maroon transition-colors">Admin Dashboard Login</button>
+            <button onclick="showAdmin()" class="text-[10px] font-black uppercase tracking-[0.3em] hover:text-maroon transition-colors">Admin Dashboard</button>
         </footer>
     </div>
 
     <!-- PAYMENT MODAL -->
-    <div id="payment-modal">
-        <div class="bg-white w-full max-w-sm rounded-[3rem] p-8 space-y-8 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.5)] animate-in fade-in zoom-in duration-300">
+    <div id="payment-modal" class="modal-overlay">
+        <div class="bg-white w-full max-w-sm rounded-[3rem] p-8 space-y-8 shadow-2xl animate-up">
             <div class="flex justify-between items-start">
                 <div>
                     <h2 id="modal-title" class="text-2xl font-black text-slate-800 leading-tight">Agiza Vocha</h2>
                     <p id="modal-plan-name" class="text-[11px] font-bold text-maroon uppercase tracking-widest mt-1"></p>
                 </div>
-                <button onclick="closePayment()" class="p-3 bg-slate-100 rounded-full hover:bg-slate-200 text-slate-400"><i data-lucide="x" class="w-5 h-5"></i></button>
+                <button onclick="closePayment()" class="p-3 bg-slate-100 rounded-full text-slate-400 hover:bg-slate-200"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
             
             <div class="flex gap-2 p-1.5 bg-slate-100 rounded-[1.4rem]">
@@ -285,12 +277,12 @@
                     <span id="expiry-time" class="text-[13px] font-black text-maroon">--:--</span>
                 </div>
 
-                <div class="bg-maroon/5 border-2 border-dashed border-maroon/10 p-6 rounded-3xl text-center shadow-inner">
+                <div class="bg-maroon/5 border-2 border-dashed border-maroon/10 p-6 rounded-3xl text-center">
                     <p class="text-[10px] font-black text-maroon/60 uppercase mb-1">Tuma Kwenda Tigo Pesa</p>
                     <p class="text-3xl font-black text-maroon tracking-tighter">0779231924</p>
                     <p class="text-[11px] font-bold text-slate-400">Jina: Japhet Sunday</p>
                 </div>
-                <form onsubmit="submitRequest(event)" class="space-y-5">
+                <form id="payment-form" onsubmit="submitRequest(event)" class="space-y-5">
                     <input required id="req-name" type="text" placeholder="Jina la Mlipaji" class="input-elegant">
                     <input required id="req-phone" type="tel" placeholder="Namba ya Malipo" class="input-elegant">
                     <button type="submit" class="btn-primary w-full py-5 rounded-[1.4rem] font-black text-[13px] uppercase tracking-widest">
@@ -301,39 +293,40 @@
 
             <div id="section-login" class="hidden space-y-6">
                 <div class="space-y-4">
-                    <p class="text-[11px] text-center text-slate-500 font-semibold px-4 italic">Ingiza vocha uliyopewa na Japhet kuanza kutumia internet.</p>
+                    <p class="text-[11px] text-center text-slate-500 font-semibold px-4 italic">Ingiza vocha uliyopewa kuanza kutumia internet.</p>
                     <input id="login-vcode" type="text" placeholder="VOCHA-XXXX" class="input-elegant text-2xl text-center tracking-widest uppercase placeholder:tracking-normal">
                     <button onclick="handleLogin()" class="btn-primary w-full py-5 rounded-[1.4rem] font-black text-[13px] uppercase tracking-widest flex items-center justify-center gap-3">
-                        UNGANISHA <i data-lucide="zap" class="w-5 h-5 fill-current"></i>
+                        UNGANISHA <i data-lucide="zap" class="w-5 h-5"></i>
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ADMIN MODAL WITH GLASS GLOW -->
-    <div id="admin-modal" class="hidden fixed inset-0 z-[100] bg-dim-cream/80 backdrop-blur-xl p-6 overflow-y-auto">
-        <div class="max-w-md mx-auto space-y-8 py-10">
-            <div class="flex justify-between items-center">
-                <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tight">Admin System</h2>
-                <button onclick="hideAdmin()" class="p-3 bg-white/50 rounded-2xl shadow-md text-slate-400"><i data-lucide="x" class="w-6 h-6"></i></button>
+    <!-- ADMIN MODAL GLASS GLOW -->
+    <div id="admin-modal" class="modal-overlay !bg-dim-cream/60 !backdrop-blur-2xl">
+        <div class="max-w-md w-full mx-auto space-y-8 animate-up">
+            <div class="flex justify-between items-center px-4">
+                <h2 class="text-2xl font-black text-slate-800 uppercase tracking-tight">Admin Portal</h2>
+                <button onclick="hideAdmin()" class="p-3 bg-white/80 rounded-2xl shadow-md text-slate-400"><i data-lucide="x" class="w-6 h-6"></i></button>
             </div>
 
-            <div id="admin-login-sec" class="bg-white/40 glass-glow p-8 rounded-[3rem] space-y-6">
-                <p class="text-sm font-semibold text-slate-600 text-center">Ingiza Passcode 'mtaani'</p>
-                <input id="adm-pass" type="password" placeholder="••••••••" class="input-elegant text-center text-3xl bg-white/60">
-                <button onclick="verifyAdmin()" class="btn-primary w-full py-5 rounded-2xl font-black uppercase tracking-widest">INGIA DASHBOARD</button>
+            <div id="admin-login-sec" class="glass-panel glass-glow-inner p-10 space-y-6">
+                <p class="text-xs font-bold text-slate-500 text-center uppercase tracking-widest">Security Access Required</p>
+                <input id="adm-pass" type="password" placeholder="Passcode" class="input-elegant text-center text-3xl bg-white/40 backdrop-blur-sm">
+                <button onclick="verifyAdmin()" class="btn-primary w-full py-5 rounded-3xl font-black uppercase tracking-widest">VERIFY ACCESS</button>
+                <p class="text-[10px] text-center text-slate-400 italic">Hint: 'mtaani'</p>
             </div>
 
             <div id="admin-dashboard" class="hidden space-y-8">
-                <div class="flex gap-2 overflow-x-auto pb-4 scrollbar-hide">
-                    <button onclick="filterAdminVouchers('Saa 1')" class="px-6 py-4 bg-white/60 glass-glow rounded-2xl text-[10px] font-black uppercase text-slate-500 whitespace-nowrap active:bg-maroon active:text-white transition-all">Saa 1</button>
-                    <button onclick="filterAdminVouchers('Masaa 6')" class="px-6 py-4 bg-white/60 glass-glow rounded-2xl text-[10px] font-black uppercase text-slate-500 whitespace-nowrap active:bg-maroon active:text-white transition-all">Masaa 6</button>
-                    <button onclick="filterAdminVouchers('Saa 24')" class="px-6 py-4 bg-white/60 glass-glow rounded-2xl text-[10px] font-black uppercase text-slate-500 whitespace-nowrap active:bg-maroon active:text-white transition-all">Saa 24</button>
-                    <button onclick="filterAdminVouchers('Siku 3')" class="px-6 py-4 bg-white/60 glass-glow rounded-2xl text-[10px] font-black uppercase text-slate-500 whitespace-nowrap active:bg-maroon active:text-white transition-all">Siku 3</button>
+                <div class="flex gap-2 overflow-x-auto pb-4 px-2">
+                    <button onclick="filterAdminVouchers('Saa 1')" class="px-6 py-4 glass-panel !rounded-2xl text-[10px] font-black uppercase text-slate-500 whitespace-nowrap hover:bg-maroon hover:text-white transition-all">Saa 1</button>
+                    <button onclick="filterAdminVouchers('Masaa 6')" class="px-6 py-4 glass-panel !rounded-2xl text-[10px] font-black uppercase text-slate-500 whitespace-nowrap hover:bg-maroon hover:text-white transition-all">Masaa 6</button>
+                    <button onclick="filterAdminVouchers('Saa 24')" class="px-6 py-4 glass-panel !rounded-2xl text-[10px] font-black uppercase text-slate-500 whitespace-nowrap hover:bg-maroon hover:text-white transition-all">Saa 24</button>
+                    <button onclick="filterAdminVouchers('Siku 3')" class="px-6 py-4 glass-panel !rounded-2xl text-[10px] font-black uppercase text-slate-500 whitespace-nowrap hover:bg-maroon hover:text-white transition-all">Siku 3</button>
                 </div>
                 
-                <div class="bg-white/40 glass-glow p-8 rounded-[3rem]">
+                <div class="glass-panel glass-glow-inner p-8">
                     <h3 id="current-tab-name" class="text-xs font-black text-slate-500 uppercase tracking-widest mb-6">Stock za Vocha</h3>
                     <div id="voucher-list" class="grid grid-cols-2 gap-3"></div>
                 </div>
@@ -343,26 +336,26 @@
 
     <!-- AI CHAT COMPONENT -->
     <div class="fixed bottom-8 right-8 z-50">
-        <button onclick="toggleAiChat()" class="w-16 h-16 bg-maroon text-white rounded-2xl shadow-2xl flex items-center justify-center hover:scale-110 active:scale-90 transition-all">
+        <button id="ai-toggle-btn" onclick="toggleAiChat()" class="w-16 h-16 bg-maroon text-white rounded-2xl shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all">
             <i data-lucide="sparkles" class="w-8 h-8"></i>
         </button>
 
-        <div id="ai-chat-content" class="hidden absolute bottom-20 right-0 w-[340px] h-[500px] bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col border border-slate-100 animate-in slide-in-from-bottom-8">
+        <div id="ai-chat-content" class="hidden absolute bottom-20 right-0 w-[340px] h-[500px] bg-white rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col border border-slate-100">
             <header class="bg-maroon p-6 text-white flex justify-between items-center">
                 <div class="flex items-center gap-3">
                     <div class="bg-white/20 p-2 rounded-xl"><i data-lucide="bot" class="w-5 h-5"></i></div>
-                    <p class="text-sm font-bold">Msaidizi wa Vocha</p>
+                    <p class="text-sm font-bold">Msaidizi Smart</p>
                 </div>
                 <button onclick="toggleAiChat()" class="opacity-60"><i data-lucide="minus" class="w-6 h-6"></i></button>
             </header>
             
             <div id="chat-messages" class="flex-1 p-6 overflow-y-auto space-y-4 bg-slate-50/50 text-sm">
-                <div class="bg-white p-4 rounded-2xl rounded-tl-none border border-slate-100 text-slate-600 shadow-sm">Jambo! Mimi ni msaidizi wa <b>WIFI MTAANI</b>. Unahitaji msaada gani?</div>
+                <div class="bg-white p-4 rounded-2xl rounded-tl-none border border-slate-100 text-slate-600 shadow-sm">Jambo! Mimi ni msaidizi wa WIFI MTAANI. Unaweza kuniuliza kuhusu vifurushi au jinsi ya kulipia.</div>
             </div>
 
             <div class="p-4 bg-white border-t border-slate-100 flex gap-2">
-                <input id="ai-input" type="text" placeholder="Uliza swali..." class="flex-1 bg-slate-100 rounded-xl px-4 py-3 text-sm outline-none border border-transparent focus:border-maroon/20">
-                <button id="ai-send-btn" onclick="sendToAi()" class="p-4 bg-maroon text-white rounded-xl shadow-lg active:scale-95"><i data-lucide="send" class="w-4 h-4"></i></button>
+                <input id="ai-input" type="text" placeholder="Andika hapa..." class="flex-1 bg-slate-100 rounded-xl px-4 py-3 text-sm outline-none focus:ring-1 focus:ring-maroon/20">
+                <button onclick="sendToAi()" class="p-4 bg-maroon text-white rounded-xl shadow-lg active:scale-95"><i data-lucide="send" class="w-4 h-4"></i></button>
             </div>
         </div>
     </div>
@@ -370,65 +363,38 @@
     <script type="module">
         import { GoogleGenAI } from "@google/genai";
 
+        // Global DB
         const VOUCHER_DB = {
-            "Saa 1": ["1H-9921", "1H-1033", "1H-5500", "1H-2022", "1H-8820"],
-            "Masaa 6": ["6H-P821", "6H-Q992", "6H-R001", "6H-X441"],
-            "Saa 24": ["24H-PLAT", "24H-FAST", "24H-KING"],
-            "Siku 3": ["3D-ULTRA", "3D-MEGA", "3D-POWER"]
+            "Saa 1": ["1H-9921", "1H-1033", "1H-5500", "1H-2022"],
+            "Masaa 6": ["6H-P821", "6H-Q992", "6H-R001"],
+            "Saa 24": ["24H-PLAT", "24H-FAST"],
+            "Siku 3": ["3D-ULTRA", "3D-MEGA"]
         };
 
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
-        let chatSession = null;
+        // UI Persistence Helpers
         let currentSelected = { amt: 0, plan: "", hours: 0 };
+        let chatSession = null;
+        let aiClient = null;
 
-        // INITIALIZE UI
-        window.addEventListener('DOMContentLoaded', () => {
-            const hour = new Date().getHours();
-            let greeting = "Habari ya Leo!";
-            if (hour < 12) greeting = "Habari za Asubuhi!";
-            else if (hour < 16) greeting = "Habari za Mchana!";
-            else if (hour < 19) greeting = "Habari za Jioni!";
-            else greeting = "Habari za Usiku!";
-            
-            const greetEl = document.getElementById('greeting-text');
-            if(greetEl) greetEl.innerText = greeting;
-            
-            // Listen for Enter key on AI input
-            const aiIn = document.getElementById('ai-input');
-            if(aiIn) {
-                aiIn.addEventListener('keypress', (e) => {
-                    if(e.key === 'Enter') window.sendToAi();
-                });
-            }
-
-            if(typeof lucide !== 'undefined') lucide.createIcons();
-        });
-
-        // TIME CALCULATION LOGIC
-        function calculateExpiry(hours) {
-            const now = new Date();
-            now.setTime(now.getTime() + (hours * 60 * 60 * 1000));
-            return now.toLocaleTimeString('sw-TZ', { hour: '2-digit', minute: '2-digit' });
-        }
-
+        // BIND FUNCTIONS TO WINDOW (Fix for "vitu kukataa kubonyezeka")
         window.openPayment = (amt, plan, hours) => {
             currentSelected = { amt, plan, hours };
             document.getElementById('modal-title').innerText = "Kifurushi Chako";
             document.getElementById('modal-plan-name').innerText = `${plan} • TSH ${amt}/=`;
-            document.getElementById('expiry-time').innerText = `${calculateExpiry(hours)}`;
+            document.getElementById('expiry-time').innerText = calculateExpiry(hours);
             window.switchTab('pay');
-            document.getElementById('payment-modal').style.display = 'flex';
-        };
-
-        window.openVoucherEntry = () => {
-            document.getElementById('modal-title').innerText = "Ingia Mtandaoni";
-            document.getElementById('modal-plan-name').innerText = "Unganisha na WIFI MTAANI sasa";
-            window.switchTab('login');
             document.getElementById('payment-modal').style.display = 'flex';
         };
 
         window.closePayment = () => {
             document.getElementById('payment-modal').style.display = 'none';
+        };
+
+        window.openVoucherEntry = () => {
+            document.getElementById('modal-title').innerText = "Weka Vocha";
+            document.getElementById('modal-plan-name').innerText = "Unganisha na WIFI MTAANI sasa";
+            window.switchTab('login');
+            document.getElementById('payment-modal').style.display = 'flex';
         };
 
         window.switchTab = (tab) => {
@@ -447,54 +413,52 @@
 
         window.submitRequest = (e) => {
             e.preventDefault();
-            const name = document.getElementById('req-name').value.trim();
-            const phone = document.getElementById('req-phone').value.trim();
+            const name = document.getElementById('req-name').value;
+            const phone = document.getElementById('req-phone').value;
             const expiry = calculateExpiry(currentSelected.hours);
-            const msg = `Habari Japhet Sunday,\nnimefanya malipo ya TSH ${currentSelected.amt} kwa ajili ya kifurushi cha ${currentSelected.plan}.\nJina: ${name}\nNamba: ${phone}\nMuda utakaisha: Saa ${expiry}`;
-            
-            alert("Maombi yametumwa! Ujumbe wako wa SMS unajipanga hivi punde.");
+            const msg = `Habari Japhet,\nnimefanya malipo ya TSH ${currentSelected.amt} kwa ${currentSelected.plan}.\nJina: ${name}\nNamba: ${phone}\nMuda utakaisha: Saa ${expiry}`;
+            alert("Maombi yametumwa! Ujumbe wako wa SMS unajipanga...");
             window.location.href = `sms:0779231924?body=${encodeURIComponent(msg)}`;
             window.closePayment();
         };
 
         window.handleLogin = () => {
             const vcode = document.getElementById('login-vcode').value.trim();
-            if(!vcode) return alert("Tafadhali weka namba ya vocha!");
-            
+            if(!vcode) return alert("Weka vocha tafadhali!");
             document.sendin.username.value = vcode;
             document.sendin.password.value = vcode;
-            
-            alert(`Inaunganisha... Vocha yako inahakikiwa sasa hivi.`);
-            setTimeout(() => { document.sendin.submit(); }, 1500);
+            alert("Inahakiki... Subiri kidogo.");
+            setTimeout(() => { document.sendin.submit(); }, 1200);
         };
 
-        window.showAdmin = () => document.getElementById('admin-modal').classList.remove('hidden');
-        window.hideAdmin = () => document.getElementById('admin-modal').classList.add('hidden');
-        
+        window.showAdmin = () => document.getElementById('admin-modal').style.display = 'flex';
+        window.hideAdmin = () => document.getElementById('admin-modal').style.display = 'none';
+
         window.verifyAdmin = () => {
             const pass = document.getElementById('adm-pass').value.trim().toLowerCase();
-            if(pass === "mtaani") {
+            if(pass === 'mtaani') {
                 document.getElementById('admin-login-sec').classList.add('hidden');
                 document.getElementById('admin-dashboard').classList.remove('hidden');
                 window.filterAdminVouchers('Saa 1');
-            } else { alert("Passcode siyo sahihi! Jaribu 'mtaani'."); }
+            } else {
+                alert("Namba ya siri si sahihi!");
+            }
         };
 
         window.filterAdminVouchers = (plan) => {
             const tabName = document.getElementById('current-tab-name');
-            if(tabName) tabName.innerText = `Vouchers: ${plan}`;
+            tabName.innerText = `Vocha za ${plan}`;
             const list = document.getElementById('voucher-list');
-            if(!list) return;
             list.innerHTML = '';
             (VOUCHER_DB[plan] || []).forEach(v => {
                 const div = document.createElement('div');
-                div.className = 'voucher-code glass-glow bg-white/40';
+                div.className = 'voucher-code glass-panel';
                 div.innerText = v;
                 div.onclick = () => {
                     navigator.clipboard.writeText(v).then(() => {
-                        const oldText = div.innerText;
+                        const originalText = div.innerText;
                         div.innerText = "COPIED!";
-                        setTimeout(() => div.innerText = oldText, 1000);
+                        setTimeout(() => div.innerText = originalText, 1000);
                     });
                 };
                 list.appendChild(div);
@@ -519,34 +483,57 @@
             input.value = '';
             container.scrollTop = container.scrollHeight;
 
-            const loadingDiv = document.createElement('div');
-            loadingDiv.className = 'typing-indicator pl-2';
-            loadingDiv.innerText = 'Inafikiria...';
-            container.appendChild(loadingDiv);
+            const loading = document.createElement('div');
+            loading.className = 'typing-indicator pl-2';
+            loading.innerText = 'Msaidizi anafikiria...';
+            container.appendChild(loading);
             container.scrollTop = container.scrollHeight;
 
             try {
-                if (!chatSession) {
-                    chatSession = ai.chats.create({
+                if(!aiClient) aiClient = new GoogleGenAI({ apiKey: process.env.API_KEY });
+                if(!chatSession) {
+                    chatSession = aiClient.chats.create({
                         model: 'gemini-3-flash-preview',
                         config: {
-                            systemInstruction: "Wewe ni msaidizi wa WIFI MTAANI. Mmiliki: Japhet Sunday (0779231924). Bei: 200 (Saa 1), 500 (Masaa 6), 1000 (Saa 24). Karibisha wateja kulingana na muda. Mteja akitaka kununua, agusa kadi husika."
+                            systemInstruction: "Wewe ni msaidizi wa Hotspot inaitwa WIFI MTAANI. Mmiliki ni Japhet (0779231924). Bei: Saa 1 (200/=), Masaa 6 (500/=), Saa 24 (1000/=). Jibu kwa Kiswahili kifupi na msaada."
                         }
                     });
                 }
-                const response = await chatSession.sendMessage({ message: msg });
-                loadingDiv.remove();
+                const result = await chatSession.sendMessage({ message: msg });
+                loading.remove();
                 
                 const aiDiv = document.createElement('div');
                 aiDiv.className = 'bg-white p-4 rounded-2xl rounded-tl-none border border-slate-100 max-w-[85%] text-slate-600 shadow-sm';
-                aiDiv.innerText = response.text;
+                aiDiv.innerText = result.text;
                 container.appendChild(aiDiv);
                 container.scrollTop = container.scrollHeight;
-            } catch(e) { 
-                loadingDiv.innerText = 'Samahani, kuna tatizo la mtandao.';
-                console.error(e); 
+            } catch(err) {
+                loading.innerText = "Mtandao umekwama kidogo...";
+                console.error(err);
             }
         };
+
+        function calculateExpiry(hours) {
+            const d = new Date();
+            d.setHours(d.getHours() + hours);
+            return d.toLocaleTimeString('sw-TZ', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        // INIT UI ELEMENTS
+        window.addEventListener('DOMContentLoaded', () => {
+            const h = new Date().getHours();
+            let g = "Karibu!";
+            if(h < 12) g = "Habari za Asubuhi!";
+            else if(h < 17) g = "Habari za Mchana!";
+            else g = "Habari za Jioni!";
+            document.getElementById('greeting-text').innerText = g;
+
+            document.getElementById('ai-input').addEventListener('keypress', (e) => {
+                if(e.key === 'Enter') window.sendToAi();
+            });
+
+            if(typeof lucide !== 'undefined') lucide.createIcons();
+        });
     </script>
 </body>
 </html>
